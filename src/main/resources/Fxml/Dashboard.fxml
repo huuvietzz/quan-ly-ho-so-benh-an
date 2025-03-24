@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <Pane prefHeight="62.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="38.0" layoutY="19.0" text="Quản lý hồ sơ bệnh án">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <FontAwesomeIconView glyphName="BOOK" layoutX="12.0" layoutY="37.0" size="20" />
+            <Label layoutX="1076.0" layoutY="4.0" prefHeight="20.0" prefWidth="20.0" />
+            <Button layoutX="1050.0" mnemonicParsing="false">
+               <graphic>
+                  <FontAwesomeIconView glyphName="MINUS" />
+               </graphic>
+            </Button>
+            <Button layoutX="1075.0" mnemonicParsing="false">
+               <graphic>
+                  <FontAwesomeIconView glyphName="CLOSE" />
+               </graphic>
+            </Button>
+         </children>
+      </Pane>
+   </top>
+   <left>
+      <Pane prefHeight="521.0" prefWidth="218.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox layoutX="1.0" layoutY="139.0" prefHeight="332.0" prefWidth="217.0">
+               <children>
+                  <JFXButton prefHeight="25.0" prefWidth="218.0" text="Dashboard">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="HOME" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="219.0" text="Quản lý bệnh nhân">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="USERS" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton layoutX="10.0" layoutY="35.0" prefHeight="25.0" prefWidth="217.0" text="Quản lý hồ sơ bệnh án">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="BOOK" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton layoutX="10.0" layoutY="61.0" prefHeight="25.0" prefWidth="217.0" text="Quản lý lịch hẹn">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="CALENDAR" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton layoutX="10.0" layoutY="86.0" prefHeight="25.0" prefWidth="218.0" text="Quản lý tài khoản">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="USER_ALT" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton layoutX="10.0" layoutY="111.0" prefHeight="25.0" prefWidth="217.0" text="Cài đặt">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="GEAR" />
+                     </graphic>
+                  </JFXButton>
+                  <Label text="Tab nhanh" />
+                  <JFXButton prefHeight="25.0" prefWidth="221.0" text="Thêm bệnh nhân">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="PLUS" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton layoutX="10.0" layoutY="179.0" prefHeight="25.0" prefWidth="221.0" text="Tạo hồ sơ">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="PLUS" />
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </VBox>
+            <ImageView fitHeight="91.0" fitWidth="100.0" layoutX="59.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Images/User.jpg" />
+               </image>
+            </ImageView>
+            <Label layoutX="74.0" layoutY="112.0" text="Việt Nguyễn" />
+            <Label layoutX="38.0" layoutY="514.0" text="Đăng xuất" />
+            <FontAwesomeIconView glyphName="SIGN_OUT" layoutX="20.0" layoutY="528.0" text="" />
+         </children>
+      </Pane>
+   </left>
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <StackPane layoutX="80.0" layoutY="35.0" prefHeight="544.0" prefWidth="881.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Dashboard">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

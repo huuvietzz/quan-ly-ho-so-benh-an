@@ -1,0 +1,12 @@
+.signup_btn {
+    -fx-background-color:  #4f56d9;
+    -fx-cursor: hand;
+}
+
+.signup_btn:hover {
+    -fx-background-color: #3c48ce;
+}
+
+.back_to_login {
+    -fx-background-color: transparent;
+}

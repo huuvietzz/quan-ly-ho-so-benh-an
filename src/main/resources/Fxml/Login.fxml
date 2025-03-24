@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.LoginController">
+   <left>
+      <AnchorPane prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: #3758fa;" BorderPane.alignment="CENTER">
+         <FontAwesomeIconView fill="WHITE" glyphName="BOOK" layoutX="101.0" layoutY="194.0" size="100" />
+         <Text fill="WHITE" layoutX="25.0" layoutY="238.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quản lý hồ sơ bệnh án">
+            <font>
+               <Font size="25.0" />
+            </font>
+         </Text>
+         <Text fill="WHITE" layoutX="46.0" layoutY="282.0" strokeType="OUTSIDE" strokeWidth="0.0" text="bệnh viện Việt Đức">
+            <font>
+               <Font size="25.0" />
+            </font>
+         </Text>
+      </AnchorPane>
+   </left>
+   <right>
+      <AnchorPane prefHeight="500.0" prefWidth="549.0" BorderPane.alignment="CENTER">
+         <TextField fx:id="usernameField" layoutX="129.0" layoutY="204.0" prefHeight="25.0" prefWidth="277.0" promptText="Tên đăng nhập" style="-fx-background-color: transparent; -fx-border-color: #3758fa; -fx-border-width: 0 0 2 0;" />
+         <PasswordField fx:id="passwordField" layoutX="131.0" layoutY="250.0" prefHeight="25.0" prefWidth="274.0" promptText="Mật khẩu" style="-fx-background-color: transparent; -fx-border-color: #3758fa; -fx-border-width: 0 0 2 0;" />
+         <Text fill="#3758fa" layoutX="157.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chào mừng bạn">
+            <font>
+               <Font size="25.0" />
+            </font>
+         </Text>
+         <FontAwesomeIconView fill="#3758fa" glyphName="USERS" layoutX="218.0" layoutY="68.0" size="50" text="" />
+         <FontAwesomeIconView fill="#3758fa" glyphName="KEY" layoutX="94.0" layoutY="276.0" size="20" />
+         <FontAwesomeIconView fill="#3758fa" glyphName="USER" layoutX="95.0" layoutY="232.0" size="20" />
+         <Button fx:id="login_btn" layoutX="131.0" layoutY="325.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="25.0" prefWidth="274.0" styleClass="login_btn" stylesheets="@../Styles/Login.css" text="Đăng nhập" textFill="WHITE" />
+         <Button fx:id="fb_btn" layoutX="131.0" layoutY="370.0" mnemonicParsing="false" onAction="#loginWithFacebook" prefHeight="25.0" prefWidth="274.0" styleClass="fb_btn" stylesheets="@../Styles/Login.css" text="Đăng nhập với facebook" textFill="WHITE" />
+         <Button fx:id="gg_btn" layoutX="130.0" layoutY="414.0" mnemonicParsing="false" onAction="#loginWithGoogle" prefHeight="25.0" prefWidth="276.0" styleClass="gg_btn" stylesheets="@../Styles/Login.css" text="Đăng nhập với google" textFill="WHITE" />
+         <CheckBox fx:id="rememberMeCheckBox" layoutX="131.0" layoutY="289.0" mnemonicParsing="false" text="Nhớ tôi" />
+         <Hyperlink layoutX="308.0" layoutY="286.0" onAction="#handleForgotPassword" text="Quên mật khẩu ?" />
+         <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="150.0" layoutY="370.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../Images/fb_logo.png" />
+         </ImageView>
+         <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="150.0" layoutY="415.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../Images/gg_logo.png" />
+         </ImageView>
+         <Text layoutX="173.0" layoutY="482.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bạn chưa có tài khoản ?" />
+         <Hyperlink layoutX="300.0" layoutY="465.0" onAction="#onSignupLinkClick" text="Đăng ký" />
+      </AnchorPane>
+   </right>
+</BorderPane>

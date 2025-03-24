@@ -1,0 +1,9 @@
+.login_btn, .gg_btn, .fb_btn {
+    -fx-background-color: #3758fa;
+    -fx-cursor: hand;
+}
+
+
+.login_btn:hover, .gg_btn:hover, .fb_btn:hover {
+    -fx-background-color: #1b3ae4;
+}
