@@ -2,15 +2,10 @@ package org.example.quanlyhosobenhan.Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import javafx.scene.control.Button;
 
 import java.awt.Desktop;
@@ -78,14 +73,8 @@ public class LoginController {
 
     // Quên mật khẩu
     @FXML
-    public void handleForgotPassword(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/ForgotPassword.fxml"));
-        Parent root = loader.load();
-
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.setTitle("Quên mật khẩu");
-        stage.show();
+    public void handleForgotPassword(ActionEvent event) {
+        SwitchScreenController.switchScreen(event, "/Fxml/ForgotPassword.fxml", "Quên mật khẩu");
     }
 
     // Đăng nhập
@@ -105,6 +94,7 @@ public class LoginController {
         } else {
             showAlert(Alert.AlertType.ERROR,"Lỗi", "Tên đăng nhập hoặc mật khẩu không đúng!");
         }
+        SwitchScreenController.switchScreen(event, "/Fxml/Main.fxml", "Quản lý hồ sơ bệnh án");
     }
 
     public void loginWithFacebook() {
@@ -126,16 +116,7 @@ public class LoginController {
     // Đăng ký
     @FXML
     public void onSignupLinkClick(ActionEvent event) throws IOException {
-            // Load file FXML của màn hình Đăng ký
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Signup.fxml"));
-            Parent root = loader.load();
-
-            // Lấy stage hiện tại và chuyển màn hình
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Đăng ký tài khoản");
-            stage.show();
+           SwitchScreenController.switchScreen(event, "/Fxml/Signup.fxml", "Đăng ký tài khoản");
     }
 
     // Hiển thị thông báo

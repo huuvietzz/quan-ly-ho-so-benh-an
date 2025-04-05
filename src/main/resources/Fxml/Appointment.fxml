@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="650.0" prefWidth="1065.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.AppointmentController">
+   <children>
+      <TextField layoutX="63.0" layoutY="33.0" prefHeight="25.0" prefWidth="303.0" promptText="Tìm kiếm lịch hẹn" />
+      <TableView layoutX="221.0" layoutY="129.0" prefHeight="263.0" prefWidth="570.0">
+         <columns>
+            <TableColumn prefWidth="57.333343505859375" text="ID" />
+            <TableColumn prefWidth="124.66661834716797" text="Bệnh nhân" />
+            <TableColumn prefWidth="108.66670227050781" text="Bác sĩ" />
+            <TableColumn prefWidth="139.33331298828125" text="Thời gian" />
+            <TableColumn minWidth="0.0" prefWidth="137.33331298828125" text="Trạng thái" />
+         </columns>
+      </TableView>
+      <Label layoutX="383.0" layoutY="93.0" text="Danh sách lịch hẹn">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <DatePicker layoutX="388.0" layoutY="34.0" />
+   </children>
+</AnchorPane>

@@ -1,0 +1,17 @@
+.root {
+    -fx-background-color: #f4dff6;
+}
+
+.search {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.printBtn {
+    -fx-background-color: #9f97de;
+    -fx-cursor: hand;
+}
+
+.printBtn:hover {
+    -fx-background-color: #8e85d6;
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="parent" prefHeight="650.0" prefWidth="1065.0" styleClass="secondary-color" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.SettingController">
+   <Label layoutX="377.0" layoutY="41.0" styleClass="primary-color" text="CÀI ĐẶT HỆ THỐNG">
+      <font>
+         <Font size="25.0" />
+      </font>
+   </Label>
+   <Label layoutX="66.0" layoutY="127.0" styleClass="primary-color" text="Chế độ thông báo">
+      <font>
+         <Font size="15.0" />
+      </font></Label>
+   <RadioButton layoutX="238.0" layoutY="123.0" mnemonicParsing="false" styleClass="primary-color" text="Bật">
+      <font>
+         <Font size="15.0" />
+      </font></RadioButton>
+   <RadioButton layoutX="328.0" layoutY="123.0" mnemonicParsing="false" styleClass="primary-color" text="Tắt">
+      <font>
+         <Font size="15.0" />
+      </font></RadioButton>
+   <Label layoutX="66.0" layoutY="168.0" styleClass="primary-color" text="Giao diện">
+      <font>
+         <Font size="15.0" />
+      </font></Label>
+</AnchorPane>

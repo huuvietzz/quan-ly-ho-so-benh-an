@@ -3,14 +3,10 @@ package org.example.quanlyhosobenhan.Controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
@@ -35,7 +31,7 @@ public class SignupController {
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
     @FXML
-    public void onSignupBtnClick(ActionEvent event) {
+    public void handleSignupBtnClick(ActionEvent event) {
         String fullName = fullNameField.getText();
         String userName = userNameField.getText();
         String email = emailField.getText();
@@ -101,14 +97,6 @@ public class SignupController {
 
     @FXML
     private void backToLogin(ActionEvent event) throws IOException {
-        // Lay man hinh Login
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Login.fxml"));
-        Parent root = loader.load();
-
-        // Lấy stage hiện tại và chuyển màn hình
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        SwitchScreenController.switchScreen(event, "/Fxml/Login.fxml", "Đăng nhập");
     }
 }

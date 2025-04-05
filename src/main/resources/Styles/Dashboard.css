@@ -1,0 +1,15 @@
+.root {
+    -fx-background-color: #f4dff6;
+}
+
+.card {
+    -fx-background-color: #5769e2;
+    -fx-pref-width: 250px;
+    -fx-pref-height: 150px;
+    -fx-background-radius: 10px;
+}
+
+.search {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}

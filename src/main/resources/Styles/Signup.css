@@ -1,3 +1,7 @@
+.root {
+    -fx-background-color: #e7f3ff;
+}
+
 .signup_btn {
     -fx-background-color:  #4f56d9;
     -fx-cursor: hand;
@@ -10,3 +14,11 @@
 .back_to_login {
     -fx-background-color: transparent;
 }
+
+.hyperlink:focused {
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    /*-fx-focus-color: transparent;*/
+    -fx-faint-focus-color: transparent;
+}
+

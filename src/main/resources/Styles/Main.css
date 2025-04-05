@@ -1,0 +1,15 @@
+.menu {
+    -fx-background-color: #3147d9;
+}
+
+.nav-btn, .logout-btn {
+    -fx-text-fill: #fff;
+    -fx-background-color: transparent;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+}
+
+.avatar {
+
+}
