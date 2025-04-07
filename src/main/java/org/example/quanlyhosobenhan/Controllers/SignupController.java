@@ -28,7 +28,7 @@ public class SignupController {
     @FXML
     private PasswordField confirmPasswordField;
 
-    private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+    private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
 
     @FXML
     public void handleSignupBtnClick(ActionEvent event) {

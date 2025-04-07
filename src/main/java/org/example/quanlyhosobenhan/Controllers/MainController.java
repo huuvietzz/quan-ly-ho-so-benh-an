@@ -44,19 +44,6 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadPage("/Fxml/Dashboard.fxml");
-
-        // Thêm sự kiện để di chuyển cửa sổ
-//        contentArea.setOnMousePressed(event -> {
-//            xOffset = event.getSceneX();
-//            yOffset = event.getSceneY();
-//        });
-//
-//        contentArea.setOnMouseDragged(event -> {
-//            Stage stage = (Stage) contentArea.getScene().getWindow();
-//            stage.setX(event.getScreenX() - xOffset);
-//            stage.setY(event.getScreenY() - yOffset);
-//        });
-
     }
 
     public void dashboard(ActionEvent event) throws IOException {

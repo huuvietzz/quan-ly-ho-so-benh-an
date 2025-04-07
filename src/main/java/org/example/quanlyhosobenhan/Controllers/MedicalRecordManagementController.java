@@ -14,7 +14,7 @@ public class MedicalRecordManagementController  {
     private Button deleteBtn;
 
     @FXML
-    private ComboBox<?> exportBtn;
+    private ComboBox<String> exportBtn;
 
     @FXML
     private Button resetBtn;
