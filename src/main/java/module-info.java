@@ -12,6 +12,9 @@ module org.example.quanlyhosobenhan {
     requires static lombok;
     requires java.validation;
     requires org.apache.poi.ooxml;
+    requires layout;
+    requires kernel;
+    requires io;
 
     opens org.example.quanlyhosobenhan to javafx.fxml, org.hibernate.orm.core;
     exports org.example.quanlyhosobenhan;

@@ -85,7 +85,7 @@
             <version>5.3.0</version>
         </dependency>
 
-        <!-- Thu vien xuat file pdf        -->
+        <!-- Thu vien xuat file pdf  -->
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itext7-core</artifactId>
@@ -93,7 +93,7 @@
             <type>pom</type>
         </dependency>
 
-        <!--        Lombok -->
+        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
