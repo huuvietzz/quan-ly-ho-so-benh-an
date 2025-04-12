@@ -7,6 +7,18 @@
     -fx-cursor: hand;
 }
 
+.search-field {
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-border-color: #ccc;
+    -fx-padding: 5px;
+}
+
+.listView {
+    -fx-background-radius: 15px;
+
+}
+
 .addBtn {
     -fx-background-color: #9f97de;
     -fx-cursor: hand;

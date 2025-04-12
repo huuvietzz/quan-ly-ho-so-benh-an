@@ -7,24 +7,16 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
+import org.example.quanlyhosobenhan.Dao.DoctorDAO;
+import org.example.quanlyhosobenhan.Model.Doctor;
 
-import java.awt.Desktop;
+import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.prefs.Preferences;
 
+
 public class LoginController {
-
-    @FXML
-    private TextField usernameField;
-
-    @FXML
-    private PasswordField passwordField;
-
-    @FXML
-    private CheckBox rememberMeCheckBox;
 
     @FXML
     private Button fb_btn;
@@ -32,69 +24,68 @@ public class LoginController {
     @FXML
     private Button gg_btn;
 
-    private Preferences prefs;
-
-    private Map<String, String> users = new HashMap<>();
-
-    // Checkbox
-    public void initialize() {
-        prefs = Preferences.userNodeForPackage(LoginController.class);
-
-        // Load thông tin tài khoản đã lưu
-        loadUsersFromPreferences();
-
-        // Kiểm tra và điền thông tin nếu có tài khoản được nhớ
-        String rememberedUser = prefs.get("rememberedUser", "");
-        if (!rememberedUser.isEmpty() && users.containsKey(rememberedUser)) {
-            usernameField.setText(rememberedUser);
-            passwordField.setText(users.get(rememberedUser));
-            rememberMeCheckBox.setSelected(true);
-        }
-    }
-
-    private void loadUsersFromPreferences() {
-        int userCount = prefs.getInt("userCount", 0);
-        for(int i = 0; i < userCount; i++) {
-            String username = prefs.get("username" + i, "");
-            String password = prefs.get("password" + i, "");
-            if(!username.isEmpty() && !password.isEmpty()) {
-                users.put(username, password);
-            }
-        }
-    }
-
-    private void saveUsersToPreferences(String username, String password) {
-        int userCount = prefs.getInt("userCount", 0);
-        prefs.put("username" + userCount, username);
-        prefs.put("password" + userCount, password);
-        prefs.putInt("userCount", userCount + 1);
-        users.put(username, password);
-    }
-
-    // Quên mật khẩu
     @FXML
-    public void handleForgotPassword(ActionEvent event) {
+    private Button login_btn;
+
+    @FXML
+    private TextField userNameField;
+
+    @FXML
+    private PasswordField passwordField;
+
+    @FXML
+    private CheckBox rememberMeCheckBox;
+
+    // Biến lưu thông tin bác sĩ đã đăng nhập
+    public static Doctor loggedInDoctor;
+
+    @FXML
+    public void initialize() {
+        loadLoginInfo();
+    }
+
+    @FXML
+    void handleCheckbox(ActionEvent event) {
+        if(rememberMeCheckBox.isSelected()){
+            saveLoginInfo();
+        } else {
+            clearLoginInfo();
+        }
+    }
+
+    @FXML
+    void handleForgotPassword(ActionEvent event) {
         SwitchScreenController.switchScreen(event, "/Fxml/ForgotPassword.fxml", "Quên mật khẩu");
     }
 
-    // Đăng nhập
     @FXML
-    public void handleLogin(ActionEvent event) {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
+    void handleLogin(ActionEvent event) {
+        String username = userNameField.getText();
+        String plainPassword = passwordField.getText();
 
-        if (users.containsKey(username) && users.get(username).equals(password)) {
-            showAlert(Alert.AlertType.INFORMATION,"Thành công", "Đăng nhập thành công!");
+        if(username.isEmpty() || plainPassword.isEmpty()){
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!");
+            return;
+        }
+
+        DoctorDAO doctorDAO = new DoctorDAO();
+        Doctor doctor = doctorDAO.login(username, plainPassword);
+
+        if(doctor != null){
+            // Lưu bác sĩ đã đăng nhập vào biến toàn cục
+            loggedInDoctor = doctor;
 
             if (rememberMeCheckBox.isSelected()) {
-                prefs.put("rememberedUser", username);
+                saveLoginInfo();
             } else {
-                prefs.remove("rememberedUser");
+                clearLoginInfo();
             }
-        } else {
-            showAlert(Alert.AlertType.ERROR,"Lỗi", "Tên đăng nhập hoặc mật khẩu không đúng!");
+
+            showAlert(Alert.AlertType.INFORMATION, "Đăng Nhập Thành Công", "Chào mừng " + doctor.getName() + "!");
+            SwitchScreenController.switchScreen(event, "/Fxml/Main.fxml", "Quản lý hồ sơ bệnh án");
+        } else{
+            showAlert(Alert.AlertType.ERROR, "Đăng Nhập Thất Bại", "Sai tên đăng nhập hoặc mật khẩu. Vui lòng thử lại!");
         }
-        SwitchScreenController.switchScreen(event, "/Fxml/Main.fxml", "Quản lý hồ sơ bệnh án");
     }
 
     public void loginWithFacebook() {
@@ -113,22 +104,42 @@ public class LoginController {
         }
     }
 
-    // Đăng ký
+
     @FXML
     public void onSignupLinkClick(ActionEvent event) throws IOException {
-           SwitchScreenController.switchScreen(event, "/Fxml/Signup.fxml", "Đăng ký tài khoản");
+        SwitchScreenController.switchScreen(event, "/Fxml/Signup.fxml", "Đăng ký");
     }
 
-    // Hiển thị thông báo
+    // Lưu userName và password vao trong máy người dùng
+    private void saveLoginInfo() {
+        Preferences prefs = Preferences.userNodeForPackage(LoginController.class);
+        prefs.put("username", userNameField.getText());
+        prefs.put("password", passwordField.getText());
+    }
+
+    private void clearLoginInfo(){
+        Preferences prefs = Preferences.userNodeForPackage(LoginController.class);
+        prefs.remove("username");
+        prefs.remove("password");
+    }
+
+    private void loadLoginInfo(){
+        Preferences prefs = Preferences.userNodeForPackage(LoginController.class);
+        String savedUsername = prefs.get("username", "");
+        String savedPassword = prefs.get("password", "");
+
+        if(!savedUsername.isEmpty() && !savedPassword.isEmpty()){
+            userNameField.setText(savedUsername);
+            passwordField.setText(savedPassword);
+            rememberMeCheckBox.setSelected(true); // checkbox nếu có dữ liệu
+        }
+    }
+
     private void showAlert(Alert.AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
-    }
-
-    public void registerUser(String username, String password) {
-        saveUsersToPreferences(username, password);
     }
 }

@@ -31,7 +31,7 @@
    </left>
    <right>
       <AnchorPane prefHeight="500.0" prefWidth="549.0" BorderPane.alignment="CENTER">
-         <TextField fx:id="usernameField" layoutX="129.0" layoutY="204.0" prefHeight="25.0" prefWidth="277.0" promptText="Tên đăng nhập" style="-fx-background-color: transparent; -fx-border-color: #3758fa; -fx-border-width: 0 0 2 0;" />
+         <TextField fx:id="userNameField" layoutX="129.0" layoutY="204.0" prefHeight="25.0" prefWidth="277.0" promptText="Tên đăng nhập" style="-fx-background-color: transparent; -fx-border-color: #3758fa; -fx-border-width: 0 0 2 0;" />
          <PasswordField fx:id="passwordField" layoutX="131.0" layoutY="250.0" prefHeight="25.0" prefWidth="274.0" promptText="Mật khẩu" style="-fx-background-color: transparent; -fx-border-color: #3758fa; -fx-border-width: 0 0 2 0;" />
          <Text fill="#3758fa" layoutX="157.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chào mừng bạn">
             <font>
@@ -44,8 +44,8 @@
          <Button fx:id="login_btn" layoutX="131.0" layoutY="325.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="25.0" prefWidth="274.0" styleClass="login_btn" stylesheets="@../Styles/Login.css" text="Đăng nhập" textFill="WHITE" />
          <Button fx:id="fb_btn" layoutX="131.0" layoutY="370.0" mnemonicParsing="false" onAction="#loginWithFacebook" prefHeight="25.0" prefWidth="274.0" styleClass="fb_btn" stylesheets="@../Styles/Login.css" text="Đăng nhập với facebook" textFill="WHITE" />
          <Button fx:id="gg_btn" layoutX="130.0" layoutY="414.0" mnemonicParsing="false" onAction="#loginWithGoogle" prefHeight="25.0" prefWidth="276.0" styleClass="gg_btn" stylesheets="@../Styles/Login.css" text="Đăng nhập với google" textFill="WHITE" />
-         <CheckBox fx:id="rememberMeCheckBox" layoutX="131.0" layoutY="289.0" mnemonicParsing="false" text="Nhớ tôi" />
-         <Hyperlink layoutX="308.0" layoutY="286.0" onAction="#handleForgotPassword" text="Quên mật khẩu ?" />
+         <CheckBox fx:id="rememberMeCheckBox" layoutX="131.0" layoutY="289.0" mnemonicParsing="false" onAction="#handleCheckbox" text="Nhớ tôi" />
+         <Hyperlink layoutX="308.0" layoutY="286.0" onAction="#handleForgotPassword" stylesheets="@../Styles/Login.css" text="Quên mật khẩu ?" />
          <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="150.0" layoutY="370.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../Images/fb_logo.png" />
          </ImageView>
@@ -53,7 +53,7 @@
             <Image url="@../Images/gg_logo.png" />
          </ImageView>
          <Text layoutX="173.0" layoutY="482.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bạn chưa có tài khoản ?" />
-         <Hyperlink layoutX="300.0" layoutY="465.0" onAction="#onSignupLinkClick" text="Đăng ký" />
+         <Hyperlink layoutX="300.0" layoutY="465.0" onAction="#onSignupLinkClick" stylesheets="@../Styles/Login.css" text="Đăng ký" />
       </AnchorPane>
    </right>
 </BorderPane>

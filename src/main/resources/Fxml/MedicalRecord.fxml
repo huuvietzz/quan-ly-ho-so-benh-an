@@ -10,38 +10,34 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1065.0" stylesheets="@../Styles/MedicalRecord.css"
-            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.quanlyhosobenhan.Controllers.MedicalRecordController">
+<AnchorPane prefHeight="650.0" prefWidth="1065.0" styleClass="primary-color" stylesheets="@../Styles/MedicalRecord.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.MedicalRecordController">
    <TableView layoutX="16.0" layoutY="114.0" prefHeight="445.0" prefWidth="1027.0">
       <columns>
-         <TableColumn prefWidth="77.33334541320801" text="Mã hồ sơ"/>
-         <TableColumn prefWidth="145.99996185302734" text="Bệnh nhân"/>
-         <TableColumn minWidth="0.0" prefWidth="139.3333740234375" text="Bác sĩ"/>
-         <TableColumn prefWidth="159.99996948242188" text="Triệu chứng"/>
-         <TableColumn minWidth="0.0" prefWidth="152.0" text="Chẩn đoán"/>
-         <TableColumn minWidth="0.0" prefWidth="133.3333740234375" text="Ngày khám"/>
-         <TableColumn minWidth="0.0" prefWidth="136.66668701171875" text="PP điều trị"/>
-         <TableColumn minWidth="0.0" prefWidth="83.33331298828125" text="Ghi chú"/>
+         <TableColumn prefWidth="77.33334541320801" text="Mã hồ sơ" />
+         <TableColumn prefWidth="145.99996185302734" text="Bệnh nhân" />
+         <TableColumn minWidth="0.0" prefWidth="139.3333740234375" text="Bác sĩ" />
+         <TableColumn prefWidth="159.99996948242188" text="Triệu chứng" />
+         <TableColumn minWidth="0.0" prefWidth="152.0" text="Chẩn đoán" />
+         <TableColumn minWidth="0.0" prefWidth="133.3333740234375" text="Ngày khám" />
+         <TableColumn minWidth="0.0" prefWidth="136.66668701171875" text="PP điều trị" />
+         <TableColumn minWidth="0.0" prefWidth="83.33331298828125" text="Ghi chú" />
       </columns>
    </TableView>
    <Label layoutX="395.0" layoutY="69.0" text="Danh sách hồ sơ bệnh án">
       <font>
-         <Font size="25.0"/>
+         <Font size="25.0" />
       </font>
    </Label>
-   <TextField layoutX="73.0" layoutY="27.0" prefHeight="25.0" prefWidth="303.0" promptText="Tìm kiếm hồ sơ bệnh án"/>
-   <DatePicker layoutX="386.0" layoutY="26.0" promptText="Ngày khám"/>
-   <Button fx:id="printBtn" layoutX="461.0" layoutY="588.0" mnemonicParsing="false" onAction="#printMedicalRecord"
-           prefHeight="40.0" prefWidth="120.0" styleClass="printBtn" text="In hồ sơ">
+   <TextField layoutX="73.0" layoutY="27.0" prefHeight="25.0" prefWidth="303.0" promptText="Tìm kiếm hồ sơ bệnh án" />
+   <DatePicker layoutX="386.0" layoutY="26.0" promptText="Ngày khám" />
+   <Button fx:id="printBtn" layoutX="461.0" layoutY="588.0" mnemonicParsing="false" onAction="#printMedicalRecord" prefHeight="40.0" prefWidth="120.0" styleClass="printBtn" text="In hồ sơ">
       <font>
-         <Font size="17.0"/>
+         <Font size="17.0" />
       </font>
    </Button>
-   <Button fx:id="searchBtn" layoutX="348.0" layoutY="28.0" mnemonicParsing="false" onAction="#search"
-           styleClass="search" stylesheets="@../Styles/MedicalRecord.css">
+   <Button fx:id="searchBtn" layoutX="348.0" layoutY="28.0" mnemonicParsing="false" onAction="#search" styleClass="search" stylesheets="@../Styles/MedicalRecord.css">
       <graphic>
-         <FontAwesomeIconView glyphName="SEARCH" text=""/>
+         <FontAwesomeIconView glyphName="SEARCH" text="" />
       </graphic>
    </Button>
 </AnchorPane>

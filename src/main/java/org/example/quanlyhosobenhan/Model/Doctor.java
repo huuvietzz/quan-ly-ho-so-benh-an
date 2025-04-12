@@ -23,6 +23,9 @@ public class Doctor {
     private String name;
 
     @Column(nullable = false, unique = true)
+    private String userName;
+
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -46,19 +49,5 @@ public class Doctor {
 
     public enum Gender {
         Nam, Nữ, Khác;
-    }
-
-    public Doctor(String name, String email, String password, String phone, String address, LocalDate birthDate, Gender gender,
-                  String department, String specialization, String position) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.phone = phone;
-        this.address = address;
-        this.birthDate = birthDate;
-        this.gender = gender;
-        this.department = department;
-        this.specialization = specialization;
-        this.position = position;
     }
 }

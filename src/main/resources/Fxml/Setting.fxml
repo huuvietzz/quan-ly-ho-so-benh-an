@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="parent" prefHeight="650.0" prefWidth="1065.0" styleClass="secondary-color" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.SettingController">
+<AnchorPane fx:id="parent" prefHeight="650.0" prefWidth="1065.0" styleClass="primary-color" stylesheets="@../Styles/Setting.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.SettingController">
    <Label layoutX="377.0" layoutY="41.0" styleClass="primary-color" text="CÀI ĐẶT HỆ THỐNG">
       <font>
          <Font size="25.0" />

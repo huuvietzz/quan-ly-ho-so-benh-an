@@ -13,7 +13,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1065.0" stylesheets="@../Styles/Dashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.DashboardController">
+<AnchorPane prefHeight="650.0" prefWidth="1065.0" styleClass="primary-color" stylesheets="@../Styles/Dashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.DashboardController">
    <AnchorPane layoutX="63.0" layoutY="72.0" prefHeight="136.0" prefWidth="213.0" styleClass="card" stylesheets="@../Styles/Dashboard.css">
       <Label layoutX="110.0" layoutY="92.0" text="Tổng số bệnh nhân" textFill="WHITE" AnchorPane.rightAnchor="11.333333333333343">
          <font>

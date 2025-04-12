@@ -12,12 +12,6 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="650.0" prefWidth="1065.0" styleClass="primary-color" stylesheets="@../Styles/PatientManagement.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.PatientManagementController">
-   <TextField layoutX="53.0" layoutY="23.0" prefHeight="25.0" prefWidth="303.0" promptText="Tìm kiếm bệnh nhân" />
-   <Button layoutX="329.0" layoutY="24.0" mnemonicParsing="false" styleClass="search">
-      <graphic>
-         <FontAwesomeIconView glyphName="SEARCH" text="" />
-      </graphic>
-   </Button>
    <TableView fx:id="patientTable" layoutX="54.0" layoutY="125.0" prefHeight="263.0" prefWidth="958.0" AnchorPane.leftAnchor="54.0" AnchorPane.rightAnchor="53.0">
       <columns>
          <TableColumn fx:id="idColumn" prefWidth="57.333343505859375" text="ID" />
@@ -68,7 +62,7 @@
    <TextField fx:id="addressField" layoutX="647.0" layoutY="419.0" prefHeight="25.0" prefWidth="207.0" />
    <TextField fx:id="emailField" layoutX="648.0" layoutY="475.0" prefHeight="25.0" prefWidth="207.0" />
    <TextField fx:id="phoneNumberField" layoutX="648.0" layoutY="531.0" prefHeight="25.0" prefWidth="207.0" />
-   <DatePicker layoutX="378.0" layoutY="24.0" />
+   <DatePicker layoutX="378.0" layoutY="24.0" promptText="Chọn ngày sinh" />
    <DatePicker fx:id="dobField" layoutX="183.0" layoutY="531.0" prefHeight="25.0" prefWidth="207.0" />
    <Button fx:id="addBtn" layoutX="45.0" layoutY="598.0" mnemonicParsing="false" onAction="#add" prefHeight="40.0" prefWidth="120.0" styleClass="addBtn" text="Thêm">
       <font>
@@ -97,4 +91,10 @@
       </font>
    </Label>
    <ComboBox fx:id="genderField" layoutX="181.0" layoutY="476.0" prefHeight="25.0" prefWidth="207.0" />
+   <TextField fx:id="searchField" layoutX="66.0" layoutY="22.0" onAction="#handleSearch" prefHeight="29.0" prefWidth="297.0" promptText="Tìm kiếm bệnh nhân" styleClass="search-field" stylesheets="@../Styles/PatientManagement.css" />
+   <Button layoutX="304.0" layoutY="22.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="57.0" styleClass="search">
+      <graphic>
+         <FontAwesomeIconView glyphName="SEARCH" text="" />
+      </graphic>
+   </Button>
 </AnchorPane>

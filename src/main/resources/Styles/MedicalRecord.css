@@ -1,4 +1,4 @@
-.root {
+.primary-color {
     -fx-background-color: #f4dff6;
 }
 
@@ -14,4 +14,9 @@
 
 .printBtn:hover {
     -fx-background-color: #8e85d6;
+}
+
+.patientField {
+    -fx-background-color: #f5f5f5;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0.3, 0, 2);
 }

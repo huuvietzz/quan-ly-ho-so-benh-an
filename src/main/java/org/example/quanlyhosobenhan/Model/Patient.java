@@ -36,6 +36,10 @@ public class Patient {
         Nam, Nữ, Khác;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id", nullable = false)
+    private Doctor doctor;
+
     public Patient(String name, String email, String phone, String address, LocalDate birthdate, Gender gender) {
         this.name = name;
         this.email = email;

@@ -12,105 +12,96 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1065.0" styleClass="root" stylesheets="@../Styles/MedicalRecordManagement.css"
-            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.quanlyhosobenhan.Controllers.MedicalRecordManagementController">
-   <TableView layoutX="16.0" layoutY="104.0" prefHeight="270.0" prefWidth="1027.0">
+<AnchorPane prefHeight="650.0" prefWidth="1065.0" styleClass="primary-color" stylesheets="@../Styles/MedicalRecordManagement.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.MedicalRecordManagementController">
+   <TableView fx:id="recordTable" layoutX="16.0" layoutY="104.0" prefHeight="270.0" prefWidth="1027.0">
       <columns>
-         <TableColumn prefWidth="77.33334541320801" text="Mã hồ sơ"/>
-         <TableColumn prefWidth="145.99996185302734" text="Bệnh nhân"/>
-         <TableColumn minWidth="0.0" prefWidth="139.3333740234375" text="Bác sĩ"/>
-         <TableColumn prefWidth="159.99996948242188" text="Triệu chứng"/>
-         <TableColumn minWidth="0.0" prefWidth="152.0" text="Chẩn đoán"/>
-         <TableColumn minWidth="0.0" prefWidth="133.3333740234375" text="Ngày khám"/>
-         <TableColumn minWidth="0.0" prefWidth="136.66668701171875" text="PP điều trị"/>
-         <TableColumn minWidth="0.0" prefWidth="83.33331298828125" text="Ghi chú"/>
+         <TableColumn fx:id="idRecordColumn" prefWidth="72.00003242492676" text="Mã hồ sơ" />
+         <TableColumn fx:id="patientColumn" prefWidth="137.99996185302734" text="Bệnh nhân" />
+         <TableColumn fx:id="symptomColumn" prefWidth="172.6667022705078" text="Triệu chứng" />
+         <TableColumn fx:id="diagnoseColumn" minWidth="0.0" prefWidth="152.0" text="Chẩn đoán" />
+         <TableColumn fx:id="consultationDateColumn" minWidth="0.0" prefWidth="133.3333740234375" text="Ngày khám" />
+         <TableColumn fx:id="treatmentColumn" minWidth="0.0" prefWidth="136.66668701171875" text="PP điều trị" />
+         <TableColumn fx:id="prescriptionColumn" minWidth="0.0" prefWidth="93.33331298828125" text="Đơn thuốc" />
+         <TableColumn fx:id="noteColumn" minWidth="0.0" prefWidth="126.66668701171875" text="Ghi chú" />
       </columns>
    </TableView>
    <Label layoutX="385.0" layoutY="59.0" text="Danh sách hồ sơ bệnh án">
       <font>
-         <Font size="25.0"/>
+         <Font size="25.0" />
       </font>
    </Label>
-   <TextField layoutX="63.0" layoutY="17.0" prefHeight="25.0" prefWidth="303.0" promptText="Tìm kiếm hồ sơ bệnh án"/>
-   <Button fx:id="searchBtn" layoutX="339.0" layoutY="17.0" mnemonicParsing="false" onAction="#search"
-           styleClass="search">
+   <TextField fx:id="recordSearchField" layoutX="63.0" layoutY="17.0" prefHeight="25.0" prefWidth="303.0" promptText="Tìm kiếm hồ sơ bệnh án" />
+   <Button layoutX="339.0" layoutY="17.0" mnemonicParsing="false" onAction="#searchRecord" styleClass="search">
       <graphic>
-         <FontAwesomeIconView glyphName="SEARCH" text=""/>
+         <FontAwesomeIconView glyphName="SEARCH" text="" />
       </graphic>
    </Button>
-   <Label layoutX="76.0" layoutY="409.0" text="Bệnh nhân">
+   <Label layoutX="120.0" layoutY="409.0" text="Bệnh nhân">
       <font>
-         <Font size="15.0"/>
+         <Font size="15.0" />
       </font>
    </Label>
-   <Label layoutX="76.0" layoutY="462.0" text="Bác sĩ">
+   <Label layoutX="121.0" layoutY="467.0" text="Triệu chứng">
       <font>
-         <Font size="15.0"/>
+         <Font size="15.0" />
       </font>
    </Label>
-   <Label layoutX="75.0" layoutY="516.0" text="Triệu chứng">
+   <Label layoutX="123.0" layoutY="534.0" text="Chẩn đoán">
       <font>
-         <Font size="15.0"/>
+         <Font size="15.0" />
       </font>
    </Label>
-   <Label layoutX="456.0" layoutY="408.0" text="Chẩn đoán">
+   <Label layoutX="625.0" layoutY="409.0" text="Ngày khám">
       <font>
-         <Font size="15.0"/>
+         <Font size="15.0" />
       </font>
    </Label>
-   <Label layoutX="456.0" layoutY="464.0" text="Ngày khám">
+   <Label layoutX="625.0" layoutY="469.0" text="PP điều trị">
       <font>
-         <Font size="15.0"/>
+         <Font size="15.0" />
       </font>
    </Label>
-   <Label layoutX="457.0" layoutY="520.0" text="PP điều trị">
+   <TextField fx:id="patientSearchField" layoutX="238.0" layoutY="404.0" onAction="#searchPatient" prefHeight="25.0" prefWidth="207.0" styleClass="patientField" stylesheets="@../Styles/MedicalRecord.css" />
+   <TextArea fx:id="symptomField" layoutX="238.0" layoutY="455.0" prefHeight="40.0" prefWidth="207.0" />
+   <TextArea fx:id="diagnoseField" layoutX="237.0" layoutY="521.0" prefHeight="40.0" prefWidth="207.0" />
+   <TextArea fx:id="treatmentField" layoutX="729.0" layoutY="452.0" prefHeight="40.0" prefWidth="207.0" />
+   <Label layoutX="626.0" layoutY="533.0" text="Ghi chú">
       <font>
-         <Font size="15.0"/>
+         <Font size="15.0" />
       </font>
    </Label>
-   <TextField layoutX="191.0" layoutY="404.0" prefHeight="25.0" prefWidth="207.0"/>
-   <TextField layoutX="192.0" layoutY="460.0" prefHeight="25.0" prefWidth="207.0"/>
-   <TextArea layoutX="193.0" layoutY="509.0" prefHeight="40.0" prefWidth="207.0"/>
-   <TextArea layoutX="560.0" layoutY="395.0" prefHeight="40.0" prefWidth="207.0"/>
-   <TextArea layoutX="561.0" layoutY="511.0" prefHeight="40.0" prefWidth="207.0"/>
-   <Label layoutX="793.0" layoutY="409.0" text="Ghi chú">
+   <TextArea fx:id="noteField" layoutX="730.0" layoutY="521.0" prefHeight="40.0" prefWidth="207.0" />
+   <Button fx:id="addBtn" layoutX="47.0" layoutY="588.0" mnemonicParsing="false" onAction="#add" prefHeight="40.0" prefWidth="120.0" styleClass="addBtn" text="Thêm">
       <font>
-         <Font size="15.0"/>
-      </font>
-   </Label>
-   <TextArea layoutX="861.0" layoutY="397.0" prefHeight="40.0" prefWidth="183.0"/>
-   <Button fx:id="addBtn" layoutX="47.0" layoutY="588.0" mnemonicParsing="false" onAction="#add" prefHeight="40.0"
-           prefWidth="120.0" styleClass="addBtn" text="Thêm">
-      <font>
-         <Font size="14.0"/>
+         <Font size="14.0" />
       </font>
    </Button>
-   <Button fx:id="resetBtn" layoutX="666.0" layoutY="587.0" mnemonicParsing="false" onAction="#reset" prefHeight="40.0"
-           prefWidth="141.0" styleClass="resetBtn" text="Làm mới danh sách">
+   <Button fx:id="resetBtn" layoutX="666.0" layoutY="587.0" mnemonicParsing="false" onAction="#reset" prefHeight="40.0" prefWidth="141.0" styleClass="resetBtn" text="Làm mới danh sách">
       <font>
-         <Font size="14.0"/>
+         <Font size="14.0" />
       </font>
    </Button>
-   <Button fx:id="deleteBtn" layoutX="463.0" layoutY="587.0" mnemonicParsing="false" onAction="#delete"
-           prefHeight="40.0" prefWidth="120.0" styleClass="deleteBtn" text="Xóa">
+   <Button fx:id="deleteBtn" layoutX="463.0" layoutY="587.0" mnemonicParsing="false" onAction="#delete" prefHeight="40.0" prefWidth="120.0" styleClass="deleteBtn" text="Xóa">
       <font>
-         <Font size="14.0"/>
+         <Font size="14.0" />
       </font>
    </Button>
-   <Button fx:id="updateBtn" layoutX="257.0" layoutY="587.0" mnemonicParsing="false" onAction="#update"
-           prefHeight="40.0" prefWidth="120.0" styleClass="updateBtn" text="Sửa">
+   <Button fx:id="updateBtn" layoutX="257.0" layoutY="587.0" mnemonicParsing="false" onAction="#update" prefHeight="40.0" prefWidth="120.0" styleClass="updateBtn" text="Sửa">
       <font>
-         <Font size="14.0"/>
+         <Font size="14.0" />
       </font>
    </Button>
-   <ComboBox fx:id="exportBtn" layoutX="929.0" layoutY="589.0" onAction="#exportFile" prefHeight="36.0" prefWidth="68.0"
-             styleClass="exportBtn"/>
+   <ComboBox fx:id="exportBtn" layoutX="929.0" layoutY="589.0" onAction="#exportFile" prefHeight="36.0" prefWidth="68.0" styleClass="exportBtn" />
    <Label layoutX="870.0" layoutY="594.0" text="Xuất file">
       <font>
-         <Font size="14.0"/>
+         <Font size="14.0" />
       </font>
    </Label>
-   <DatePicker layoutX="376.0" layoutY="16.0" promptText="Ngày khám"/>
-   <DatePicker layoutX="561.0" layoutY="462.0" prefHeight="25.0" prefWidth="207.0"/>
+   <DatePicker layoutX="376.0" layoutY="16.0" promptText="Ngày khám" />
+   <DatePicker fx:id="consultationDateField" layoutX="729.0" layoutY="403.0" prefHeight="25.0" prefWidth="207.0" />
+   <Button layoutX="393.0" layoutY="404.0" mnemonicParsing="false" onAction="#searchPatient" prefHeight="24.0" prefWidth="51.0" styleClass="search">
+      <graphic>
+         <FontAwesomeIconView glyphName="SEARCH" />
+      </graphic>
+   </Button>
 </AnchorPane>

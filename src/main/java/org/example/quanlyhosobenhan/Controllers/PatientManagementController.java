@@ -35,6 +35,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
@@ -108,17 +109,29 @@ public class PatientManagementController {
 
     @FXML
     public void initialize() {
-        idColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getId()));
-        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-        genderColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getGender()));
+        idColumn.setCellValueFactory(cellData
+                -> new SimpleObjectProperty<>(cellData.getValue().getId()));
+
+        nameColumn.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().getName()));
+
+        genderColumn.setCellValueFactory(cellData
+                -> new SimpleObjectProperty<>(cellData.getValue().getGender()));
+
         dobColumn.setCellValueFactory(cellData -> {
             LocalDate birthdate = cellData.getValue().getBirthdate();
             String formattedDate = birthdate != null ? birthdate.format(VIETNAMESE_DATE_FORMATTER) : "";
             return new SimpleStringProperty(formattedDate);
         });
-        addressColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress()));
-        emailColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
-        phoneNumberColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPhone()));
+
+        addressColumn.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().getAddress()));
+
+        emailColumn.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().getEmail()));
+
+        phoneNumberColumn.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().getPhone()));
 
         genderField.getItems().setAll(Patient.Gender.values());
         exportBtn.getItems().addAll("Excel (.xlsx)", "Word (.docx)", "PDF (.pdf)");
@@ -165,6 +178,18 @@ public class PatientManagementController {
         LocalDate birthdate = dobField.getValue();
         Patient.Gender gender = genderField.getSelectionModel().getSelectedItem();
 
+        // Kiem tra xem email da ton tai chua
+        if(patientDAO.existsByEmail(email)){
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "Email đã tồn tại! Vui lòng nhập email khác!");
+            return;
+        }
+
+        // Kiem tra xem numberPhone da ton tai chua
+        if(patientDAO.existsByNumberPhone(phoneNumber)){
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "SĐT đã tồn tại! Vui lòng nhập SĐT khác!");
+            return;
+        }
+
         Patient patient = new Patient(name, email, phoneNumber, address, birthdate, gender);
         patientDAO.savePatient(patient);
         showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Thêm thành công!");
@@ -182,7 +207,7 @@ public class PatientManagementController {
     void update(ActionEvent event) {
         Patient selectedPatient = patientTable.getSelectionModel().getSelectedItem();
         if (selectedPatient == null) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi","Vui lòng chọn bệnh nhân cần cập nhật.");
+            showAlert(Alert.AlertType.ERROR, "Lỗi","Vui lòng chọn bệnh nhân cần sửa.");
             return;
         }
 
@@ -242,7 +267,6 @@ public class PatientManagementController {
 
     @FXML
     void reset(ActionEvent event) {
-        patientDAO.deleteAllPatient();
         refreshTable();
         showAlert(Alert.AlertType.INFORMATION, "Thông báo!", "Đã làm mới toàn bộ danh sách!");
     }
@@ -472,7 +496,7 @@ public class PatientManagementController {
                 Document document = new Document(pdfDoc);
 
                 // Load font Arial hỗ trợ tiếng Việt
-                String fontPath = "src/main/resources/Fonts/arial.ttf"; // Đảm bảo đúng đường dẫn
+                String fontPath = "src/main/resources/Fonts/arial.ttf";
                 PdfFont font = PdfFontFactory.createFont(fontPath, PdfEncodings.IDENTITY_H);
 
                 // Thêm tiêu đề căn giữa
@@ -519,9 +543,6 @@ public class PatientManagementController {
         }
     }
 
-
-
-
     private void showAlert(Alert.AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -530,9 +551,15 @@ public class PatientManagementController {
         alert.showAndWait();
     }
 
+    @FXML
+    void handleSearch(ActionEvent event) {
+
+    }
+    
     private void refreshTable() {
         patientTable.getItems().clear();
-        patientTable.getItems().addAll(patientDAO.getAllPatient());
+        List<Patient> patients = patientDAO.getPatientsByDoctorId(LoginController.loggedInDoctor.getId());
+        patientTable.getItems().addAll(patients);
     }
 
     private boolean isValidPhoneNumber(String phoneNumber) {

@@ -4,7 +4,6 @@ module org.example.quanlyhosobenhan {
     requires de.jensd.fx.glyphs.fontawesome;
     requires java.desktop;
     requires java.prefs;
-    requires jbcrypt;
     requires java.persistence;
     requires java.naming;
     requires org.hibernate.orm.core;
@@ -15,6 +14,8 @@ module org.example.quanlyhosobenhan {
     requires layout;
     requires kernel;
     requires io;
+    requires bcrypt;
+    requires mysql.connector.j;
 
     opens org.example.quanlyhosobenhan to javafx.fxml, org.hibernate.orm.core;
     exports org.example.quanlyhosobenhan;

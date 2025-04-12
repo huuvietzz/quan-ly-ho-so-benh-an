@@ -33,18 +33,18 @@ public class MedicalRecord {
 
     private LocalDate consultationDate;
 
-    private String treamentMethod;
+    private String treatmentMethod;
 
     private String notes;
 
     public MedicalRecord(Patient patient, Doctor doctor, String symptoms, String diagnosis,
-                         LocalDate consultationDate, String treamentMethod, String notes) {
+                         LocalDate consultationDate, String treatmentMethod, String notes) {
         this.patient = patient;
         this.doctor = doctor;
         this.symptoms = symptoms;
         this.diagnosis = diagnosis;
         this.consultationDate = consultationDate;
-        this.treamentMethod = treamentMethod;
+        this.treatmentMethod = treatmentMethod;
         this.notes = notes;
     }
 }

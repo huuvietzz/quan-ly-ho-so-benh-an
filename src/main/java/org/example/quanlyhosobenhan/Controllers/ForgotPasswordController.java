@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import org.example.quanlyhosobenhan.Dao.DoctorDAO;
 
 import java.io.IOException;
 
@@ -19,7 +20,7 @@ public class ForgotPasswordController {
     @FXML
     private PasswordField confirmPasswordField;
 
-    public void handleContinueBtn(ActionEvent event) throws IOException {
+    public void handleContinueBtn(ActionEvent event) {
         String userName = userNameField.getText();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
@@ -34,11 +35,23 @@ public class ForgotPasswordController {
             return;
         }
 
-        try {
-            showAlert(Alert.AlertType.INFORMATION,"Thành công", "Mật khẩu của bạn đã được đặt lại thành công. Vui lòng đăng nhập lại!");
-            backToLogin(event);
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR,"Lỗi", "Không thể tải lại màn hình đăng nhập!");
+        DoctorDAO doctorDAO = new DoctorDAO();
+        boolean isUpdate = doctorDAO.updatePassword(userName, password);
+
+        if(!doctorDAO.existByUserName(userName)){
+            showAlert(Alert.AlertType.ERROR, "Lỗi","Tên đăng nhập không tồn tại!");
+            return;
+        }
+
+        if(isUpdate){
+            showAlert(Alert.AlertType.INFORMATION, "Thành công", "Mật khẩu của bạn đã được đặt lại thành công. Vui lòng đăng nhập lại!");
+            try{
+                backToLogin(event);
+            } catch(IOException e){
+                showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể tải lại màn hình đăng nhập!");
+            }
+        } else {
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "Không tìm thấy tài khoản để đặt lại mật khẩu!");
         }
     }
 

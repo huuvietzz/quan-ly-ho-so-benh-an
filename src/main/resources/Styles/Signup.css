@@ -11,14 +11,13 @@
     -fx-background-color: #3c48ce;
 }
 
-.back_to_login {
-    -fx-background-color: transparent;
-}
+/*.back_to_login {*/
+/*    -fx-background-color: transparent;*/
+/*}*/
 
 .hyperlink:focused {
     -fx-border-color: transparent;
     -fx-background-insets: 0;
-    /*-fx-focus-color: transparent;*/
     -fx-faint-focus-color: transparent;
 }
 

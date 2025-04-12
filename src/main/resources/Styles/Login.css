@@ -7,3 +7,9 @@
 .login_btn:hover, .gg_btn:hover, .fb_btn:hover {
     -fx-background-color: #1b3ae4;
 }
+
+.hyperlink:focused {
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-faint-focus-color: transparent;
+}

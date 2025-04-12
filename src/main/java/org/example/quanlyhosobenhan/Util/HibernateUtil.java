@@ -15,13 +15,13 @@ public class HibernateUtil {
                 // Cấu hình Hibernate
                 Configuration configuration = new Configuration()
                         .setProperty(Environment.URL, "jdbc:mysql://localhost/HospitalManagement")
-                        .setProperty(Environment.DRIVER, "com.mysql.cj.jdbc.Driver")  // Sử dụng com.mysql.cj.jdbc.Driver thay cho com.mysql.jdbc.Driver
+                        .setProperty(Environment.DRIVER, "com.mysql.cj.jdbc.Driver")
                         .setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect")
                         .setProperty("hibernate.show_sql", "true")
                         .setProperty("hibernate.format_sql", "true")
                         .setProperty("hibernate.connection.username", "root")
                         .setProperty("hibernate.connection.password", "Huuvietdz123@")
-                        .setProperty("hibernate.hbm2ddl.auto", "update"); // Tùy chọn tạo bảng hoặc cập nhật bảng khi có sự thay đổi;
+                        .setProperty("hibernate.hbm2ddl.auto", "update");
 
                 configuration.addAnnotatedClass(Appointment.class);
                 configuration.addAnnotatedClass(Doctor.class);
