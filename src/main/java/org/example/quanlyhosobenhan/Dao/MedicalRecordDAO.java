@@ -1,5 +1,7 @@
 package org.example.quanlyhosobenhan.Dao;
 
+import com.mysql.cj.protocol.x.Notice;
+import org.example.quanlyhosobenhan.Model.Doctor;
 import org.example.quanlyhosobenhan.Model.MedicalRecord;
 import org.example.quanlyhosobenhan.Util.HibernateUtil;
 import org.hibernate.Session;
@@ -34,6 +36,12 @@ public class MedicalRecordDAO {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public List<MedicalRecord> getMedicalRecordsByDoctor(int doctorId) {
+        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("from MedicalRecord where doctor.id = :doctorId", MedicalRecord.class).setParameter("doctorId", doctorId).getResultList();
         }
     }
 

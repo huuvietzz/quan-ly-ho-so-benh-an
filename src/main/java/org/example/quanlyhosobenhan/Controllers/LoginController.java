@@ -7,6 +7,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 import org.example.quanlyhosobenhan.Dao.DoctorDAO;
 import org.example.quanlyhosobenhan.Model.Doctor;
 
@@ -42,6 +43,11 @@ public class LoginController {
     @FXML
     public void initialize() {
         loadLoginInfo();
+        passwordField.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ENTER) {
+                login_btn.fire();
+            }
+        });
     }
 
     @FXML

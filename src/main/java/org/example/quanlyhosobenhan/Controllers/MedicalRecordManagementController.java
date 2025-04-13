@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.quanlyhosobenhan.Dao.MedicalRecordDAO;
 import org.example.quanlyhosobenhan.Dao.PatientDAO;
+import org.example.quanlyhosobenhan.Model.Doctor;
 import org.example.quanlyhosobenhan.Model.MedicalRecord;
 import org.example.quanlyhosobenhan.Model.Patient;
 
@@ -92,10 +93,17 @@ public class MedicalRecordManagementController  {
         idRecordColumn.setCellValueFactory(cellData
                 -> new SimpleObjectProperty<>(cellData.getValue().getId()));
 
+        patientColumn.setCellValueFactory(cellData -> {
+            Patient patient = cellData.getValue().getPatient();
+            return new SimpleStringProperty(patient != null ? patient.getName() : "");
+        });
+
         patientColumn.setCellFactory(cellData   -> new TableCell<>() {
             private final Hyperlink link = new Hyperlink();
 
             {
+                link.setUnderline(true);
+                link.setFocusTraversable(false);
                 link.setOnAction((ActionEvent event) -> {
                     MedicalRecord record = getTableView().getItems().get(getIndex());
                     Patient patient = record.getPatient();
@@ -111,6 +119,23 @@ public class MedicalRecordManagementController  {
                 } else {
                     link.setText(item);
                     setGraphic(link);
+
+                   // Check nếu dòng được chọn thì đổi màu chữ
+                    TableRow<?> currentRow = getTableRow();
+                    if(currentRow != null && currentRow.isSelected()) {
+                        link.setStyle("-fx-text-fill: #fff");
+                    } else {
+                        link.setStyle("-fx-text-fill: #2a73ff;");
+                    }
+
+                    // Bắt sự kiện thay đổi chọn dòng
+                    currentRow.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
+                        if(isNowSelected) {
+                            link.setStyle("-fx-text-fill: #fff");
+                        } else {
+                            link.setStyle("-fx-text-fill: #2a73ff;");
+                        }
+                    });
                 }
             }
         });
@@ -131,6 +156,8 @@ public class MedicalRecordManagementController  {
                 private final Hyperlink link = new Hyperlink("Kê đơn");
 
             {
+                link.setUnderline(true);
+                link.setFocusTraversable(false);
                 link.setOnAction((ActionEvent event) -> {
                     MedicalRecord record = getTableView().getItems().get(getIndex());
                     openPrescriptionForm(record.getId());
@@ -144,6 +171,22 @@ public class MedicalRecordManagementController  {
                     setGraphic(null);
                 } else {
                     setGraphic(link);
+                    // Check nếu dòng được chọn thì đổi màu chữ
+                    TableRow<?> currentRow = getTableRow();
+                    if(currentRow != null && currentRow.isSelected()) {
+                        link.setStyle("-fx-text-fill: #fff");
+                    } else {
+                        link.setStyle("-fx-text-fill: #2a73ff;");
+                    }
+
+                    // Bắt sự kiện thay đổi chọn dòng
+                    currentRow.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
+                        if(isNowSelected) {
+                            link.setStyle("-fx-text-fill: #fff");
+                        } else {
+                            link.setStyle("-fx-text-fill: #2a73ff;");
+                        }
+                    });
                 }
             }
         });
@@ -164,6 +207,9 @@ public class MedicalRecordManagementController  {
 //            handleExport(selectedFormat);
 //        });
 
+//        Load bảng ngay khi mở form
+        refreshTable();
+
     }
 
     @FXML
@@ -175,7 +221,6 @@ public class MedicalRecordManagementController  {
                 return;
             }
 
-            String patientName = patientSearchField.getText();
             String symptom = symptomField.getText();
             String diagnosis = diagnoseField.getText();
             String treatment = treatmentField.getText();
@@ -183,7 +228,9 @@ public class MedicalRecordManagementController  {
             LocalDate consultationDate = consultationDateField.getValue();
 
             MedicalRecord record = new MedicalRecord();
+            Doctor selectedDoctor = LoginController.loggedInDoctor;
             record.setPatient(selectedPatient);
+            record.setDoctor(selectedDoctor);
             record.setSymptoms(symptom);
             record.setDiagnosis(diagnosis);
             record.setTreatmentMethod(treatment);
@@ -246,7 +293,8 @@ public class MedicalRecordManagementController  {
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
             // ⚡ Load dữ liệu từ database
-            table.getItems().addAll(new PatientDAO().getAllPatient());
+            int doctorId = LoginController.loggedInDoctor.getId();
+            table.getItems().addAll(new PatientDAO().getPatientsByDoctorId(doctorId));
 
             table.setRowFactory(tv -> {
                 TableRow<Patient> row = new TableRow<>();
@@ -265,7 +313,7 @@ public class MedicalRecordManagementController  {
               searchField.setPromptText("Tìm bệnh nhân...");
               searchField.textProperty().addListener((obs, oldText, newText) -> {
                   table.setItems(FXCollections.observableArrayList(
-                          new PatientDAO().getAllPatient().stream()
+                          new PatientDAO().getPatientsByDoctorId(doctorId).stream()
                                   .filter(p ->
                                           String.valueOf(p.getId()).contains(newText) ||
                                           p.getName().toLowerCase().contains(newText.toLowerCase()))
@@ -299,7 +347,21 @@ public class MedicalRecordManagementController  {
     }
 
     private void openPatientDetail(Patient patient) {
+        if (patient == null) return;
 
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Thông tin bệnh nhân");
+        alert.setHeaderText(patient.getName());
+        alert.setContentText(
+                "ID: " + patient.getId() + "\n" +
+                        "Tên: " + patient.getName() + "\n" +
+                        "Giới tính: " + patient.getGender() + "\n" +
+                        "Ngày sinh: " + patient.getBirthdate() + "\n" +
+                        "Địa chỉ: " + patient.getAddress() + "\n" +
+                        "Email: " + patient.getEmail() + "\n" +
+                        "SĐT: " + patient.getPhone()
+        );
+        alert.showAndWait();
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String content) {
@@ -311,7 +373,8 @@ public class MedicalRecordManagementController  {
     }
 
     private void refreshTable() {
+        int doctorId = LoginController.loggedInDoctor.getId();
         recordTable.getItems().clear();
-        recordTable.getItems().addAll(medicalRecordDAO.getAllMedicalRecords());
+        recordTable.getItems().addAll(medicalRecordDAO.getMedicalRecordsByDoctor(doctorId));
     }
 }
