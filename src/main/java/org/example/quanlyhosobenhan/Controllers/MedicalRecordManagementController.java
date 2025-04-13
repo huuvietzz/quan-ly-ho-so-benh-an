@@ -66,7 +66,7 @@ public class MedicalRecordManagementController  {
     private TableView<MedicalRecord> recordTable;
 
     @FXML
-    private Button resetBtn;
+    private Button refreshBtn;
 
     @FXML
     private TableColumn<MedicalRecord, String> symptomColumn;
@@ -255,7 +255,24 @@ public class MedicalRecordManagementController  {
 
     @FXML
     void delete(ActionEvent event) {
+        MedicalRecord selectedRecord = recordTable.getSelectionModel().getSelectedItem();
+        if(selectedRecord == null) {
+            showAlert(Alert.AlertType.ERROR, "Lỗi!", "Vui lòng chọn hồ sơ bệnh án để xóa!");
+            return;
+        }
 
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Xác nhận xóa");
+        confirmAlert.setHeaderText("Bạn có chắc chắn xóa hồ sơ bệnh án này?");
+        confirmAlert.setContentText(null);
+
+        confirmAlert.showAndWait().ifPresent(response -> {
+           if(response == ButtonType.OK) {
+               medicalRecordDAO.deleteMedicalRecord(selectedRecord.getId());
+               showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Xóa hồ sơ bệnh án thành công!");
+               refreshTable();
+           }
+        });
     }
 
     @FXML
@@ -264,8 +281,9 @@ public class MedicalRecordManagementController  {
     }
 
     @FXML
-    void reset(ActionEvent event) {
-
+    void refresh(ActionEvent event) {
+        refreshTable();
+        showAlert(Alert.AlertType.INFORMATION, "Thông báo!", "Đã làm mới toàn bộ danh sách!");
     }
 
     @FXML

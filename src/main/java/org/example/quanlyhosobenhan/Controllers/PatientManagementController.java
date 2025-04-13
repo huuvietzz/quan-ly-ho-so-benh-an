@@ -27,7 +27,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xwpf.usermodel.*;
+import org.example.quanlyhosobenhan.Dao.MedicalRecordDAO;
 import org.example.quanlyhosobenhan.Dao.PatientDAO;
+import org.example.quanlyhosobenhan.Model.MedicalRecord;
 import org.example.quanlyhosobenhan.Model.Patient;
 
 
@@ -93,7 +95,7 @@ public class PatientManagementController {
     private TextField phoneNumberField;
 
     @FXML
-    private Button resetBtn;
+    private Button refreshBtn;
 
     @FXML
     private Button updateBtn;
@@ -256,17 +258,34 @@ public class PatientManagementController {
     void delete(ActionEvent event) {
         Patient selectedPatient = patientTable.getSelectionModel().getSelectedItem();
         if(selectedPatient == null) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng chọn sinh viên cần xóa!");
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng chọn bệnh nhân cần xóa!");
             return;
         }
-        patientDAO.deletePatient(selectedPatient.getId());
-        showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đã xóa thành công!");
-        refreshTable();
 
+        MedicalRecordDAO medicalRecordDAO = new MedicalRecordDAO();
+        List<MedicalRecord> records = medicalRecordDAO.getRecordsByPatientId(selectedPatient.getId());
+        if (!records.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "Bệnh nhân này vẫn còn hồ sơ bệnh án. Vui lòng xóa hết hồ sơ trước khi xóa bệnh nhân!");
+            return;
+        }
+
+
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Xác nhận xóa");
+        confirmAlert.setHeaderText("Bạn có chắc chắn muốn xóa bệnh nhân này!");
+        confirmAlert.setContentText(null);
+
+        confirmAlert.showAndWait().ifPresent(response -> {
+            if(response == ButtonType.OK) {
+                patientDAO.deletePatient(selectedPatient.getId());
+                showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đã xóa thành công!");
+                refreshTable();
+            }
+        });
     }
 
     @FXML
-    void reset(ActionEvent event) {
+    void refresh(ActionEvent event) {
         refreshTable();
         showAlert(Alert.AlertType.INFORMATION, "Thông báo!", "Đã làm mới toàn bộ danh sách!");
     }

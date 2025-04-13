@@ -48,6 +48,12 @@ public class LoginController {
                 login_btn.fire();
             }
         });
+
+        userNameField.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ENTER) {
+                login_btn.fire();
+            }
+        });
     }
 
     @FXML

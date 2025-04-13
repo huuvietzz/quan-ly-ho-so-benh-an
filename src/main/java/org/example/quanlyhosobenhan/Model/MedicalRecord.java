@@ -27,6 +27,10 @@ public class MedicalRecord {
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
+    @ManyToOne
+    @JoinColumn(name = "prescription_id")
+    private Prescription prescription;
+
     private String symptoms;
 
     private String diagnosis;
@@ -38,7 +42,7 @@ public class MedicalRecord {
     private String notes;
 
     public MedicalRecord(Patient patient, Doctor doctor, String symptoms, String diagnosis,
-                         LocalDate consultationDate, String treatmentMethod, String notes) {
+                         LocalDate consultationDate, String treatmentMethod, String notes, Prescription prescription) {
         this.patient = patient;
         this.doctor = doctor;
         this.symptoms = symptoms;
@@ -46,5 +50,6 @@ public class MedicalRecord {
         this.consultationDate = consultationDate;
         this.treatmentMethod = treatmentMethod;
         this.notes = notes;
+        this.prescription = prescription;
     }
 }

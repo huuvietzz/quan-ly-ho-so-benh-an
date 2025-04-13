@@ -45,6 +45,17 @@ public class MedicalRecordDAO {
         }
     }
 
+    public List<MedicalRecord> getRecordsByPatientId(int patientId) {
+        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("from MedicalRecord where patient.id = :patientId", MedicalRecord.class)
+                    .setParameter("patientId", patientId)
+                    .getResultList();
+        } catch(Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public void deleteMedicalRecord(Integer id) {
         try(Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
