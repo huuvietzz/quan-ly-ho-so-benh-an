@@ -1,0 +1,19 @@
+.add_btn {
+    -fx-background-color: transparent;
+}
+
+.save_btn {
+    -fx-background-color: #68a6c0;
+}
+
+.save_btn:hover {
+    -fx-background-color: #439cbc;
+}
+
+.cancel_btn {
+    -fx-background-color: #d0833f;
+}
+
+.cancel_btn:hover {
+    -fx-background-color: #be691e;
+}

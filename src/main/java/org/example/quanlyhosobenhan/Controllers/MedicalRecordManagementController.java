@@ -5,7 +5,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -16,6 +18,7 @@ import org.example.quanlyhosobenhan.Model.Doctor;
 import org.example.quanlyhosobenhan.Model.MedicalRecord;
 import org.example.quanlyhosobenhan.Model.Patient;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 public class MedicalRecordManagementController  {
@@ -361,7 +364,18 @@ public class MedicalRecordManagementController  {
     }
 
     private void openPrescriptionForm(int recordId) {
-        System.out.println("Mở form kê đơn cho hồ sơ có ID: " + recordId);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/PrescriptionForm.fxml"));
+            Parent root = loader.load();
+            PrescriptionFormController controller = loader.getController();
+
+            Stage stage = new Stage();
+            stage.setTitle("Kê đơn thuốc");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     private void openPatientDetail(Patient patient) {

@@ -77,7 +77,7 @@ public class MainController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Đăng xuất");
         alert.setHeaderText("Bạn có chắc chắn muốn đăng xuất?");
-        alert.setContentText("Nhấn OK để đăng xuất, Cancel để hủy.");
+        alert.setContentText(null);
 
         // Hiển thị hộp thoại và đợi người dùng tra lời
         Optional<ButtonType> result = alert.showAndWait();

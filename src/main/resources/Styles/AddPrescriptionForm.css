@@ -1,0 +1,17 @@
+.add_btn {
+    -fx-background-color: #9f97de;
+    -fx-cursor: hand;
+}
+
+.add_btn:hover {
+    -fx-background-color: #8e85d6;
+}
+
+.cancel_btn {
+    -fx-background-color: #d0833f;
+    -fx-cursor: hand;
+}
+
+.cancel_btn:hover {
+    -fx-background-color: #be691e;
+}
