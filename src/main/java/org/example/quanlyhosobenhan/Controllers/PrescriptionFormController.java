@@ -11,6 +11,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.example.quanlyhosobenhan.Model.PrescriptionDetail;
 
@@ -70,9 +72,16 @@ public class PrescriptionFormController {
 
         // Cột dữ liệu
         medicineNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMedicineName()));
+        setupEllipsisColumn(medicineNameColumn, "Chi tiết tên đơn thuốc");
+
         dosageColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDosage()));
+        setupEllipsisColumn(dosageColumn, "Chi tiết liều lượng");
+
         usageInstructionsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsageInstructions()));
+        setupEllipsisColumn(usageInstructionsColumn, "Chi tiết cách dùng");
+
         noteColum.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNotes()));
+        setupEllipsisColumn(noteColum, "Chi tiết ghi chú");
 
         addActionButtonsToTable();
 
@@ -183,6 +192,74 @@ public class PrescriptionFormController {
                     setGraphic(null);
                 } else {
                     setGraphic(hbox);
+                }
+            }
+        });
+    }
+
+    private void showDetailDialog(String title, String content) {
+        Stage dialog = new Stage();
+        dialog.setTitle(title);
+
+        TextArea textArea = new TextArea(content);
+        textArea.setWrapText(true);
+        textArea.setEditable(false);
+        textArea.setPrefSize(400, 200);
+
+        Button closeButton = new Button("Đóng");
+        closeButton.setOnAction(e -> dialog.close());
+
+        VBox vbox = new VBox(10, textArea, closeButton);
+        vbox.setStyle("-fx-padding: 10;");
+        Scene scene = new Scene(vbox);
+        dialog.setScene(scene);
+        dialog.initOwner(prescriptionTable.getScene().getWindow());
+        dialog.show();
+    }
+
+    // Hàm giúp hiển thị nội dung khi nội dung vuot quá chieu dài của cột
+    private void setupEllipsisColumn(TableColumn<PrescriptionDetail, String> column, String dialogTitle) {
+        column.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setTooltip(null);
+                    setOnMouseClicked(null);
+                    setStyle(""); // Reset lại style nếu ô rỗng
+                } else {
+                    // Đo chiều rộng văn bản thực tế
+                    Text text = new Text(item);
+                    text.setFont(getFont());
+                    double textWidth = text.getLayoutBounds().getWidth();
+
+                    //Chiều rộng cột - padding (khoảng 10px mặc định)
+                    double cellWidth = column.getWidth() - 10;
+
+                    // Nếu quá rộng, cắt dần và thêm "..."
+                    if(textWidth > cellWidth) {
+                        String shortened = item;
+                        text.setText(shortened);
+                        while(text.getLayoutBounds().getWidth() > cellWidth - 10 && shortened.length() > 0) {
+                            shortened = shortened.substring(0, shortened.length() - 1);
+                            text.setText(shortened + "...");
+                        }
+                        setText(shortened + "...");
+                        setTooltip(new Tooltip("Bấm để xem chi tiết"));
+                        setStyle("-fx-cursor: hand;");
+                        setOnMouseClicked(event -> {
+                            if (event.getClickCount() == 1 && !isEmpty()) {
+                                showDetailDialog(dialogTitle, item);
+                            }
+                        });
+                    } else {
+                        // Nếu ngắn, hiển thị bình thường, không cần tooltip hay click
+                        setText(item);
+                        setTooltip(null);
+                        setOnMouseClicked(null);
+                        setStyle("");
+                    }
                 }
             }
         });
