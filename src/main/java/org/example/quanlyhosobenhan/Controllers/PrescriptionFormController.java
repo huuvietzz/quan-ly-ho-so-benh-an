@@ -1,12 +1,12 @@
 package org.example.quanlyhosobenhan.Controllers;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -14,10 +14,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.example.quanlyhosobenhan.Dao.PrescriptionDAO;
+import org.example.quanlyhosobenhan.Dao.PrescriptionDetailDAO;
+import org.example.quanlyhosobenhan.Model.MedicalRecord;
+import org.example.quanlyhosobenhan.Model.Patient;
+import org.example.quanlyhosobenhan.Model.Prescription;
 import org.example.quanlyhosobenhan.Model.PrescriptionDetail;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class PrescriptionFormController {
     @FXML
@@ -50,20 +56,28 @@ public class PrescriptionFormController {
     @FXML
     private TableColumn<PrescriptionDetail, String> usageInstructionsColumn;
 
-    // Ô nhập dữ liệu chi tiết thuốc
-    @FXML
-    private TextField medicineNameInput;
-
-    @FXML
-    private TextField dosageInput;
-
-    @FXML
-    private TextField usageInput;
-
-    @FXML
-    private TextField noteInput;
-
     private final ObservableList<PrescriptionDetail> prescriptionDetails = FXCollections.observableArrayList();
+
+    private Patient patient;
+
+    private Prescription existingPrescription;
+
+    private MedicalRecord medicalRecord;
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+        if (patientField != null) {
+            patientField.setText(patient.getName());
+        }
+    }
+
+    public void setExistingPrescription(Prescription existingPrescription) {
+        this.existingPrescription = existingPrescription;
+    }
+
+    public void setMedicalRecord(MedicalRecord medicalRecord) {
+        this.medicalRecord = medicalRecord;
+    }
 
     @FXML
     public void initialize() {
@@ -72,7 +86,7 @@ public class PrescriptionFormController {
 
         // Cột dữ liệu
         medicineNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMedicineName()));
-        setupEllipsisColumn(medicineNameColumn, "Chi tiết tên đơn thuốc");
+        setupEllipsisColumn(medicineNameColumn, "Chi tiết tên thuốc");
 
         dosageColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDosage()));
         setupEllipsisColumn(dosageColumn, "Chi tiết liều lượng");
@@ -86,9 +100,28 @@ public class PrescriptionFormController {
         addActionButtonsToTable();
 
         // Gán sẵn thông tin bệnh nhân, bác sĩ, ngày kê
-        doctorField.setText("BS. Nguyễn Văn A");
-        patientField.setText("Nguyễn Văn B");
-        prescriptionDateField.setText("2025-04-15");
+        if(LoginController.loggedInDoctor != null) {
+            doctorField.setText(LoginController.loggedInDoctor.getUserName());
+            doctorField.setEditable(false);
+        }
+        
+        Platform.runLater(() -> {
+            if (patient != null) {
+                patientField.setText(patient.getName());
+                patientField.setEditable(false);
+            }
+        });
+
+        prescriptionDateField.setEditable(false);
+
+        Platform.runLater(() -> {
+            if (existingPrescription != null) {
+                generalNotesField.setText(existingPrescription.getNotes());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH'h':mm'm':ss's'");
+                prescriptionDateField.setText(existingPrescription.getPrescriptionDate().format(formatter));
+                prescriptionDetails.setAll(PrescriptionDetailDAO.getByPrescriptionId(existingPrescription.getId()));
+            }
+        });
     }
 
     @FXML
@@ -116,12 +149,65 @@ public class PrescriptionFormController {
 
     @FXML
     void cancelBtn(ActionEvent event) {
-
+        Stage stage = (Stage)prescriptionTable.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
     void saveBtn(ActionEvent event) {
-//         showAlert();
+        // Lưu phần csdl của prescription
+        String notes = generalNotesField.getText();
+        LocalDateTime prescriptionDate = LocalDateTime.now();
+
+        Prescription prescription;
+        if(existingPrescription != null) {
+            // Cập nhật đơn thuốc cũ
+            prescription = existingPrescription;
+            prescription.setNotes(notes);
+            prescription.setPrescriptionDate(prescriptionDate);
+            PrescriptionDAO.updatePrescription(prescription);
+        } else {
+            // Thêm mới đơn thuốc
+            prescription = new Prescription();
+            prescription.setPatient(patient);
+            prescription.setDoctor(LoginController.loggedInDoctor);
+            prescription.setMedicalRecord(medicalRecord);
+            prescription.setPrescriptionDate(prescriptionDate);
+            prescription.setNotes(notes);
+            PrescriptionDAO.savePrescription(prescription);
+        }
+
+        // Lấy danh sách hiện tại trong DB
+        List<PrescriptionDetail> currentDetailsInDb = PrescriptionDetailDAO.getByPrescriptionId(prescription.getId());
+
+        // Phân biệt dòng mới và dòng cũ
+        for (PrescriptionDetail detail : prescriptionDetails) {
+            detail.setPrescription(prescription);
+            if (detail.getId() == null || detail.getId() == 0) {
+                PrescriptionDetailDAO.savePrescriptionDetail(detail); // dòng mới
+            } else {
+                PrescriptionDetailDAO.updatePrescriptionDetail(detail); // dòng cũ
+            }
+        }
+
+        // Xóa các dòng đã bị xóa trên giao diện (không còn trong prescriptionDetails)
+        for (PrescriptionDetail oldDetail : currentDetailsInDb) {
+            boolean stillExists = prescriptionDetails.stream()
+                    .anyMatch(d -> d.getId() != null && d.getId().equals(oldDetail.getId()));
+            if (!stillExists) {
+                PrescriptionDetailDAO.deletePrescriptionDetail(oldDetail);
+            }
+        }
+
+        // Cập nhật giao diện (hiển thị ngày giờ đẹp)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH'h':mm'm':ss's'");
+        prescriptionDateField.setText(prescriptionDate.format(formatter));
+
+        prescriptionDetails.clear();
+        prescriptionDetails.addAll(PrescriptionDetailDAO.getByPrescriptionId(prescription.getId()));
+
+        showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đơn thuốc đã được lưu thành công!");
+        closeWindow();
     }
 
     private void addActionButtonsToTable() {
@@ -263,6 +349,11 @@ public class PrescriptionFormController {
                 }
             }
         });
+    }
+
+    private void closeWindow(){
+        Stage stage = (Stage) prescriptionTable.getScene().getWindow();
+        stage.close();
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String content) {

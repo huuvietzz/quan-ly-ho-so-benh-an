@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -28,14 +29,11 @@ public class Prescription {
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 
-    private LocalDate prescriptionDate;
+    @OneToOne
+    @JoinColumn(name = "medicalRecord_id")
+    private MedicalRecord medicalRecord;
+
+    private LocalDateTime prescriptionDate;
 
     private String notes;
-
-    public Prescription(Patient patient, Doctor doctor, LocalDate prescriptionDate, String notes) {
-        this.patient = patient;
-        this.doctor = doctor;
-        this.prescriptionDate = prescriptionDate;
-        this.notes = notes;
-    }
 }

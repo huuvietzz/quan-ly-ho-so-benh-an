@@ -29,12 +29,4 @@ public class PrescriptionDetail {
     private String usageInstructions;
 
     private String notes;
-
-    public PrescriptionDetail(String notes, String usageInstructions, String dosage, String medicineName, Prescription prescription) {
-        this.notes = notes;
-        this.usageInstructions = usageInstructions;
-        this.dosage = dosage;
-        this.medicineName = medicineName;
-        this.prescription = prescription;
-    }
 }

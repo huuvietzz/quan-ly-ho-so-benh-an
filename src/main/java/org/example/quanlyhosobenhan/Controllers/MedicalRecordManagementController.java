@@ -12,11 +12,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import lombok.Setter;
 import org.example.quanlyhosobenhan.Dao.MedicalRecordDAO;
 import org.example.quanlyhosobenhan.Dao.PatientDAO;
+import org.example.quanlyhosobenhan.Dao.PrescriptionDAO;
 import org.example.quanlyhosobenhan.Model.Doctor;
 import org.example.quanlyhosobenhan.Model.MedicalRecord;
 import org.example.quanlyhosobenhan.Model.Patient;
+import org.example.quanlyhosobenhan.Model.Prescription;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -87,6 +90,7 @@ public class MedicalRecordManagementController  {
     private Button updateBtn;
 
     private Patient selectedPatient;
+
 
     private MedicalRecordDAO medicalRecordDAO = new MedicalRecordDAO();
 
@@ -368,6 +372,19 @@ public class MedicalRecordManagementController  {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/PrescriptionForm.fxml"));
             Parent root = loader.load();
             PrescriptionFormController controller = loader.getController();
+
+            MedicalRecord record = medicalRecordDAO.getMedicalRecordById(recordId);
+            Patient patient = record.getPatient();
+
+            controller.setPatient(patient);
+
+            //Kiểm tra nếu đã có đơn thuốc => truyền vào
+            Prescription existingPrescription = PrescriptionDAO.getByMedicalRecordId(recordId);
+            if (existingPrescription != null) {
+                controller.setExistingPrescription(existingPrescription);
+            } else {
+                controller.setMedicalRecord(record); // dùng nếu tạo đơn mới cần medicalRecord
+            }
 
             Stage stage = new Stage();
             stage.setTitle("Kê đơn thuốc");

@@ -13,8 +13,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -116,6 +119,7 @@ public class PatientManagementController {
 
         nameColumn.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getName()));
+        setupEllipsisColumn(nameColumn, "Chi tiết tên");
 
         genderColumn.setCellValueFactory(cellData
                 -> new SimpleObjectProperty<>(cellData.getValue().getGender()));
@@ -128,9 +132,11 @@ public class PatientManagementController {
 
         addressColumn.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getAddress()));
+        setupEllipsisColumn(addressColumn, "Chi tiết địa chỉ");
 
         emailColumn.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getEmail()));
+        setupEllipsisColumn(emailColumn, "Chi tiết email");
 
         phoneNumberColumn.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getPhone()));
@@ -603,5 +609,73 @@ public class PatientManagementController {
         else if (format.equals("PDF (.pdf)")) {
             exportToPDF();
         }
+    }
+
+    private void showDetailDialog(String title, String content) {
+        Stage dialog = new Stage();
+        dialog.setTitle(title);
+
+        TextArea textArea = new TextArea(content);
+        textArea.setWrapText(true);
+        textArea.setEditable(false);
+        textArea.setPrefSize(400, 200);
+
+        Button closeButton = new Button("Đóng");
+        closeButton.setOnAction(e -> dialog.close());
+
+        VBox vbox = new VBox(10, textArea, closeButton);
+        vbox.setStyle("-fx-padding: 10;");
+        Scene scene = new Scene(vbox);
+        dialog.setScene(scene);
+        dialog.initOwner(patientTable.getScene().getWindow());
+        dialog.show();
+    }
+
+    // Hàm giúp hiển thị nội dung khi nội dung vuot quá chieu dài của cột
+    private void setupEllipsisColumn(TableColumn<Patient, String> column, String dialogTitle) {
+        column.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setTooltip(null);
+                    setOnMouseClicked(null);
+                    setStyle(""); // Reset lại style nếu ô rỗng
+                } else {
+                    // Đo chiều rộng văn bản thực tế
+                    Text text = new Text(item);
+                    text.setFont(getFont());
+                    double textWidth = text.getLayoutBounds().getWidth();
+
+                    //Chiều rộng cột - padding (khoảng 10px mặc định)
+                    double cellWidth = column.getWidth() - 10;
+
+                    // Nếu quá rộng, cắt dần và thêm "..."
+                    if(textWidth > cellWidth) {
+                        String shortened = item;
+                        text.setText(shortened);
+                        while(text.getLayoutBounds().getWidth() > cellWidth - 10 && shortened.length() > 0) {
+                            shortened = shortened.substring(0, shortened.length() - 1);
+                            text.setText(shortened + "...");
+                        }
+                        setText(shortened + "...");
+                        setTooltip(new Tooltip("Bấm để xem chi tiết"));
+                        setStyle("-fx-cursor: hand;");
+                        setOnMouseClicked(event -> {
+                            if (event.getClickCount() == 1 && !isEmpty()) {
+                                showDetailDialog(dialogTitle, item);
+                            }
+                        });
+                    } else {
+                        // Nếu ngắn, hiển thị bình thường, không cần tooltip hay click
+                        setText(item);
+                        setTooltip(null);
+                        setOnMouseClicked(null);
+                        setStyle("");
+                    }
+                }
+            }
+        });
     }
 }

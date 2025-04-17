@@ -30,6 +30,15 @@ public class MedicalRecordDAO {
         }
     }
 
+    public MedicalRecord getMedicalRecordById(int id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(MedicalRecord.class, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public List<MedicalRecord> getAllMedicalRecords() {
         try(Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("from MedicalRecord ", MedicalRecord.class).getResultList();

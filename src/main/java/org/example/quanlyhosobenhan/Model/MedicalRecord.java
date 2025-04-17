@@ -27,10 +27,6 @@ public class MedicalRecord {
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
-    @ManyToOne
-    @JoinColumn(name = "prescription_id")
-    private Prescription prescription;
-
     private String symptoms;
 
     private String diagnosis;
@@ -41,8 +37,11 @@ public class MedicalRecord {
 
     private String notes;
 
+//    @OneToOne(mappedBy = "medicalRecord", cascade = CascadeType.ALL)
+//    private Prescription prescription;
+
     public MedicalRecord(Patient patient, Doctor doctor, String symptoms, String diagnosis,
-                         LocalDate consultationDate, String treatmentMethod, String notes, Prescription prescription) {
+                         LocalDate consultationDate, String treatmentMethod, String notes) {
         this.patient = patient;
         this.doctor = doctor;
         this.symptoms = symptoms;
@@ -50,6 +49,5 @@ public class MedicalRecord {
         this.consultationDate = consultationDate;
         this.treatmentMethod = treatmentMethod;
         this.notes = notes;
-        this.prescription = prescription;
     }
 }
