@@ -43,11 +43,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class PatientManagementController {
-
-    @FXML
-    private Button addBtn;
 
     @FXML
     private TableColumn<Patient, String> addressColumn;
@@ -56,13 +54,19 @@ public class PatientManagementController {
     private TextField addressField;
 
     @FXML
-    private Button deleteBtn;
-
-    @FXML
     private TableColumn<Patient, String> dobColumn;
 
     @FXML
     private DatePicker dobField;
+
+    @FXML
+    private DatePicker endDatePicker;
+
+    @FXML
+    private DatePicker startDatePicker;
+
+    @FXML
+    private TextField searchTextField;
 
     @FXML
     private TableColumn<Patient, String> emailColumn;
@@ -96,12 +100,6 @@ public class PatientManagementController {
 
     @FXML
     private TextField phoneNumberField;
-
-    @FXML
-    private Button refreshBtn;
-
-    @FXML
-    private Button updateBtn;
 
     private static final DateTimeFormatter VIETNAMESE_DATE_FORMATTER =
             DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.forLanguageTag("vi-VN"));
@@ -154,6 +152,19 @@ public class PatientManagementController {
         });
 
         refreshTable();
+
+        // Xử lý tìm kiếm
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filterRecordsCombined(newValue);
+        });
+
+        // Xu ly chon khoang ngay sinh
+        startDatePicker.valueProperty().addListener((obs, oldDate, newDate) -> {
+            filterRecordsCombined(searchTextField.getText());
+        });
+        endDatePicker.valueProperty().addListener((obs, oldDate, newDate) ->{
+            filterRecordsCombined(searchTextField.getText());
+        });
     }
 
     @FXML
@@ -677,5 +688,43 @@ public class PatientManagementController {
                 }
             }
         });
+    }
+
+    // Hàm tìm kiếm kết hợp giữa tìm kiếm và chọn khoảng ngày sinh
+    private void filterRecordsCombined(String keyword) {
+        LocalDate startDate = startDatePicker.getValue();
+        LocalDate endDate = endDatePicker.getValue();
+
+        PatientDAO patientDAO = new PatientDAO();
+        List<Patient> allRecords = patientDAO.getPatientsByDoctorId(LoginController.loggedInDoctor.getId());
+
+        List<Patient> filtered = allRecords.stream()
+                .filter(patient -> {
+                    LocalDate dob  = patient.getBirthdate();
+                    if(dob  == null) return false;
+
+                    // Lọc theo khoảng ngày được chọn
+                    boolean afterOrEqualStart = (startDate == null || !dob .isBefore(startDate)); // consultationDate >= startDate
+                    boolean beforeOrEqualEnd = (endDate == null || !dob .isAfter(endDate)); // consultationDate <= endDate
+                    if(!(afterOrEqualStart && beforeOrEqualEnd))  return false;
+
+                    // Lọc theo từ khóa nếu có
+                    if(keyword != null && !keyword.trim().isEmpty()) {
+                        String combined = (
+                                (patient != null ? patient.getName() : "") + " " +
+                                        patient.getGender() + " " +
+                                        patient.getAddress() + " " +
+                                        patient.getEmail() + " " +
+                                        patient.getPhone() + " " +
+                                        dob.toString() + " " +
+                                        patient.getId()
+                        ).toLowerCase();
+
+                        return combined.contains(keyword.toLowerCase());
+                    }
+                    return true; // Neu ko có từ khó, chỉ lọc theo ngày
+                }).collect(Collectors.toList());
+
+        patientTable.getItems().setAll(filtered);
     }
 }

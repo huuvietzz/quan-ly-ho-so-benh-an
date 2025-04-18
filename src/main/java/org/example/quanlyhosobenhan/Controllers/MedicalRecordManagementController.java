@@ -11,8 +11,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import lombok.Setter;
 import org.example.quanlyhosobenhan.Dao.MedicalRecordDAO;
 import org.example.quanlyhosobenhan.Dao.PatientDAO;
 import org.example.quanlyhosobenhan.Dao.PrescriptionDAO;
@@ -37,6 +37,12 @@ public class MedicalRecordManagementController  {
 
     @FXML
     private DatePicker consultationDateField;
+
+    @FXML
+    private DatePicker startDatePicker;
+
+    @FXML
+    private DatePicker endDatePicker;
 
     @FXML
     private Button deleteBtn;
@@ -69,7 +75,7 @@ public class MedicalRecordManagementController  {
     private TextField patientSearchField;
 
     @FXML
-    private TextField recordSearchField;
+    private TextField searchTextField;
 
     @FXML
     private TableView<MedicalRecord> recordTable;
@@ -107,6 +113,7 @@ public class MedicalRecordManagementController  {
             Patient patient = cellData.getValue().getPatient();
             return new SimpleStringProperty(patient != null ? patient.getName() : "");
         });
+
 
         patientColumn.setCellFactory(cellData   -> new TableCell<>() {
             private final Hyperlink link = new Hyperlink();
@@ -152,9 +159,11 @@ public class MedicalRecordManagementController  {
 
         symptomColumn.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getSymptoms()));
+        setupEllipsisColumn(symptomColumn, "Chi tiết triệu chứng");
 
         diagnoseColumn.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getDiagnosis()));
+        setupEllipsisColumn(diagnoseColumn, "Chi tiết chẩn đoán");
 
         consultationDateColumn.setCellValueFactory(cellData
                 -> new SimpleObjectProperty<>(cellData.getValue().getConsultationDate()));
@@ -174,6 +183,7 @@ public class MedicalRecordManagementController  {
 
         treatmentColumn.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getTreatmentMethod()));
+        setupEllipsisColumn(treatmentColumn, "Chi tiết pp điều trị");
 
         prescriptionColumn.setCellFactory(col -> new TableCell<>() {
                 private final Hyperlink link = new Hyperlink();
@@ -226,6 +236,7 @@ public class MedicalRecordManagementController  {
 
         noteColumn.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getNotes()));
+        setupEllipsisColumn(noteColumn, "Chi tiết ghi chú");
 
         exportBtn.getItems().addAll("Excel (.xlsx)", "Word (.docx)", "PDF (.pdf)");
 
@@ -240,14 +251,21 @@ public class MedicalRecordManagementController  {
 //            handleExport(selectedFormat);
 //        });
 
-//        Load bảng ngay khi mở form
+        // Load bảng ngay khi mở form
         refreshTable();
 
         // Xử lý tìm kiếm
-        recordSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filterRecords(newValue.trim().toLowerCase());
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filterRecordsCombined(newValue);
         });
 
+        // Xu ly chon khoang ngay sinh
+        startDatePicker.valueProperty().addListener((obs, oldDate, newDate) -> {
+            filterRecordsCombined(searchTextField.getText());
+        });
+        endDatePicker.valueProperty().addListener((obs, oldDate, newDate) ->{
+            filterRecordsCombined(searchTextField.getText());
+        });
     }
 
     @FXML
@@ -438,29 +456,41 @@ public class MedicalRecordManagementController  {
 
     }
 
-    private void filterRecords(String keyword) {
-        if(keyword.isEmpty()) {
-            refreshTable();
-            return;
-        }
+    // Hàm tìm kiếm kết hợp giữa tìm kiếm và chọn khoảng ngày sinh
+    private void filterRecordsCombined(String keyword) {
+        LocalDate startDate = startDatePicker.getValue();
+        LocalDate endDate = endDatePicker.getValue();
 
-        List<MedicalRecord> doctorRecords = medicalRecordDAO.getMedicalRecordsByDoctor(LoginController.loggedInDoctor.getId());
+        List<MedicalRecord> allRecords = medicalRecordDAO.getMedicalRecordsByDoctor(LoginController.loggedInDoctor.getId());
 
-        List<MedicalRecord> filtered = doctorRecords.stream()
+        List<MedicalRecord> filtered = allRecords.stream()
                 .filter(record -> {
-                   Patient patient = record.getPatient();
-                   String combined = (
-                           (patient != null ? patient.getName() : "") + " " +
-                                   record.getSymptoms() + " " +
-                                   record.getDiagnosis() + " " +
-                                   record.getTreatmentMethod() + " " +
-                                   record.getNotes() + " " +
-                                   (record.getConsultationDate() != null ? record.getConsultationDate() : "") + " " +
-                                   record.getId()
-                           ).toLowerCase();
+                    LocalDate consultationDate  = record.getConsultationDate();
+                    if(consultationDate  == null) return false;
 
-                   return combined.contains(keyword);
+                    // Lọc theo khoảng ngày được chọn
+                    boolean afterOrEqualStart = (startDate == null || !consultationDate .isBefore(startDate)); // consultationDate >= startDate
+                    boolean beforeOrEqualEnd = (endDate == null || !consultationDate .isAfter(endDate)); // consultationDate <= endDate
+                    if(!(afterOrEqualStart && beforeOrEqualEnd))  return false;
+
+                    // Lọc theo từ khóa nếu có
+                    if(keyword != null && !keyword.trim().isEmpty()) {
+                        Patient patient = record.getPatient();
+                        String combined = (
+                                (patient != null ? patient.getName() : "") + " " +
+                                        record.getSymptoms() + " " +
+                                        record.getDiagnosis() + " " +
+                                        record.getTreatmentMethod() + " " +
+                                        record.getNotes() + " " +
+                                        consultationDate.toString() + " " +
+                                        record.getId()
+                                ).toLowerCase();
+
+                        return combined.contains(keyword.toLowerCase());
+                    }
+                    return true; // Neu ko có từ khó, chỉ lọc theo ngày
                 }).collect(Collectors.toList());
+
         recordTable.getItems().setAll(filtered);
     }
 
@@ -481,9 +511,6 @@ public class MedicalRecordManagementController  {
             if (existingPrescription != null) {
                 controller.setExistingPrescription(existingPrescription);
             }
-//            else {
-//                controller.setMedicalRecord(record); // dùng nếu tạo đơn mới cần medicalRecord
-//            }
 
             Stage stage = new Stage();
             stage.setTitle("Kê đơn thuốc");
@@ -514,6 +541,74 @@ public class MedicalRecordManagementController  {
                         "SĐT: " + patient.getPhone()
         );
         alert.showAndWait();
+    }
+
+    // Hàm giúp hiển thị nội dung khi nội dung vuot quá chieu dài của cột
+    private void setupEllipsisColumn(TableColumn<MedicalRecord, String> column, String dialogTitle) {
+        column.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setTooltip(null);
+                    setOnMouseClicked(null);
+                    setStyle(""); // Reset lại style nếu ô rỗng
+                } else {
+                    // Đo chiều rộng văn bản thực tế
+                    Text text = new Text(item);
+                    text.setFont(getFont());
+                    double textWidth = text.getLayoutBounds().getWidth();
+
+                    //Chiều rộng cột - padding (khoảng 10px mặc định)
+                    double cellWidth = column.getWidth() - 10;
+
+                    // Nếu quá rộng, cắt dần và thêm "..."
+                    if(textWidth > cellWidth) {
+                        String shortened = item;
+                        text.setText(shortened);
+                        while(text.getLayoutBounds().getWidth() > cellWidth - 10 && shortened.length() > 0) {
+                            shortened = shortened.substring(0, shortened.length() - 1);
+                            text.setText(shortened + "...");
+                        }
+                        setText(shortened + "...");
+                        setTooltip(new Tooltip("Bấm để xem chi tiết"));
+                        setStyle("-fx-cursor: hand;");
+                        setOnMouseClicked(event -> {
+                            if (event.getClickCount() == 1 && !isEmpty()) {
+                                showDetailDialog(dialogTitle, item);
+                            }
+                        });
+                    } else {
+                        // Nếu ngắn, hiển thị bình thường, không cần tooltip hay click
+                        setText(item);
+                        setTooltip(null);
+                        setOnMouseClicked(null);
+                        setStyle("");
+                    }
+                }
+            }
+        });
+    }
+
+    private void showDetailDialog(String title, String content) {
+        Stage dialog = new Stage();
+        dialog.setTitle(title);
+
+        TextArea textArea = new TextArea(content);
+        textArea.setWrapText(true);
+        textArea.setEditable(false);
+        textArea.setPrefSize(400, 200);
+
+        Button closeButton = new Button("Đóng");
+        closeButton.setOnAction(e -> dialog.close());
+
+        VBox vbox = new VBox(10, textArea, closeButton);
+        vbox.setStyle("-fx-padding: 10;");
+        Scene scene = new Scene(vbox);
+        dialog.setScene(scene);
+        dialog.initOwner(recordTable.getScene().getWindow());
+        dialog.show();
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String content) {

@@ -27,7 +27,7 @@ public class Patient {
 
     private String address;
 
-    private LocalDate birthdate;;
+    private LocalDate birthdate;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
