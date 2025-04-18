@@ -30,8 +30,8 @@
          <Font size="25.0" />
       </font>
    </Label>
-   <TextField fx:id="recordSearchField" layoutX="63.0" layoutY="17.0" prefHeight="25.0" prefWidth="303.0" promptText="Tìm kiếm hồ sơ bệnh án" />
-   <Button layoutX="339.0" layoutY="17.0" mnemonicParsing="false" onAction="#searchRecord" styleClass="search">
+   <TextField fx:id="recordSearchField" layoutX="63.0" layoutY="17.0" prefHeight="25.0" prefWidth="303.0" promptText="Tìm kiếm hồ sơ bệnh án" styleClass="search-field" stylesheets="@../Styles/MedicalRecordManagement.css" />
+   <Button layoutX="335.0" layoutY="19.0" mnemonicParsing="false" onAction="#searchRecord" styleClass="search">
       <graphic>
          <FontAwesomeIconView glyphName="SEARCH" text="" />
       </graphic>
@@ -97,11 +97,12 @@
          <Font size="14.0" />
       </font>
    </Label>
-   <DatePicker layoutX="376.0" layoutY="16.0" promptText="Ngày khám" />
+   <DatePicker layoutX="376.0" layoutY="19.0" promptText="Ngày khám bắt đầu" />
    <DatePicker fx:id="consultationDateField" layoutX="729.0" layoutY="403.0" prefHeight="25.0" prefWidth="207.0" />
    <Button layoutX="393.0" layoutY="404.0" mnemonicParsing="false" onAction="#searchPatient" prefHeight="24.0" prefWidth="51.0" styleClass="search">
       <graphic>
          <FontAwesomeIconView glyphName="SEARCH" />
       </graphic>
    </Button>
+   <DatePicker layoutX="577.0" layoutY="19.0" promptText="Ngày khám kết thúc" />
 </AnchorPane>

@@ -157,7 +157,12 @@ public class PrescriptionFormController {
     void saveBtn(ActionEvent event) {
         // Lưu phần csdl của prescription
         String notes = generalNotesField.getText();
-        LocalDateTime prescriptionDate = LocalDateTime.now();
+
+        // Lấy thời gian hiện tại
+        LocalDateTime now = LocalDateTime.now();
+        // Ghép ngày từ ngày khám và giờ hiện tại
+        LocalDateTime prescriptionDate = medicalRecord.getConsultationDate()
+                .atTime(now.getHour(), now.getMinute(), now.getSecond());
 
         Prescription prescription;
         if(existingPrescription != null) {

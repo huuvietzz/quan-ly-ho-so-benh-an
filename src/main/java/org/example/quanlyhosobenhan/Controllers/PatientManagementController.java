@@ -104,7 +104,7 @@ public class PatientManagementController {
     private Button updateBtn;
 
     private static final DateTimeFormatter VIETNAMESE_DATE_FORMATTER =
-            DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.forLanguageTag("vi-VN"));
+            DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.forLanguageTag("vi-VN"));
 
     private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{3,6}$";
 

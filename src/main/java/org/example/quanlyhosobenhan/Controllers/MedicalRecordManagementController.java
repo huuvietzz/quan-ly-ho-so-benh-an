@@ -23,6 +23,9 @@ import org.example.quanlyhosobenhan.Model.Prescription;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MedicalRecordManagementController  {
 
@@ -156,11 +159,24 @@ public class MedicalRecordManagementController  {
         consultationDateColumn.setCellValueFactory(cellData
                 -> new SimpleObjectProperty<>(cellData.getValue().getConsultationDate()));
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        consultationDateColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.format(formatter));
+                }
+            }
+        });
+
         treatmentColumn.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getTreatmentMethod()));
 
         prescriptionColumn.setCellFactory(col -> new TableCell<>() {
-                private final Hyperlink link = new Hyperlink("Kê đơn");
+                private final Hyperlink link = new Hyperlink();
 
             {
                 link.setUnderline(true);
@@ -174,10 +190,20 @@ public class MedicalRecordManagementController  {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if(empty) {
+                if(empty || getIndex() >= getTableView().getItems().size()) {
                     setGraphic(null);
                 } else {
+                    MedicalRecord record = getTableView().getItems().get(getIndex());
+
+                    // Kiểm tra xem có đơn thuốc không
+                    Prescription existingPrescription = PrescriptionDAO.getByMedicalRecordId(record.getId());
+                    if (existingPrescription != null) {
+                        link.setText("Xem đơn");
+                    } else {
+                        link.setText("Kê đơn");
+                    }
                     setGraphic(link);
+
                     // Check nếu dòng được chọn thì đổi màu chữ
                     TableRow<?> currentRow = getTableRow();
                     if(currentRow != null && currentRow.isSelected()) {
@@ -216,6 +242,11 @@ public class MedicalRecordManagementController  {
 
 //        Load bảng ngay khi mở form
         refreshTable();
+
+        // Xử lý tìm kiếm
+        recordSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filterRecords(newValue.trim().toLowerCase());
+        });
 
     }
 
@@ -261,6 +292,50 @@ public class MedicalRecordManagementController  {
     }
 
     @FXML
+    void update(ActionEvent event) {
+        try {
+            MedicalRecord selectedMedicalRecord = recordTable.getSelectionModel().getSelectedItem();
+            if (selectedMedicalRecord == null) {
+                showAlert(Alert.AlertType.ERROR, "Lỗi","Vui lòng chọn bệnh nhân cần sửa.");
+                return;
+            }
+
+            String symptom = symptomField.getText();
+            String diagnosis = diagnoseField.getText();
+            String treatment = treatmentField.getText();
+            String note = noteField.getText();
+            LocalDate consultationDate = consultationDateField.getValue();
+
+            if(selectedPatient == null || symptom.isEmpty() || diagnosis.isEmpty()
+                    || treatment.isEmpty() || consultationDate == null) {
+                showAlert(Alert.AlertType.ERROR, "Lỗi","Vui lòng điền đầy đủ thông tin!");
+                return;
+            }
+
+            selectedMedicalRecord.setSymptoms(symptom);
+            selectedMedicalRecord.setDiagnosis(diagnosis);
+            selectedMedicalRecord.setTreatmentMethod(treatment);
+            selectedMedicalRecord.setNotes(note);
+            selectedMedicalRecord.setConsultationDate(consultationDate);
+
+            medicalRecordDAO.updateMedicalRecord(selectedMedicalRecord);
+            showAlert(Alert.AlertType.INFORMATION, "Thông báo!", "Cập nhật hồ sơ bệnh án thành công!");
+            refreshTable();
+
+            selectedPatient = null;
+            patientSearchField.clear();
+            symptomField.clear();
+            diagnoseField.clear();
+            treatmentField.clear();
+            noteField.clear();
+            consultationDateField.setValue(null);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
     void delete(ActionEvent event) {
         MedicalRecord selectedRecord = recordTable.getSelectionModel().getSelectedItem();
         if(selectedRecord == null) {
@@ -293,10 +368,6 @@ public class MedicalRecordManagementController  {
         showAlert(Alert.AlertType.INFORMATION, "Thông báo!", "Đã làm mới toàn bộ danh sách!");
     }
 
-    @FXML
-    void update(ActionEvent event) {
-
-    }
 
     @FXML
     void searchPatient(ActionEvent event) {
@@ -367,6 +438,32 @@ public class MedicalRecordManagementController  {
 
     }
 
+    private void filterRecords(String keyword) {
+        if(keyword.isEmpty()) {
+            refreshTable();
+            return;
+        }
+
+        List<MedicalRecord> doctorRecords = medicalRecordDAO.getMedicalRecordsByDoctor(LoginController.loggedInDoctor.getId());
+
+        List<MedicalRecord> filtered = doctorRecords.stream()
+                .filter(record -> {
+                   Patient patient = record.getPatient();
+                   String combined = (
+                           (patient != null ? patient.getName() : "") + " " +
+                                   record.getSymptoms() + " " +
+                                   record.getDiagnosis() + " " +
+                                   record.getTreatmentMethod() + " " +
+                                   record.getNotes() + " " +
+                                   (record.getConsultationDate() != null ? record.getConsultationDate() : "") + " " +
+                                   record.getId()
+                           ).toLowerCase();
+
+                   return combined.contains(keyword);
+                }).collect(Collectors.toList());
+        recordTable.getItems().setAll(filtered);
+    }
+
     private void openPrescriptionForm(int recordId) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/PrescriptionForm.fxml"));
@@ -377,19 +474,22 @@ public class MedicalRecordManagementController  {
             Patient patient = record.getPatient();
 
             controller.setPatient(patient);
+            controller.setMedicalRecord(record);
 
             //Kiểm tra nếu đã có đơn thuốc => truyền vào
             Prescription existingPrescription = PrescriptionDAO.getByMedicalRecordId(recordId);
             if (existingPrescription != null) {
                 controller.setExistingPrescription(existingPrescription);
-            } else {
-                controller.setMedicalRecord(record); // dùng nếu tạo đơn mới cần medicalRecord
             }
+//            else {
+//                controller.setMedicalRecord(record); // dùng nếu tạo đơn mới cần medicalRecord
+//            }
 
             Stage stage = new Stage();
             stage.setTitle("Kê đơn thuốc");
             stage.setScene(new Scene(root));
-            stage.show();
+            stage.showAndWait();
+            refreshTable();
         } catch(IOException e){
             e.printStackTrace();
         }
@@ -398,6 +498,9 @@ public class MedicalRecordManagementController  {
     private void openPatientDetail(Patient patient) {
         if (patient == null) return;
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String formattedBirthDate = patient.getBirthdate().format(formatter);
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Thông tin bệnh nhân");
         alert.setHeaderText(patient.getName());
@@ -405,7 +508,7 @@ public class MedicalRecordManagementController  {
                 "ID: " + patient.getId() + "\n" +
                         "Tên: " + patient.getName() + "\n" +
                         "Giới tính: " + patient.getGender() + "\n" +
-                        "Ngày sinh: " + patient.getBirthdate() + "\n" +
+                        "Ngày sinh: " + formattedBirthDate + "\n" +
                         "Địa chỉ: " + patient.getAddress() + "\n" +
                         "Email: " + patient.getEmail() + "\n" +
                         "SĐT: " + patient.getPhone()
