@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -56,6 +57,15 @@ public class PrescriptionFormController {
     @FXML
     private TableColumn<PrescriptionDetail, String> usageInstructionsColumn;
 
+    @FXML
+    private Button addButton;
+
+    @FXML
+    private Button saveButton;
+
+    @FXML
+    private Button cancelButton;
+
     private final ObservableList<PrescriptionDetail> prescriptionDetails = FXCollections.observableArrayList();
 
     private Patient patient;
@@ -78,6 +88,7 @@ public class PrescriptionFormController {
     public void setMedicalRecord(MedicalRecord medicalRecord) {
         this.medicalRecord = medicalRecord;
     }
+
 
     @FXML
     public void initialize() {
@@ -367,5 +378,28 @@ public class PrescriptionFormController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+
+    public void setReadOnly(boolean readOnly) {
+        if (readOnly) {
+            hideNode(addButton);
+            hideNode(saveButton);
+            hideNode(cancelButton);
+
+            // Ẩn sạch sẽ cột hành động
+            actionColumn.setVisible(false);
+            // Xóa ko gian của cột
+            actionColumn.setPrefWidth(0);
+            // Cập nhật lại độ rộng các cột còn lại
+            prescriptionTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        }
+    }
+
+    private void hideNode(Node node) {
+        if (node != null) {
+            node.setVisible(false);    // không hiển thị
+            node.setManaged(false);    // không chiếm diện tích
+        }
     }
 }

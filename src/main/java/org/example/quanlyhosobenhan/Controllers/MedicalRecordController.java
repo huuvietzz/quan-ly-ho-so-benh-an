@@ -5,11 +5,15 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.print.PrinterJob;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import org.example.quanlyhosobenhan.Dao.MedicalRecordDAO;
 import org.example.quanlyhosobenhan.Dao.PrescriptionDAO;
@@ -54,6 +58,9 @@ public class MedicalRecordController {
 
     @FXML
     private TextField searchTextField;
+
+    @FXML
+    private AnchorPane medicalRecordPane;
 
     @FXML
     private TableColumn<MedicalRecord, String> symptomColumn;
@@ -162,15 +169,7 @@ public class MedicalRecordController {
                 if(empty || getIndex() >= getTableView().getItems().size()) {
                     setGraphic(null);
                 } else {
-                    MedicalRecord record = getTableView().getItems().get(getIndex());
-
-                    // Kiểm tra xem có đơn thuốc không
-                    Prescription existingPrescription = PrescriptionDAO.getByMedicalRecordId(record.getId());
-                    if (existingPrescription != null) {
-                        link.setText("Xem đơn");
-                    } else {
-                        link.setText("Kê đơn");
-                    }
+                    link.setText("Xem đơn");
                     setGraphic(link);
 
                     // Check nếu dòng được chọn thì đổi màu chữ
@@ -343,6 +342,12 @@ public class MedicalRecordController {
 
     private void openPrescriptionForm(int recordId) {
         try {
+            Prescription existingPrescription = PrescriptionDAO.getByMedicalRecordId(recordId);
+            if (existingPrescription == null) {
+                showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Chưa có đơn thuốc cho hồ sơ này.");
+                return;
+            }
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/PrescriptionForm.fxml"));
             Parent root = loader.load();
             PrescriptionFormController controller = loader.getController();
@@ -352,12 +357,10 @@ public class MedicalRecordController {
 
             controller.setPatient(patient);
             controller.setMedicalRecord(record);
+            controller.setExistingPrescription(existingPrescription);
 
-            //Kiểm tra nếu đã có đơn thuốc => truyền vào
-            Prescription existingPrescription = PrescriptionDAO.getByMedicalRecordId(recordId);
-            if (existingPrescription != null) {
-                controller.setExistingPrescription(existingPrescription);
-            }
+            // Chế độ chỉ xem
+            controller.setReadOnly(true);
 
             Stage stage = new Stage();
             stage.setTitle("Kê đơn thuốc");
