@@ -36,7 +36,7 @@ public class Patient {
         Nam, Nữ, Khác;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 

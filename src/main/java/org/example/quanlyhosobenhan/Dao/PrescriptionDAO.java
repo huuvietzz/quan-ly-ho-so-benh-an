@@ -36,4 +36,14 @@ public class PrescriptionDAO {
             e.printStackTrace();
         }
     }
+
+    public static void deletePrescription(Prescription prescription) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction =  session.beginTransaction();
+            session.delete(prescription);
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

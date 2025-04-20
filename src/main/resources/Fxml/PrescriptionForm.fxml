@@ -85,7 +85,7 @@
           <TableColumn fx:id="actionColumn" prefWidth="97.33333333333337" text="Hành động" />
       </columns>
     </TableView>
-    <HBox prefHeight="27.0" prefWidth="610.0" spacing="278.0">
+    <HBox prefHeight="27.0" prefWidth="610.0" spacing="95.0">
         <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveBtn" prefHeight="29.0" prefWidth="80.0" styleClass="save_btn" stylesheets="@../Styles/PrescriptionForm.css" text="Lưu">
          <HBox.margin>
             <Insets left="88.0" />
@@ -96,6 +96,14 @@
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
+      <Button fx:id="deleteButton" layoutX="98.0" layoutY="10.0" mnemonicParsing="false" onAction="#deleteBtn" prefHeight="29.0" prefWidth="80.0" styleClass="save_btn" stylesheets="@../Styles/PrescriptionForm.css" text="Xóa">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
         <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelBtn" prefHeight="29.0" prefWidth="81.0" styleClass="cancel_btn" stylesheets="@../Styles/PrescriptionForm.css" text="Hủy">
          <font>
             <Font size="14.0" />

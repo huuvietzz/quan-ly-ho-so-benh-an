@@ -99,4 +99,14 @@ public class PatientDAO {
             return null;
         }
     }
+
+    public Long countByDoctorId(int doctorId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return (Long)session.createQuery("select count(p) from Patient p where p.doctor.id = :doctorId")
+                    .setParameter("doctorId", doctorId).uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0L;
+        }
+    }
 }

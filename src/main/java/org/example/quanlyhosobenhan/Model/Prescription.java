@@ -8,6 +8,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,6 +34,9 @@ public class Prescription {
     @OneToOne
     @JoinColumn(name = "medicalRecord_id")
     private MedicalRecord medicalRecord;
+
+    @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PrescriptionDetail> prescriptionDetails = new ArrayList<>();
 
     private LocalDateTime prescriptionDate;
 

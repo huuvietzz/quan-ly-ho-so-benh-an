@@ -25,6 +25,7 @@ import org.example.quanlyhosobenhan.Model.PrescriptionDetail;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 public class PrescriptionFormController {
     @FXML
@@ -62,6 +63,9 @@ public class PrescriptionFormController {
 
     @FXML
     private Button saveButton;
+
+    @FXML
+    private Button deleteButton;
 
     @FXML
     private Button cancelButton;
@@ -131,8 +135,11 @@ public class PrescriptionFormController {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH'h':mm'm':ss's'");
                 prescriptionDateField.setText(existingPrescription.getPrescriptionDate().format(formatter));
                 prescriptionDetails.setAll(PrescriptionDetailDAO.getByPrescriptionId(existingPrescription.getId()));
+            } else {
+                deleteButton.setVisible(false);
             }
         });
+
     }
 
     @FXML
@@ -156,6 +163,23 @@ public class PrescriptionFormController {
        } catch(Exception e){
            e.printStackTrace();
        }
+    }
+
+    @FXML
+    void deleteBtn(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Xác nhận xóa");
+        alert.setHeaderText("Bạn có chắc chắn muốn xóa đơn thuốc này không?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.isPresent() && result.get() == ButtonType.OK) {
+            if(existingPrescription != null) {
+                PrescriptionDAO.deletePrescription(existingPrescription);
+                showAlert(Alert.AlertType.INFORMATION,"Thành công", "Đã xóa đơn thuốc!");
+
+                closeWindow();
+            }
+        }
     }
 
     @FXML
@@ -386,6 +410,7 @@ public class PrescriptionFormController {
             hideNode(addButton);
             hideNode(saveButton);
             hideNode(cancelButton);
+            hideNode(deleteButton);
 
             // Ẩn sạch sẽ cột hành động
             actionColumn.setVisible(false);

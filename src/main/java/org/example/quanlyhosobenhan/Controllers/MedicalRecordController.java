@@ -363,7 +363,7 @@ public class MedicalRecordController {
             controller.setReadOnly(true);
 
             Stage stage = new Stage();
-            stage.setTitle("Kê đơn thuốc");
+            stage.setTitle("Đơn thuốc");
             stage.setScene(new Scene(root));
             stage.showAndWait();
             refreshTable();

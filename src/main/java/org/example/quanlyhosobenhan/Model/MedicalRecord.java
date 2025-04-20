@@ -37,8 +37,8 @@ public class MedicalRecord {
 
     private String notes;
 
-//    @OneToOne(mappedBy = "medicalRecord", cascade = CascadeType.ALL)
-//    private Prescription prescription;
+    @OneToOne(mappedBy = "medicalRecord", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Prescription prescription;
 
     public MedicalRecord(Patient patient, Doctor doctor, String symptoms, String diagnosis,
                          LocalDate consultationDate, String treatmentMethod, String notes) {
