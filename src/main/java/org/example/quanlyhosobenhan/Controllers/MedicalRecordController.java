@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.print.PrinterJob;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,6 +16,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import org.example.quanlyhosobenhan.Dao.MedicalRecordDAO;
 import org.example.quanlyhosobenhan.Dao.PrescriptionDAO;
 import org.example.quanlyhosobenhan.Model.MedicalRecord;
@@ -23,6 +25,7 @@ import org.example.quanlyhosobenhan.Model.Prescription;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +33,7 @@ import java.util.stream.Collectors;
 public class MedicalRecordController {
 
     @FXML
-    private TableColumn<MedicalRecord, LocalDate> consultationDateColumn;
+    private TableColumn<MedicalRecord, LocalDateTime> consultationDateColumn;
 
     @FXML
     private TableColumn<MedicalRecord, String> diagnoseColumn;
@@ -70,8 +73,12 @@ public class MedicalRecordController {
 
     private MedicalRecordDAO medicalRecordDAO = new MedicalRecordDAO();
 
+    public static final DateTimeFormatter VIETNAMESE_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
     @FXML
     void initialize() {
+        recordTable.setPlaceholder(new Label("❌ Không có hồ sơ bệnh án."));
+
         idRecordColumn.setCellValueFactory(cellData
                 -> new SimpleObjectProperty<>(cellData.getValue().getId()));
 
@@ -134,10 +141,10 @@ public class MedicalRecordController {
         consultationDateColumn.setCellValueFactory(cellData
                 -> new SimpleObjectProperty<>(cellData.getValue().getConsultationDate()));
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        consultationDateColumn.setCellFactory(column -> new TableCell<>() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        consultationDateColumn.setCellFactory(column -> new TableCell<MedicalRecord, LocalDateTime>() {
             @Override
-            protected void updateItem(LocalDate item, boolean empty) {
+            protected void updateItem(LocalDateTime item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setText(null);
@@ -204,12 +211,44 @@ public class MedicalRecordController {
             filterRecordsCombined(newValue);
         });
 
+        // Định dạng ngày hiển thị theo dd-MM-yyyy
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        StringConverter<LocalDate> converter = new StringConverter<>() {
+            @Override
+            public String toString(LocalDate date) {
+                return date != null ? dateFormatter.format(date) : "";
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                if (string == null || string.trim().isEmpty()) {
+                    return null;
+                }
+                return LocalDate.parse(string, dateFormatter);
+            }
+        };
+
+        startDatePicker.setConverter(converter);
+        endDatePicker.setConverter(converter);
+
         // Xu ly chon khoang ngay sinh
         startDatePicker.valueProperty().addListener((obs, oldDate, newDate) -> {
             filterRecordsCombined(searchTextField.getText());
         });
         endDatePicker.valueProperty().addListener((obs, oldDate, newDate) ->{
             filterRecordsCombined(searchTextField.getText());
+        });
+
+        // Bổ sung xử lý khi người dùng xóa ngày bằng bàn phím rồi rời focus
+        startDatePicker.focusedProperty().addListener((obs, oldFocus, newFocus) -> {
+            if (!newFocus) { // Khi mất focus
+                filterRecordsCombined(searchTextField.getText());
+            }
+        });
+        endDatePicker.focusedProperty().addListener((obs, oldFocus, newFocus) -> {
+            if (!newFocus) {
+                filterRecordsCombined(searchTextField.getText());
+            }
         });
     }
 
@@ -222,30 +261,39 @@ public class MedicalRecordController {
 
         List<MedicalRecord> filtered = allRecords.stream()
                 .filter(record -> {
-                    LocalDate consultationDate  = record.getConsultationDate();
+                    LocalDateTime consultationDate  = record.getConsultationDate();
                     if(consultationDate  == null) return false;
 
+                    // Chuyển LocalDateTime thành LocalDate để so sánh chỉ theo ngày
+                    LocalDate consultationLocalDate = consultationDate.toLocalDate();
+
                     // Lọc theo khoảng ngày được chọn
-                    boolean afterOrEqualStart = (startDate == null || !consultationDate .isBefore(startDate)); // consultationDate >= startDate
-                    boolean beforeOrEqualEnd = (endDate == null || !consultationDate .isAfter(endDate)); // consultationDate <= endDate
+                    boolean afterOrEqualStart = (startDate == null || !consultationLocalDate .isBefore(startDate)); // consultationDate >= startDate
+                    boolean beforeOrEqualEnd = (endDate == null || !consultationLocalDate .isAfter(endDate)); // consultationDate <= endDate
                     if(!(afterOrEqualStart && beforeOrEqualEnd))  return false;
 
                     // Lọc theo từ khóa nếu có
                     if(keyword != null && !keyword.trim().isEmpty()) {
-                        Patient patient = record.getPatient();
-                        String combined = (
-                                (patient != null ? patient.getName() : "") + " " +
-                                        record.getSymptoms() + " " +
-                                        record.getDiagnosis() + " " +
-                                        record.getTreatmentMethod() + " " +
-                                        record.getNotes() + " " +
-                                        consultationDate.toString() + " " +
-                                        record.getId()
-                        ).toLowerCase();
+                        try {
+                            int keywordId = Integer.parseInt(keyword);
+                            return record.getId() == keywordId;
+                        } catch(NumberFormatException e) {
+                            Patient patient = record.getPatient();
+                            String combined = (
+                                    (patient != null ? patient.getName() : "") + " " +
+                                            record.getId() + " " +
+                                            record.getSymptoms() + " " +
+                                            record.getDiagnosis() + " " +
+                                            record.getTreatmentMethod() + " " +
+                                            record.getNotes() + " " +
+                                            consultationDate + " " +
+                                            record.getId()
+                            ).toLowerCase();
 
-                        return combined.contains(keyword.toLowerCase());
+                            return combined.contains(keyword.trim().toLowerCase());
+                        }
                     }
-                    return true; // Neu ko có từ khó, chỉ lọc theo ngày
+                    return true;
                 }).collect(Collectors.toList());
 
         recordTable.getItems().setAll(filtered);
@@ -335,7 +383,9 @@ public class MedicalRecordController {
                         "Ngày sinh: " + formattedBirthDate + "\n" +
                         "Địa chỉ: " + patient.getAddress() + "\n" +
                         "Email: " + patient.getEmail() + "\n" +
-                        "SĐT: " + patient.getPhone()
+                        "SĐT: " + patient.getPhone() + "\n" +
+                        "Số căn cước công dân: " + patient.getNationalId() + "\n" +
+                        "Số thẻ BHYT: " + patient.getHealthInsuranceId()
         );
         alert.showAndWait();
     }
@@ -389,5 +439,49 @@ public class MedicalRecordController {
     @FXML
     void printMedicalRecord(ActionEvent event) {
 
+    }
+
+    @FXML
+    void detail(ActionEvent event) {
+        MedicalRecord selectedRecord = recordTable.getSelectionModel().getSelectedItem();
+        if (selectedRecord == null) {
+            showAlert(Alert.AlertType.ERROR, "Lỗi!", "Vui lòng chọn hồ sơ bệnh án!");
+            return;
+        }
+
+        Stage detailStage = new Stage();
+        detailStage.setTitle("Chi tiết hồ sơ bệnh án");
+
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20));
+
+        Label idLabel = new Label("ID: " + selectedRecord.getId());
+        Label patientLabel = new Label("Bệnh nhân: " + selectedRecord.getPatient().getName());
+        Label doctorLabel = new Label("Bác sĩ: " + selectedRecord.getDoctor().getName());
+        Label consultationDateLabel = new Label("Ngày khám: " + selectedRecord.getConsultationDate().format(VIETNAMESE_DATE_TIME_FORMATTER));
+        Label symptomsLabel = new Label("Triệu chứng: " + selectedRecord.getSymptoms());
+        Label diagnosisLabel = new Label("Chẩn đoán: " + selectedRecord.getDiagnosis());
+        Label resultLabel = new Label("Kết quả khám bệnh: " + selectedRecord.getExaminationResult());
+        Label treatmentLabel = new Label("Phương pháp điều trị: " + selectedRecord.getTreatmentMethod());
+        Label finalResultLabel = new Label("Kết quả điều trị cuối: " + selectedRecord.getFinalTreatmentResult());
+        Label notesLabel = new Label("Ghi chú: " + selectedRecord.getNotes());
+        Label admissionLabel = new Label("Ngày nhập viện: " +
+                (selectedRecord.getAdmissionDate() != null ? selectedRecord.getAdmissionDate().format(VIETNAMESE_DATE_TIME_FORMATTER) : "Chưa có"));
+        Label dischargeLabel = new Label("Ngày xuất viện: " +
+                (selectedRecord.getDischargeDate() != null ? selectedRecord.getDischargeDate().format(VIETNAMESE_DATE_TIME_FORMATTER) : "Chưa có"));
+
+        Button closeBtn = new Button("Đóng");
+        closeBtn.setOnAction(e -> detailStage.close());
+
+        vbox.getChildren().addAll(
+                idLabel, patientLabel, doctorLabel, consultationDateLabel,
+                admissionLabel, dischargeLabel,symptomsLabel, diagnosisLabel,
+                resultLabel, treatmentLabel, finalResultLabel, notesLabel,
+                closeBtn
+        );
+
+        Scene scene = new Scene(vbox, 500, 450);
+        detailStage.setScene(scene);
+        detailStage.show();
     }
 }

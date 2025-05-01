@@ -1,6 +1,7 @@
 package org.example.quanlyhosobenhan.Controllers;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -45,6 +46,12 @@ public class PrescriptionFormController {
 
     @FXML
     private TableColumn<PrescriptionDetail, String> medicineNameColumn;
+
+    @FXML
+    private TableColumn<PrescriptionDetail, Integer> quantityColumn;
+
+    @FXML
+    private TableColumn<PrescriptionDetail, String> unitColumn;
 
     @FXML
     private TableColumn<PrescriptionDetail, String> noteColum;
@@ -102,6 +109,11 @@ public class PrescriptionFormController {
         // Cột dữ liệu
         medicineNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMedicineName()));
         setupEllipsisColumn(medicineNameColumn, "Chi tiết tên thuốc");
+
+        quantityColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<Integer>(cellData.getValue().getQuantity()));
+
+        unitColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUnit()));
+        setupEllipsisColumn(unitColumn, "Chi tiết đơn vị tính");
 
         dosageColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDosage()));
         setupEllipsisColumn(dosageColumn, "Chi tiết liều lượng");
@@ -195,9 +207,11 @@ public class PrescriptionFormController {
 
         // Lấy thời gian hiện tại
         LocalDateTime now = LocalDateTime.now();
-        // Ghép ngày từ ngày khám và giờ hiện tại
-        LocalDateTime prescriptionDate = medicalRecord.getConsultationDate()
-                .atTime(now.getHour(), now.getMinute(), now.getSecond());
+        LocalDateTime consultationDate = medicalRecord.getConsultationDate();
+        LocalDateTime prescriptionDate = consultationDate.withHour(now.getHour())
+                .withMinute(now.getMinute())
+                .withSecond(now.getSecond());
+
 
         Prescription prescription;
         if(existingPrescription != null) {
@@ -265,7 +279,7 @@ public class PrescriptionFormController {
 
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Xác nhận xóa");
-                    alert.setHeaderText("Bạn có chắc muốn xóa đơn thuốc này?");
+                    alert.setHeaderText("Bạn có chắc muốn xóa loại thuốc này?");
 
                     ButtonType buttonYes = new ButtonType("Có", ButtonBar.ButtonData.YES);
                     ButtonType buttonNo = new ButtonType("Không", ButtonBar.ButtonData.NO);
@@ -290,7 +304,7 @@ public class PrescriptionFormController {
                         controller.setData(selectedItem); // truyền dữ liệu để hiển thị
 
                         Stage stage = new Stage();
-                        stage.setTitle("Cập nhật đơn thuốc");
+                        stage.setTitle("Cập nhật loại thuốc");
                         stage.setScene(new Scene(root));
                         stage.showAndWait();
 
@@ -298,6 +312,8 @@ public class PrescriptionFormController {
                         PrescriptionDetail updated = controller.getResult();
                         if(updated != null) {
                             selectedItem.setMedicineName(updated.getMedicineName());
+                            selectedItem.setQuantity(updated.getQuantity());
+                            selectedItem.setUnit(updated.getUnit());
                             selectedItem.setDosage(updated.getDosage());
                             selectedItem.setUsageInstructions(updated.getUsageInstructions());
                             selectedItem.setNotes(updated.getNotes());

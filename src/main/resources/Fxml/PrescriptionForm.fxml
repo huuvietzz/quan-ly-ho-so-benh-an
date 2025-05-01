@@ -16,13 +16,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="587.0" prefWidth="650.0" spacing="10.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.PrescriptionFormController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="587.0" prefWidth="839.0" spacing="10.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.PrescriptionFormController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
     <Label text="KÊ ĐƠN THUỐC CHO BỆNH NHÂN">
         <VBox.margin>
-          <Insets left="173.0" />
+          <Insets left="265.0" />
         </VBox.margin>
         <font>
           <Font name="System Bold" size="15.0" />
@@ -30,8 +30,8 @@
     </Label>
     <GridPane>
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="30.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="70.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="20.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="80.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -62,7 +62,7 @@
          <Font name="System Bold" size="15.0" />
       </font></Label>
     <TextArea fx:id="generalNotesField" prefHeight="57.0" prefWidth="560.0" />
-    <HBox prefHeight="29.0" prefWidth="560.0" spacing="472.0">
+    <HBox prefHeight="29.0" prefWidth="560.0" spacing="660.0">
        <Label prefHeight="29.0" prefWidth="75.0" text="Thuốc kê:">
          <font>
             <Font name="System Bold" size="15.0" />
@@ -76,19 +76,21 @@
             <FontAwesomeIconView glyphName="PLUS" size="1.5em" />
          </graphic></Button>
     </HBox>
-    <TableView fx:id="prescriptionTable" prefHeight="215.0" prefWidth="610.0">
+    <TableView fx:id="prescriptionTable" prefHeight="215.0" prefWidth="801.0">
       <columns>
           <TableColumn fx:id="medicineNameColumn" prefWidth="102.66665649414062" text="Tên thuốc" />
+         <TableColumn fx:id="quantityColumn" prefWidth="92.66668701171875" text="Số lượng" />
+         <TableColumn fx:id="unitColumn" prefWidth="94.66668701171875" text="Đơn vị tính" />
           <TableColumn fx:id="dosageColumn" prefWidth="115.3333511352539" text="Liều lượng" />
           <TableColumn fx:id="usageInstructionsColumn" prefWidth="139.3332977294922" text="Cách dùng" />
           <TableColumn fx:id="noteColum" prefWidth="152.00003051757812" text="Ghi chú" />
           <TableColumn fx:id="actionColumn" prefWidth="97.33333333333337" text="Hành động" />
       </columns>
     </TableView>
-    <HBox prefHeight="27.0" prefWidth="610.0" spacing="95.0">
+    <HBox prefHeight="27.0" prefWidth="610.0" spacing="200.0">
         <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveBtn" prefHeight="29.0" prefWidth="80.0" styleClass="save_btn" stylesheets="@../Styles/PrescriptionForm.css" text="Lưu">
          <HBox.margin>
-            <Insets left="88.0" />
+            <Insets left="78.0" />
          </HBox.margin>
          <font>
             <Font size="14.0" />
@@ -103,6 +105,9 @@
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
+         <HBox.margin>
+            <Insets />
+         </HBox.margin>
       </Button>
         <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelBtn" prefHeight="29.0" prefWidth="81.0" styleClass="cancel_btn" stylesheets="@../Styles/PrescriptionForm.css" text="Hủy">
          <font>
@@ -110,7 +115,10 @@
          </font>
          <cursor>
             <Cursor fx:constant="HAND" />
-         </cursor></Button>
+         </cursor>
+         <HBox.margin>
+            <Insets />
+         </HBox.margin></Button>
       <VBox.margin>
          <Insets top="30.0" />
       </VBox.margin>

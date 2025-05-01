@@ -16,6 +16,12 @@ public class UpdatePrescriptionFormController {
     private TextField medicineNameField;
 
     @FXML
+    private TextField quantityField;
+
+    @FXML
+    private TextField unitField;
+
+    @FXML
     private TextArea noteField;
 
     @FXML
@@ -30,22 +36,39 @@ public class UpdatePrescriptionFormController {
     @FXML
     void updateBtn(ActionEvent event) {
         String medicineName = medicineNameField.getText();
+        String quantityText = quantityField.getText();
+        String unit = unitField.getText();
         String dosage = dosageField.getText();
         String usageInStructions = usageInstructionsField.getText();
         String note = noteField.getText();
 
-        if(medicineName.trim().isEmpty() || dosage.trim().isEmpty() || usageInStructions.trim().isEmpty() ) {
+        if(medicineName.trim().isEmpty() || dosage.trim().isEmpty() || usageInStructions.trim().isEmpty()
+                || quantityText.trim().isEmpty() || unit.trim().isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng nhập đầy đủ thông tin!");
+            return;
+        }
+
+        int quantity;
+        try {
+            quantity = Integer.parseInt(quantityText.trim());
+            if(quantity <= 0) {
+                showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Số lượng phải lớn hơn 0!");
+                return;
+            }
+        } catch(NumberFormatException e) {
+            showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Số lượng phải là số nguyên hợp lệ!");
             return;
         }
 
         result = new PrescriptionDetail();
         result.setMedicineName(medicineName);
+        result.setQuantity(quantity);
+        result.setUnit(unit);
         result.setDosage(dosage);
         result.setUsageInstructions(usageInStructions);
         result.setNotes(note);
 
-        showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Cập nhật đơn thuốc thành công!");
+        showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Cập nhật thuốc thành công!");
         closeWindow();
     }
 
@@ -58,6 +81,8 @@ public class UpdatePrescriptionFormController {
     public void setData(PrescriptionDetail detail) {
         this.result = null; // reset
         medicineNameField.setText(detail.getMedicineName());
+        quantityField.setText(String.valueOf(detail.getQuantity()));
+        unitField.setText(detail.getUnit());
         dosageField.setText(detail.getDosage());
         usageInstructionsField.setText(detail.getUsageInstructions());
         noteField.setText(detail.getNotes());

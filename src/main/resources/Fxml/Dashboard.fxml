@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
@@ -53,7 +54,7 @@
       </Label>
       <FontAwesomeIconView fill="WHITE" glyphName="CALENDAR" layoutX="25.0" layoutY="74.0" size="3.5em" />
    </AnchorPane>
-   <BarChart layoutX="668.0" layoutY="282.0" prefHeight="230.0" prefWidth="374.0" title="Biểu đồ số bệnh nhân theo ngày">
+   <BarChart layoutX="694.0" layoutY="249.0" prefHeight="302.0" prefWidth="359.0" title="Biểu đồ số bệnh nhân theo tháng">
       <xAxis>
          <CategoryAxis side="BOTTOM" />
       </xAxis>
@@ -61,16 +62,13 @@
          <NumberAxis side="LEFT" />
       </yAxis>
    </BarChart>
-   <TextField layoutX="613.0" layoutY="15.0" prefHeight="25.0" prefWidth="211.0" promptText="Tìm kiếm bệnh nhân, lịch hẹn,..." />
-   <FontAwesomeIconView fill="#a39b9b" glyphName="BELL" layoutX="859.0" layoutY="34.0" selectionFill="#f8d1d1" size="1.5em" />
-   <FontAwesomeIconView fill="#a39b9b" glyphName="ENVELOPE" layoutX="897.0" layoutY="33.0" size="1.5em" />
+   <FontAwesomeIconView fx:id="messageIcon" fill="#a39b9b" glyphName="ENVELOPE" layoutX="906.0" layoutY="32.0" size="1.5em">
+      <cursor>
+         <Cursor fx:constant="HAND" />
+      </cursor></FontAwesomeIconView>
    <Line endX="-100.00006103515625" endY="25.333335876464844" layoutX="944.0" layoutY="14.0" startX="-100.0" stroke="#a39b9b" />
-   <Button layoutX="793.0" layoutY="16.0" mnemonicParsing="false" onAction="#search" styleClass="search" stylesheets="@../Styles/Dashboard.css">
-      <graphic>
-         <FontAwesomeIconView glyphName="SEARCH" size="1.3em" />
-      </graphic>
-   </Button>
-   <LineChart layoutX="53.0" layoutY="277.0" prefHeight="240.0" prefWidth="368.0">
+   <PieChart fx:id="pieChart" layoutX="390.0" layoutY="257.0" prefHeight="269.0" prefWidth="300.0" />
+   <LineChart layoutX="11.0" layoutY="243.0" prefHeight="302.0" prefWidth="359.0" title="Biểu đồ lịch hẹn theo tháng">
      <xAxis>
        <CategoryAxis side="BOTTOM" />
      </xAxis>
@@ -78,5 +76,21 @@
        <NumberAxis side="LEFT" />
      </yAxis>
    </LineChart>
-   <PieChart layoutX="448.0" layoutY="304.0" prefHeight="185.0" prefWidth="195.0" />
+   <StackPane fx:id="userAvatar" layoutX="798.0" layoutY="12.0" prefHeight="30.0" prefWidth="30.0">
+      <children>
+         <Circle fx:id="avatarCircle" fill="#2196f3" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
+         <Label fx:id="avatarLabel" text="T" textFill="WHITE">
+            <font>
+               <Font size="17.0" />
+            </font>
+         </Label>
+      </children>
+      <cursor>
+         <Cursor fx:constant="HAND" />
+      </cursor>
+   </StackPane>
+   <FontAwesomeIconView fx:id="notificationIcon" fill="#a39b9b" glyphName="BELL" layoutX="865.0" layoutY="33.0" selectionFill="#f8d1d1" size="1.5em">
+      <cursor>
+         <Cursor fx:constant="HAND" />
+      </cursor></FontAwesomeIconView>
 </AnchorPane>

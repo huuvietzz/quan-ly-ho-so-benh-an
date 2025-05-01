@@ -13,10 +13,9 @@
    <TableView layoutX="221.0" layoutY="129.0" prefHeight="263.0" prefWidth="570.0">
       <columns>
          <TableColumn prefWidth="57.333343505859375" text="ID" />
-         <TableColumn prefWidth="124.66661834716797" text="Bệnh nhân" />
-         <TableColumn prefWidth="108.66670227050781" text="Bác sĩ" />
-         <TableColumn prefWidth="139.33331298828125" text="Thời gian" />
-         <TableColumn minWidth="0.0" prefWidth="137.33331298828125" text="Trạng thái" />
+         <TableColumn prefWidth="164.66665649414062" text="Bệnh nhân" />
+         <TableColumn prefWidth="170.0" text="Thời gian" />
+         <TableColumn minWidth="0.0" prefWidth="176.666748046875" text="Trạng thái" />
       </columns>
    </TableView>
    <Label layoutX="383.0" layoutY="93.0" text="Danh sách lịch hẹn">

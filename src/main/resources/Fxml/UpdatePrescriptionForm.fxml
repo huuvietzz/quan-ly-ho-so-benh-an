@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="379.0" spacing="20.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.UpdatePrescriptionFormController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="379.0" spacing="20.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.UpdatePrescriptionFormController">
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
     </padding>
@@ -29,6 +29,29 @@
         </Label>
         <TextField fx:id="medicineNameField" prefHeight="35.0" prefWidth="230.0" />
     </HBox>
+   <HBox prefHeight="35.0" prefWidth="600.0" spacing="24.0">
+      <children>
+         <Label text="Số lượng:">
+            <font>
+               <Font name="System Bold" size="15.0" />
+            </font>
+         </Label>
+         <TextField fx:id="quantityField" prefHeight="35.0" prefWidth="230.0" />
+      </children>
+   </HBox>
+   <HBox prefHeight="35.0" prefWidth="600.0" spacing="42.0">
+      <children>
+         <Label text="Đơn vị:">
+            <font>
+               <Font name="System Bold" size="15.0" />
+            </font>
+            <HBox.margin>
+               <Insets left="1.0" />
+            </HBox.margin>
+         </Label>
+         <TextField fx:id="unitField" prefHeight="35.0" prefWidth="230.0" />
+      </children>
+   </HBox>
     <HBox layoutX="10.0" layoutY="46.0" prefHeight="35.0" prefWidth="600.0" spacing="14.0">
         <Label text="Liều lượng:">
             <font>
@@ -55,7 +78,7 @@
     </HBox>
     <HBox prefHeight="28.0" prefWidth="359.0" spacing="126.0">
         <VBox.margin>
-            <Insets top="3.0" />
+            <Insets bottom="5.0" top="3.0" />
         </VBox.margin>
         <Button mnemonicParsing="false" onAction="#updateBtn" prefHeight="28.0" prefWidth="67.0" styleClass="add_btn" stylesheets="@../Styles/AddPrescriptionForm.css" text="Cập nhật">
             <HBox.margin>

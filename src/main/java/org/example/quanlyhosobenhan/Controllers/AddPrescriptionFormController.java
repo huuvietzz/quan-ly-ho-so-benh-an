@@ -21,6 +21,12 @@ public class AddPrescriptionFormController {
     @FXML
     private TextArea usageInstructionsField;
 
+    @FXML
+    private TextField quantityField;
+
+    @FXML
+    private TextField unitField;
+
     // Kết quả tạo đơn thuốc mới
     private PrescriptionDetail result;
 
@@ -32,22 +38,39 @@ public class AddPrescriptionFormController {
     @FXML
     void addBtn(ActionEvent event) {
         String medicineName = medicineNameField.getText();
+        String quantityText = quantityField.getText();
+        String unit = unitField.getText();
         String dosage = dosageField.getText();
         String usageInStructions = usageInstructionsField.getText();
         String note = noteField.getText();
 
-        if(medicineName.trim().isEmpty() || dosage.trim().isEmpty() || usageInStructions.trim().isEmpty() ) {
+        if(medicineName.trim().isEmpty() || dosage.trim().isEmpty() || usageInStructions.trim().isEmpty()
+                || quantityText.trim().isEmpty() || unit.trim().isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng nhập đầy đủ thông tin!");
             return;
         }
 
+        int quantity;
+        try {
+            quantity = Integer.parseInt(quantityText.trim());
+            if(quantity <= 0) {
+                showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Số lượng phải lớn hơn 0!");
+                return;
+            }
+        } catch(NumberFormatException e) {
+            showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Số lượng phải là số nguyên hợp lệ!");
+            return;
+        }
+        
         result = new PrescriptionDetail();
         result.setMedicineName(medicineName);
+        result.setQuantity(quantity);
+        result.setUnit(unit);
         result.setDosage(dosage);
         result.setUsageInstructions(usageInStructions);
         result.setNotes(note);
 
-        showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Thêm đơn thuốc thành công!");
+        showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Thêm thuốc thành công!");
         closeWindow(); // Đóng form
     }
 

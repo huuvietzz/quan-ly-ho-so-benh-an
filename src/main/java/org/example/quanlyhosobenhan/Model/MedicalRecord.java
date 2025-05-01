@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -27,27 +28,54 @@ public class MedicalRecord {
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
-    private String symptoms;
-
-    private String diagnosis;
-
-    private LocalDate consultationDate;
-
-    private String treatmentMethod;
-
-    private String notes;
-
     @OneToOne(mappedBy = "medicalRecord", cascade = CascadeType.ALL, orphanRemoval = true)
     private Prescription prescription;
 
-    public MedicalRecord(Patient patient, Doctor doctor, String symptoms, String diagnosis,
-                         LocalDate consultationDate, String treatmentMethod, String notes) {
-        this.patient = patient;
-        this.doctor = doctor;
-        this.symptoms = symptoms;
-        this.diagnosis = diagnosis;
-        this.consultationDate = consultationDate;
-        this.treatmentMethod = treatmentMethod;
-        this.notes = notes;
+    @Column(name = "consultation_date", nullable = false)
+    private LocalDateTime consultationDate;
+
+    @Column(columnDefinition = "TEXT")
+    private String symptoms;
+
+    @Column(columnDefinition = "TEXT")
+    private String diagnosis;
+
+    @Column(name = "examination_result", columnDefinition = "TEXT")
+    private String examinationResult;
+
+    @Column(name = "treatment_method", columnDefinition = "TEXT")
+    private String treatmentMethod;
+
+    @Column(name = "final_treatment_result", columnDefinition = "TEXT")
+    private String finalTreatmentResult;
+
+    @Column(columnDefinition = "TEXT")
+    private String notes;
+
+    @Column(name = "admission_date")
+    private LocalDateTime admissionDate;
+
+    @Column(name = "discharge_date")
+    private LocalDateTime dischargeDate;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
+        if (updatedAt == null) {
+            updatedAt = LocalDateTime.now();
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }

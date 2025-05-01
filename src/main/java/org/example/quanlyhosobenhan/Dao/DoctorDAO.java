@@ -6,6 +6,9 @@ import org.example.quanlyhosobenhan.Util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 public class DoctorDAO {
     public Doctor login(String userName, String plainPassword){
         try(Session session = HibernateUtil.getSessionFactory().openSession()){
@@ -81,6 +84,4 @@ public class DoctorDAO {
             return false;
         }
     }
-
-
 }

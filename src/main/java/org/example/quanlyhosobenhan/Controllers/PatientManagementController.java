@@ -9,10 +9,14 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.TranslateTransition;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 
@@ -20,6 +24,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import javafx.util.StringConverter;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
@@ -51,13 +57,7 @@ public class PatientManagementController {
     private TableColumn<Patient, String> addressColumn;
 
     @FXML
-    private TextField addressField;
-
-    @FXML
     private TableColumn<Patient, String> dobColumn;
-
-    @FXML
-    private DatePicker dobField;
 
     @FXML
     private DatePicker endDatePicker;
@@ -72,16 +72,10 @@ public class PatientManagementController {
     private TableColumn<Patient, String> emailColumn;
 
     @FXML
-    private TextField emailField;
-
-    @FXML
     private ComboBox<String> exportBtn;
 
     @FXML
     private TableColumn<Patient, Patient.Gender> genderColumn;
-
-    @FXML
-    private ComboBox<Patient.Gender> genderField;
 
     @FXML
     private TableColumn<Patient, Integer> idColumn;
@@ -90,16 +84,10 @@ public class PatientManagementController {
     private TableColumn<Patient, String> nameColumn;
 
     @FXML
-    private TextField nameField;
-
-    @FXML
     private TableView<Patient> patientTable;
 
     @FXML
     private TableColumn<Patient, String> phoneNumberColumn;
-
-    @FXML
-    private TextField phoneNumberField;
 
     private static final DateTimeFormatter VIETNAMESE_DATE_FORMATTER =
             DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.forLanguageTag("vi-VN"));
@@ -112,6 +100,8 @@ public class PatientManagementController {
 
     @FXML
     public void initialize() {
+        patientTable.setPlaceholder(new Label("❌ Không có bệnh nhân."));
+
         idColumn.setCellValueFactory(cellData
                 -> new SimpleObjectProperty<>(cellData.getValue().getId()));
 
@@ -139,7 +129,6 @@ public class PatientManagementController {
         phoneNumberColumn.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getPhone()));
 
-        genderField.getItems().setAll(Patient.Gender.values());
         exportBtn.getItems().addAll("Excel (.xlsx)", "Word (.docx)", "PDF (.pdf)");
 
 
@@ -158,6 +147,26 @@ public class PatientManagementController {
             filterRecordsCombined(newValue);
         });
 
+        // Định dạng ngày hiển thị theo dd-MM-yyyy
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        StringConverter<LocalDate> converter = new StringConverter<>() {
+            @Override
+            public String toString(LocalDate date) {
+                return date != null ? dateFormatter.format(date) : "";
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                if (string == null || string.trim().isEmpty()) {
+                    return null;
+                }
+                return LocalDate.parse(string, dateFormatter);
+            }
+        };
+
+        startDatePicker.setConverter(converter);
+        endDatePicker.setConverter(converter);
+
         // Xu ly chon khoang ngay sinh
         startDatePicker.valueProperty().addListener((obs, oldDate, newDate) -> {
             filterRecordsCombined(searchTextField.getText());
@@ -165,146 +174,80 @@ public class PatientManagementController {
         endDatePicker.valueProperty().addListener((obs, oldDate, newDate) ->{
             filterRecordsCombined(searchTextField.getText());
         });
-    }
-
-    @FXML
-    void add(ActionEvent event) {
-        if(nameField.getText().isEmpty() || addressField.getText().isEmpty() || emailField.getText().isEmpty()
-        || phoneNumberField.getText().isEmpty() || dobField.getValue() == null || genderField.getValue() == null){
-             showAlert(Alert.AlertType.ERROR, "Lỗi","Vui lòng điền đầy đủ thông tin!");
-             return;
-        }
-
-        if(!isValidEmail(emailField.getText()) && !isValidPhoneNumber(phoneNumberField.getText())){
-            showAlert(Alert.AlertType.ERROR, "Lỗi","Email và SĐT không hợp lệ! Vui lòng nhập lại!");
-            return;
-        }
-
-        if(!isValidEmail(emailField.getText())){
-            showAlert(Alert.AlertType.ERROR, "Lỗi","Email không hợp lệ! Vui lòng nhập lại!");
-            return;
-        }
-
-        if(!isValidPhoneNumber(phoneNumberField.getText())){
-            showAlert(Alert.AlertType.ERROR, "Lỗi","SĐT không hợp lệ! Vui lòng nhập lại!");
-            return;
-        }
-
-        String name = nameField.getText();
-        String address = addressField.getText();
-        String email = emailField.getText();
-        String phoneNumber = phoneNumberField.getText();
-        LocalDate birthdate = dobField.getValue();
-        Patient.Gender gender = genderField.getSelectionModel().getSelectedItem();
-
-        // Kiem tra xem email da ton tai chua
-        if(patientDAO.existsByEmail(email)){
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Email đã tồn tại! Vui lòng nhập email khác!");
-            return;
-        }
-
-        // Kiem tra xem numberPhone da ton tai chua
-        if(patientDAO.existsByNumberPhone(phoneNumber)){
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "SĐT đã tồn tại! Vui lòng nhập SĐT khác!");
-            return;
-        }
-
-        Patient patient = new Patient(name, email, phoneNumber, address, birthdate, gender);
-        patientDAO.savePatient(patient);
-        showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Thêm thành công!");
-        refreshTable();
-
-        nameField.clear();
-        addressField.clear();
-        emailField.clear();
-        phoneNumberField.clear();
-        dobField.setValue(null);
-        genderField.getSelectionModel().clearSelection();
-    }
-
-    @FXML
-    void update(ActionEvent event) {
-        Patient selectedPatient = patientTable.getSelectionModel().getSelectedItem();
-        if (selectedPatient == null) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi","Vui lòng chọn bệnh nhân cần sửa.");
-            return;
-        }
-
-        if(nameField.getText().isEmpty() || addressField.getText().isEmpty() || emailField.getText().isEmpty()
-                || phoneNumberField.getText().isEmpty() || dobField.getValue() == null || genderField.getValue() == null){
-            showAlert(Alert.AlertType.ERROR, "Lỗi","Vui lòng điền đầy đủ thông tin!");
-            return;
-        }
-
-        if(!isValidEmail(emailField.getText()) && !isValidPhoneNumber(phoneNumberField.getText())){
-            showAlert(Alert.AlertType.ERROR, "Lỗi","Email và SĐT không hợp lệ! Vui lòng nhập lại!");
-            return;
-        }
-
-        if(!isValidEmail(emailField.getText())){
-            showAlert(Alert.AlertType.ERROR, "Lỗi","Email không hợp lệ! Vui lòng nhập lại!");
-            return;
-        }
-
-        if(!isValidPhoneNumber(phoneNumberField.getText())){
-            showAlert(Alert.AlertType.ERROR, "Lỗi","SĐT không hợp lệ! Vui lòng nhập lại!");
-            return;
-        }
-
-        selectedPatient.setName(nameField.getText());
-        selectedPatient.setAddress(addressField.getText());
-        selectedPatient.setEmail(emailField.getText());
-        selectedPatient.setPhone(phoneNumberField.getText());
-        selectedPatient.setBirthdate(dobField.getValue());
-        selectedPatient.setGender(genderField.getSelectionModel().getSelectedItem());
-
-        patientDAO.updatePatient(selectedPatient);
-        showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Sửa thông tin thành công!");
-        refreshTable();
-
-        nameField.clear();
-        addressField.clear();
-        emailField.clear();
-        phoneNumberField.clear();
-        dobField.setValue(null);
-        genderField.getSelectionModel().clearSelection();
-
-    }
-
-    @FXML
-    void delete(ActionEvent event) {
-        Patient selectedPatient = patientTable.getSelectionModel().getSelectedItem();
-        if(selectedPatient == null) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng chọn bệnh nhân cần xóa!");
-            return;
-        }
-
-        MedicalRecordDAO medicalRecordDAO = new MedicalRecordDAO();
-        List<MedicalRecord> records = medicalRecordDAO.getRecordsByPatientId(selectedPatient.getId());
-        if (!records.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Bệnh nhân này vẫn còn hồ sơ bệnh án. Vui lòng xóa hết hồ sơ trước khi xóa bệnh nhân!");
-            return;
-        }
-
-
-        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmAlert.setTitle("Xác nhận xóa");
-        confirmAlert.setHeaderText("Bạn có chắc chắn muốn xóa bệnh nhân này!");
-        confirmAlert.setContentText(null);
-
-        confirmAlert.showAndWait().ifPresent(response -> {
-            if(response == ButtonType.OK) {
-                patientDAO.deletePatient(selectedPatient.getId());
-                showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đã xóa thành công!");
-                refreshTable();
+        // Bổ sung xử lý khi người dùng xóa ngày bằng bàn phím rồi rời focus
+        startDatePicker.focusedProperty().addListener((obs, oldFocus, newFocus) -> {
+            if (!newFocus) { // Khi mất focus
+                filterRecordsCombined(searchTextField.getText());
+            }
+        });
+        endDatePicker.focusedProperty().addListener((obs, oldFocus, newFocus) -> {
+            if (!newFocus) {
+                filterRecordsCombined(searchTextField.getText());
             }
         });
     }
 
     @FXML
+    void details(ActionEvent event) {
+        Patient selectedPatient = patientTable.getSelectionModel().getSelectedItem();
+        if (selectedPatient == null) {
+            showAlert(Alert.AlertType.ERROR, "Lỗi!", "Vui lòng chọn bệnh nhân!");
+            return;
+        }
+
+        Stage detailsStage = new Stage();
+        detailsStage.setTitle("Thông tin chi tiết bệnh nhân");
+
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20));
+
+        Label idLabel = new Label("ID: " + selectedPatient.getId());
+        Label nameLabel = new Label("Tên: " + selectedPatient.getName());
+        Label genderLabel = new Label("Giới tính: " + selectedPatient.getGender());
+        Label dobLabel = new Label("Ngày sinh: " + selectedPatient.getBirthdate().format(PatientManagementController.VIETNAMESE_DATE_FORMATTER));
+        Label addressLabel = new Label("Địa chỉ: " + selectedPatient.getAddress());
+        Label emailLabel = new Label("Email: " + selectedPatient.getEmail());
+        Label phoneLabel = new Label("Số điện thoại: " + selectedPatient.getPhone());
+        Label nationalIdLabel = new Label("Số căn cước công dân: " + selectedPatient.getNationalId());
+        Label healthInsuranceIdLabel = new Label("Số thẻ BHYT: " + selectedPatient.getHealthInsuranceId());
+
+        vbox.getChildren().addAll(idLabel, nameLabel, genderLabel, dobLabel, addressLabel, emailLabel, phoneLabel, nationalIdLabel, healthInsuranceIdLabel);
+
+        Button closeBtn = new Button("Đóng");
+        closeBtn.setOnAction(e -> detailsStage.close());
+
+        vbox.getChildren().addAll(closeBtn);
+
+        Scene scene = new Scene(vbox, 400, 300);
+        detailsStage.setScene(scene);
+        detailsStage.show();
+    }
+
+    @FXML
     void refresh(ActionEvent event) {
         refreshTable();
+        playTableRefreshAnimation();
         showAlert(Alert.AlertType.INFORMATION, "Thông báo!", "Đã làm mới toàn bộ danh sách!");
+    }
+
+    private void playTableRefreshAnimation() {
+        // Hiệu ứng mờ
+        FadeTransition fade = new FadeTransition(Duration.millis(250), patientTable);
+        fade.setFromValue(1.0);
+        fade.setToValue(0.7);
+        fade.setCycleCount(2);
+        fade.setAutoReverse(true);
+
+        // Hiệu ứng rung ngang
+        TranslateTransition shake = new TranslateTransition(Duration.millis(100), patientTable);
+        shake.setFromX(0);
+        shake.setByX(5);
+        shake.setCycleCount(4);
+        shake.setAutoReverse(true);
+
+        // Chạy đồng thời
+        ParallelTransition parallel = new ParallelTransition(fade, shake);
+        parallel.play();
     }
 
     @FXML
@@ -587,11 +530,6 @@ public class PatientManagementController {
         alert.showAndWait();
     }
 
-    @FXML
-    void handleSearch(ActionEvent event) {
-
-    }
-    
     private void refreshTable() {
         patientTable.getItems().clear();
         List<Patient> patients = patientDAO.getPatientsByDoctorId(LoginController.loggedInDoctor.getId());
@@ -710,17 +648,22 @@ public class PatientManagementController {
 
                     // Lọc theo từ khóa nếu có
                     if(keyword != null && !keyword.trim().isEmpty()) {
-                        String combined = (
-                                (patient != null ? patient.getName() : "") + " " +
-                                        patient.getGender() + " " +
-                                        patient.getAddress() + " " +
-                                        patient.getEmail() + " " +
-                                        patient.getPhone() + " " +
-                                        dob.toString() + " " +
-                                        patient.getId()
-                        ).toLowerCase();
+                        try {
+                            int patientId = Integer.parseInt(keyword);
+                            return patient.getId() == patientId;
+                        } catch(NumberFormatException e) {
+                            String combined = (
+                                    (patient != null ? patient.getName() : "") + " " +
+                                            patient.getGender() + " " +
+                                            patient.getAddress() + " " +
+                                            patient.getEmail() + " " +
+                                            patient.getPhone() + " " +
+                                            dob.toString() + " " +
+                                            patient.getId()
+                            ).toLowerCase();
 
-                        return combined.contains(keyword.toLowerCase());
+                            return combined.contains(keyword.trim().toLowerCase());
+                        }
                     }
                     return true; // Neu ko có từ khó, chỉ lọc theo ngày
                 }).collect(Collectors.toList());

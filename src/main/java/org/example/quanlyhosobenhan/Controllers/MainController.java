@@ -4,11 +4,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -16,18 +17,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.prefs.Preferences;
-
 
 public class MainController implements Initializable {
     @FXML
     private StackPane contentArea;
 
     @FXML
-    private Button close_btn;
+    private Label userNameLabel;
 
-    @FXML
-    private Button minus_btn;
 
     @FXML
     public void minus(ActionEvent event) {
@@ -45,6 +42,12 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadPage("/Fxml/Dashboard.fxml");
+
+        // Hiển thị tên bác sĩ
+        if(LoginController.loggedInDoctor != null) {
+            userNameLabel.setText("Xin chào, " + LoginController.loggedInDoctor.getUserName());
+            userNameLabel.setAlignment(Pos.CENTER);
+        }
     }
 
     public void dashboard(ActionEvent event) throws IOException {

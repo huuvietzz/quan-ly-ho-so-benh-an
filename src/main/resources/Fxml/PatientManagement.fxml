@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="650.0" prefWidth="1065.0" styleClass="primary-color" stylesheets="@../Styles/PatientManagement.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.PatientManagementController">
-   <TableView fx:id="patientTable" layoutX="54.0" layoutY="125.0" prefHeight="263.0" prefWidth="958.0" AnchorPane.leftAnchor="54.0" AnchorPane.rightAnchor="53.0">
+   <TableView fx:id="patientTable" layoutX="54.0" layoutY="125.0" prefHeight="445.0" prefWidth="958.0" AnchorPane.leftAnchor="54.0" AnchorPane.rightAnchor="53.0">
       <columns>
          <TableColumn fx:id="idColumn" prefWidth="57.333343505859375" text="ID" />
          <TableColumn fx:id="nameColumn" prefWidth="161.33332061767578" text="Tên" />
@@ -23,75 +23,29 @@
          <TableColumn fx:id="phoneNumberColumn" prefWidth="88.0" text="SĐT" />
       </columns>
    </TableView>
-   <Label layoutX="373.0" layoutY="83.0" text="Danh sách bệnh nhân">
+   <Label layoutX="373.0" layoutY="77.0" text="Danh sách bệnh nhân">
       <font>
          <Font size="25.0" />
       </font>
    </Label>
-   <Label layoutX="66.0" layoutY="424.0" text="Tên">
-      <font>
-         <Font size="15.0" />
-      </font>
-   </Label>
-   <Label layoutX="66.0" layoutY="477.0" text="Giới tính">
-      <font>
-         <Font size="15.0" />
-      </font>
-   </Label>
-   <Label layoutX="65.0" layoutY="531.0" text="Ngày sinh">
-      <font>
-         <Font size="15.0" />
-      </font>
-   </Label>
-   <Label layoutX="543.0" layoutY="424.0" text="Địa chỉ">
-      <font>
-         <Font size="15.0" />
-      </font>
-   </Label>
-   <Label layoutX="543.0" layoutY="474.0" text="Email">
-      <font>
-         <Font size="15.0" />
-      </font>
-   </Label>
-   <Label layoutX="544.0" layoutY="533.0" text="SĐT">
-      <font>
-         <Font size="15.0" />
-      </font>
-   </Label>
-   <TextField fx:id="nameField" layoutX="181.0" layoutY="419.0" prefHeight="25.0" prefWidth="207.0" />
-   <TextField fx:id="addressField" layoutX="647.0" layoutY="419.0" prefHeight="25.0" prefWidth="207.0" />
-   <TextField fx:id="emailField" layoutX="648.0" layoutY="475.0" prefHeight="25.0" prefWidth="207.0" />
-   <TextField fx:id="phoneNumberField" layoutX="648.0" layoutY="531.0" prefHeight="25.0" prefWidth="207.0" />
    <DatePicker fx:id="startDatePicker" layoutX="378.0" layoutY="24.0" promptText="Chọn ngày sinh bắt đầu" />
-   <DatePicker fx:id="dobField" layoutX="183.0" layoutY="531.0" prefHeight="25.0" prefWidth="207.0" />
-   <Button layoutX="45.0" layoutY="598.0" mnemonicParsing="false" onAction="#add" prefHeight="40.0" prefWidth="120.0" styleClass="addBtn" text="Thêm">
+   <Button layoutX="458.0" layoutY="597.0" mnemonicParsing="false" onAction="#refresh" prefHeight="40.0" prefWidth="141.0" styleClass="resetBtn" text="Làm mới danh sách">
       <font>
          <Font size="14.0" />
       </font>
    </Button>
-   <Button layoutX="664.0" layoutY="597.0" mnemonicParsing="false" onAction="#refresh" prefHeight="40.0" prefWidth="141.0" styleClass="resetBtn" text="Làm mới danh sách">
+   <Button layoutX="255.0" layoutY="597.0" mnemonicParsing="false" onAction="#details" prefHeight="40.0" prefWidth="120.0" styleClass="deleteBtn" text="Xem chi tiết">
       <font>
          <Font size="14.0" />
       </font>
    </Button>
-   <Button layoutX="461.0" layoutY="597.0" mnemonicParsing="false" onAction="#delete" prefHeight="40.0" prefWidth="120.0" styleClass="deleteBtn" text="Xóa">
-      <font>
-         <Font size="14.0" />
-      </font>
-   </Button>
-   <Button layoutX="255.0" layoutY="597.0" mnemonicParsing="false" onAction="#update" prefHeight="40.0" prefWidth="120.0" styleClass="updateBtn" text="Sửa">
-      <font>
-         <Font size="14.0" />
-      </font>
-   </Button>
-   <ComboBox fx:id="exportBtn" layoutX="910.0" layoutY="599.0" onAction="#exportFile" prefHeight="36.0" prefWidth="112.0" styleClass="exportBtn" />
-   <Label layoutX="846.0" layoutY="607.0" text="Xuất file">
+   <ComboBox fx:id="exportBtn" layoutX="704.0" layoutY="599.0" onAction="#exportFile" prefHeight="36.0" prefWidth="112.0" styleClass="exportBtn" />
+   <Label layoutX="640.0" layoutY="607.0" text="Xuất file">
       <font>
          <Font size="14.0" />
       </font>
    </Label>
-   <ComboBox fx:id="genderField" layoutX="181.0" layoutY="476.0" prefHeight="25.0" prefWidth="207.0" />
-   <TextField fx:id="searchTextField" layoutX="66.0" layoutY="22.0" onAction="#handleSearch" prefHeight="29.0" prefWidth="297.0" promptText="Tìm kiếm bệnh nhân" styleClass="search-field" stylesheets="@../Styles/PatientManagement.css" />
+   <TextField fx:id="searchTextField" layoutX="66.0" layoutY="22.0" prefHeight="29.0" prefWidth="297.0" promptText="Tìm kiếm bệnh nhân" styleClass="search-field" stylesheets="@../Styles/PatientManagement.css" />
    <Button layoutX="304.0" layoutY="22.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="57.0" styleClass="search">
       <graphic>
          <FontAwesomeIconView glyphName="SEARCH" text="" />

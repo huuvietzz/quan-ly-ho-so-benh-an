@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -27,19 +29,41 @@ public class Appointment {
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
-    private LocalDate appointmentTime;
+    @Column(name = "appointment_time", nullable = false)
+    private LocalDateTime appointmentTime;
 
     @Enumerated(EnumType.STRING)
-    private Status status = Status.ChoXacNhan;
+    @Column(nullable = false)
+    private Status status;
 
     public enum Status {
-        ChoXacNhan, DaXacNhan, DaHuy;
+        PENDING, CONFIRMED, CANCELLED, COMPLETED
     }
 
-    public Appointment(Patient patient, Doctor doctor, LocalDate appointmentTime, Status status) {
-        this.patient = patient;
-        this.doctor = doctor;
-        this.appointmentTime = appointmentTime;
-        this.status = status;
+    @Column(name = "room_number")
+    private String roomNumber;
+
+    @Column(name = "reason", columnDefinition = "TEXT")
+    private String reason;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
+        if (updatedAt == null) {
+            updatedAt = LocalDateTime.now();
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }

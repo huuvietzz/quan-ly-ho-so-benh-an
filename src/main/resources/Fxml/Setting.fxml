@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="parent" prefHeight="650.0" prefWidth="1065.0" styleClass="primary-color" stylesheets="@../Styles/Setting.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.SettingController">
@@ -11,9 +16,9 @@
          <Font size="25.0" />
       </font>
    </Label>
-   <Label layoutX="66.0" layoutY="127.0" styleClass="primary-color" text="Chế độ thông báo">
+   <Label layoutX="66.0" layoutY="127.0" styleClass="primary-color" text="Chế độ thông báo :">
       <font>
-         <Font size="15.0" />
+         <Font name="System Bold" size="15.0" />
       </font></Label>
    <RadioButton layoutX="238.0" layoutY="123.0" mnemonicParsing="false" styleClass="primary-color" text="Bật">
       <font>
@@ -23,8 +28,61 @@
       <font>
          <Font size="15.0" />
       </font></RadioButton>
-   <Label layoutX="66.0" layoutY="168.0" styleClass="primary-color" text="Giao diện">
+   <TitledPane animated="false" layoutX="63.0" layoutY="187.0" prefHeight="212.0" prefWidth="665.0" text="Thông tin bệnh viện :">
+     <content>
+       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="170.0" prefWidth="663.0">
+            <children>
+               <VBox layoutX="-2.0" layoutY="-1.0" prefHeight="182.0" prefWidth="665.0" spacing="40.0">
+                  <children>
+                     <HBox layoutX="10.0" layoutY="53.0" prefHeight="28.0" prefWidth="511.0" spacing="15.0">
+                        <children>
+                           <Label prefHeight="29.0" prefWidth="108.0" text="Tên bệnh viện :">
+                              <font>
+                                 <Font name="System Bold" size="15.0" />
+                              </font>
+                              <HBox.margin>
+                                 <Insets left="120.0" />
+                              </HBox.margin>
+                           </Label>
+                           <TextField prefHeight="25.0" prefWidth="421.0" />
+                        </children>
+                        <VBox.margin>
+                           <Insets top="6.0" />
+                        </VBox.margin>
+                     </HBox>
+                     <HBox prefHeight="28.0" prefWidth="479.0" spacing="63.0">
+                        <children>
+                           <Label prefHeight="28.0" prefWidth="57.0" text="Địa chỉ :">
+                              <font>
+                                 <Font name="System Bold" size="15.0" />
+                              </font>
+                              <HBox.margin>
+                                 <Insets left="120.0" />
+                              </HBox.margin>
+                           </Label>
+                           <TextField prefHeight="25.0" prefWidth="423.0" />
+                        </children>
+                     </HBox>
+                     <HBox layoutX="10.0" layoutY="53.0" prefHeight="28.0" prefWidth="479.0" spacing="59.0">
+                        <children>
+                           <Label prefHeight="30.0" prefWidth="61.0" text="Hotline :">
+                              <font>
+                                 <Font name="System Bold" size="15.0" />
+                              </font>
+                              <HBox.margin>
+                                 <Insets left="120.0" />
+                              </HBox.margin>
+                           </Label>
+                           <TextField prefHeight="25.0" prefWidth="423.0" />
+                        </children>
+                     </HBox>
+                  </children>
+               </VBox>
+            </children>
+         </AnchorPane>
+     </content>
       <font>
-         <Font size="15.0" />
-      </font></Label>
+         <Font name="System Bold" size="15.0" />
+      </font>
+   </TitledPane>
 </AnchorPane>

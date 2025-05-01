@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -22,7 +24,7 @@ public class Doctor {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "user_name", nullable = false, unique = true)
     private String userName;
 
     @Column(nullable = false, unique = true)
@@ -34,12 +36,19 @@ public class Doctor {
     @Column(nullable = false, unique = true)
     private String phone;
 
+    @Column(columnDefinition = "TEXT")
     private String address;
 
+    @Column(name = "birth_date")
     private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Gender gender;
+
+    public enum Gender {
+        Nam, Nữ, Khác;
+    }
 
     private String department;
 
@@ -47,7 +56,24 @@ public class Doctor {
 
     private String position;
 
-    public enum Gender {
-        Nam, Nữ, Khác;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
+        if (updatedAt == null) {
+            updatedAt = LocalDateTime.now();
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }

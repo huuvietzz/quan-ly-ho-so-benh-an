@@ -7,7 +7,9 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PatientDAO {
     public void savePatient(Patient patient) {
@@ -108,5 +110,23 @@ public class PatientDAO {
             e.printStackTrace();
             return 0L;
         }
+    }
+
+    public Map<Patient.Gender, Long> getPatientCountByGender(int doctorId) {
+        Map<Patient.Gender, Long> genderCountMap = new HashMap<>();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "select p.gender, count(p) from Patient p where p.doctor.id = :doctorId group by p.gender";
+            Query<Object[]> query = session.createQuery(hql, Object[].class);
+            query.setParameter("doctorId", doctorId);
+
+            for(Object[] row : query.getResultList()) {
+                Patient.Gender gender = (Patient.Gender)row[0];
+                Long count = (Long)row[1];
+                genderCountMap.put(gender, count);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return genderCountMap;
     }
 }

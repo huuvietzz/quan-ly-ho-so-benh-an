@@ -7,12 +7,21 @@ import org.example.quanlyhosobenhan.Util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class MedicalRecordDAO {
     public void saveMedicalRecord(MedicalRecord medicalRecord) {
         try(Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
+
+//            if (medicalRecord.getCreatedAt() == null) {
+//                medicalRecord.setCreatedAt(LocalDateTime.now());
+//            }
+//            if (medicalRecord.getUpdatedAt() == null) {
+//                medicalRecord.setUpdatedAt(LocalDateTime.now());
+//            }
+
             session.save(medicalRecord);
             transaction.commit();
         } catch (Exception e) {

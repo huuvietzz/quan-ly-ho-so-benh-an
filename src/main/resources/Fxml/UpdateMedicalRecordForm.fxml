@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="579.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.UpdateMedicalRecordFormController">
+    <Label layoutX="312.0" layoutY="24.0" text="Sửa hồ sơ bệnh án">
+        <font>
+            <Font name="System Bold" size="30.0" />
+        </font>
+    </Label>
+    <Label layoutX="29.0" layoutY="99.0" text="Bệnh nhân">
+        <font>
+            <Font name="System Bold" size="15.0" />
+        </font>
+    </Label>
+    <TextField fx:id="patientSearchField" layoutX="157.0" layoutY="92.0" onAction="#searchPatient" prefHeight="25.0" prefWidth="271.0" styleClass="patientField" stylesheets="@../Styles/MedicalRecord.css" />
+    <Button layoutX="377.0" layoutY="94.0" mnemonicParsing="false" onAction="#searchPatient" prefHeight="24.0" prefWidth="51.0" style="-fx-background-color: transparent;">
+        <graphic>
+            <FontAwesomeIconView glyphName="SEARCH" />
+        </graphic>
+        <cursor>
+            <Cursor fx:constant="HAND" />
+        </cursor>
+    </Button>
+    <Label layoutX="29.0" layoutY="167.0" text="Ngày khám">
+        <font>
+            <Font name="System Bold" size="15.0" />
+        </font>
+    </Label>
+    <Label layoutX="31.0" layoutY="398.0" text="Triệu chứng">
+        <font>
+            <Font name="System Bold" size="15.0" />
+        </font>
+    </Label>
+    <Label layoutX="498.0" layoutY="100.0" text="Chẩn đoán">
+        <font>
+            <Font name="System Bold" size="15.0" />
+        </font>
+    </Label>
+    <TextArea fx:id="symptomField" layoutX="161.0" layoutY="379.0" prefHeight="40.0" prefWidth="271.0" />
+    <TextArea fx:id="diagnoseField" layoutX="664.0" layoutY="83.0" prefHeight="40.0" prefWidth="207.0" />
+    <Label layoutX="501.0" layoutY="240.0" text="PP điều trị">
+        <font>
+            <Font name="System Bold" size="15.0" />
+        </font>
+    </Label>
+    <TextArea fx:id="treatmentMethodField" layoutX="664.0" layoutY="226.0" prefHeight="40.0" prefWidth="207.0" />
+    <Label layoutX="500.0" layoutY="393.0" text="Ghi chú">
+        <font>
+            <Font name="System Bold" size="15.0" />
+        </font>
+    </Label>
+    <TextArea fx:id="finalTreatmentResultField" layoutX="664.0" layoutY="298.0" prefHeight="40.0" prefWidth="207.0" />
+    <Label layoutX="28.0" layoutY="240.0" text="Ngày nhập viện">
+        <font>
+            <Font name="System Bold" size="15.0" />
+        </font>
+    </Label>
+    <Label layoutX="30.0" layoutY="314.0" text="Ngày xuất viện">
+        <font>
+            <Font name="System Bold" size="15.0" />
+        </font>
+    </Label>
+    <TextArea fx:id="noteField" layoutX="664.0" layoutY="373.0" prefHeight="40.0" prefWidth="207.0" />
+    <TextArea fx:id="examinationResultField" layoutX="664.0" layoutY="154.0" prefHeight="40.0" prefWidth="207.0" />
+    <Label layoutX="498.0" layoutY="173.0" text="Kết quả khám bệnh">
+        <font>
+            <Font name="System Bold" size="15.0" />
+        </font>
+    </Label>
+    <Label layoutX="499.0" layoutY="315.0" text="Kết quả điều trị cuối">
+        <font>
+            <Font name="System Bold" size="15.0" />
+        </font>
+    </Label>
+    <Button layoutX="260.0" layoutY="497.0" mnemonicParsing="false" onAction="#update" prefHeight="40.0" prefWidth="120.0" styleClass="add_btn" stylesheets="@../Styles/AddMedicalRecordForm.css" text="Cập nhật">
+        <font>
+            <Font size="14.0" />
+        </font>
+        <cursor>
+            <Cursor fx:constant="HAND" />
+        </cursor>
+    </Button>
+    <Button layoutX="544.0" layoutY="497.0" mnemonicParsing="false" onAction="#cancel" prefHeight="40.0" prefWidth="120.0" styleClass="cancel_btn" stylesheets="@../Styles/AddMedicalRecordForm.css" text="Hủy">
+        <font>
+            <Font size="14.0" />
+        </font>
+        <cursor>
+            <Cursor fx:constant="HAND" />
+        </cursor>
+    </Button>
+    <HBox layoutX="159.0" layoutY="311.0" prefHeight="32.0" prefWidth="271.0" spacing="5.0">
+        <children>
+            <DatePicker fx:id="dischargeDateField" prefHeight="25.0" prefWidth="111.0" />
+            <ComboBox fx:id="hourDischargeDateComboBox" prefHeight="25.0" prefWidth="74.0" promptText="Giờ" />
+            <ComboBox fx:id="minuteDischargeDateComboBox" prefHeight="25.0" prefWidth="74.0" promptText="Phút" />
+        </children>
+    </HBox>
+    <HBox layoutX="158.0" layoutY="163.0" prefHeight="32.0" prefWidth="271.0" spacing="5.0">
+        <children>
+            <DatePicker fx:id="consultationDateField" prefHeight="25.0" prefWidth="111.0" />
+            <ComboBox fx:id="hourConsultationDateComboBox" prefHeight="25.0" prefWidth="74.0" promptText="Giờ" />
+            <ComboBox fx:id="minuteConsultationDateComboBox" prefHeight="25.0" prefWidth="74.0" promptText="Phút" />
+        </children>
+    </HBox>
+    <HBox layoutX="158.0" layoutY="236.0" prefHeight="32.0" prefWidth="271.0" spacing="5.0">
+        <children>
+            <DatePicker fx:id="admissionDateField" prefHeight="25.0" prefWidth="111.0" />
+            <ComboBox fx:id="hourAdmissionDateComboBox" prefHeight="25.0" prefWidth="74.0" promptText="Giờ" />
+            <ComboBox fx:id="minuteAdmissionDateComboBox" prefHeight="25.0" prefWidth="74.0" promptText="Phút" />
+        </children>
+    </HBox>
+</AnchorPane>
