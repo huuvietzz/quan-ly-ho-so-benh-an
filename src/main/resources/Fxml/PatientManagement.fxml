@@ -2,7 +2,6 @@
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -29,22 +28,16 @@
       </font>
    </Label>
    <DatePicker fx:id="startDatePicker" layoutX="378.0" layoutY="24.0" promptText="Chọn ngày sinh bắt đầu" />
-   <Button layoutX="458.0" layoutY="597.0" mnemonicParsing="false" onAction="#refresh" prefHeight="40.0" prefWidth="141.0" styleClass="resetBtn" text="Làm mới danh sách">
+   <Button layoutX="455.0" layoutY="597.0" mnemonicParsing="false" onAction="#refresh" prefHeight="40.0" prefWidth="141.0" styleClass="resetBtn" text="Làm mới danh sách">
       <font>
          <Font size="14.0" />
       </font>
    </Button>
-   <Button layoutX="255.0" layoutY="597.0" mnemonicParsing="false" onAction="#details" prefHeight="40.0" prefWidth="120.0" styleClass="deleteBtn" text="Xem chi tiết">
+   <Button layoutX="154.0" layoutY="597.0" mnemonicParsing="false" onAction="#details" prefHeight="40.0" prefWidth="120.0" styleClass="deleteBtn" text="Xem chi tiết">
       <font>
          <Font size="14.0" />
       </font>
    </Button>
-   <ComboBox fx:id="exportBtn" layoutX="704.0" layoutY="599.0" onAction="#exportFile" prefHeight="36.0" prefWidth="112.0" styleClass="exportBtn" />
-   <Label layoutX="640.0" layoutY="607.0" text="Xuất file">
-      <font>
-         <Font size="14.0" />
-      </font>
-   </Label>
    <TextField fx:id="searchTextField" layoutX="66.0" layoutY="22.0" prefHeight="29.0" prefWidth="297.0" promptText="Tìm kiếm bệnh nhân" styleClass="search-field" stylesheets="@../Styles/PatientManagement.css" />
    <Button layoutX="304.0" layoutY="22.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="57.0" styleClass="search">
       <graphic>
@@ -52,4 +45,9 @@
       </graphic>
    </Button>
    <DatePicker fx:id="endDatePicker" layoutX="577.0" layoutY="24.0" promptText="Chọn ngày sinh kết thúc" />
+   <Button layoutX="774.0" layoutY="597.0" mnemonicParsing="false" onAction="#exportToExcel" prefHeight="40.0" prefWidth="141.0" styleClass="resetBtn" text="Xuất file Excel">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </Button>
 </AnchorPane>

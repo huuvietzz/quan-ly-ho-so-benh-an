@@ -34,34 +34,29 @@
          <FontAwesomeIconView glyphName="SEARCH" text="" />
       </graphic>
    </Button>
-   <Button layoutX="26.0" layoutY="589.0" mnemonicParsing="false" onAction="#add" prefHeight="40.0" prefWidth="100.0" styleClass="addBtn" text="Thêm">
+   <Button layoutX="104.0" layoutY="589.0" mnemonicParsing="false" onAction="#add" prefHeight="40.0" prefWidth="100.0" styleClass="addBtn" text="Thêm">
       <font>
          <Font size="14.0" />
       </font>
    </Button>
-   <Button layoutX="542.0" layoutY="589.0" mnemonicParsing="false" onAction="#refresh" prefHeight="40.0" prefWidth="141.0" styleClass="resetBtn" text="Làm mới danh sách">
+   <Button layoutX="620.0" layoutY="589.0" mnemonicParsing="false" onAction="#refresh" prefHeight="40.0" prefWidth="141.0" styleClass="resetBtn" text="Làm mới danh sách">
       <font>
          <Font size="14.0" />
       </font>
    </Button>
-   <Button layoutX="369.0" layoutY="589.0" mnemonicParsing="false" onAction="#delete" prefHeight="40.0" prefWidth="100.0" styleClass="deleteBtn" text="Xóa">
+   <Button layoutX="447.0" layoutY="589.0" mnemonicParsing="false" onAction="#delete" prefHeight="40.0" prefWidth="100.0" styleClass="deleteBtn" text="Xóa">
       <font>
          <Font size="14.0" />
       </font>
    </Button>
-   <Button layoutX="198.0" layoutY="589.0" mnemonicParsing="false" onAction="#update" prefHeight="40.0" prefWidth="100.0" styleClass="updateBtn" text="Sửa">
+   <Button layoutX="276.0" layoutY="589.0" mnemonicParsing="false" onAction="#update" prefHeight="40.0" prefWidth="100.0" styleClass="updateBtn" text="Sửa">
       <font>
          <Font size="14.0" />
       </font>
    </Button>
    <DatePicker fx:id="startDatePicker" layoutX="376.0" layoutY="19.0" promptText="Ngày khám bắt đầu" />
    <DatePicker fx:id="endDatePicker" layoutX="577.0" layoutY="19.0" promptText="Ngày khám kết thúc" />
-   <Button layoutX="926.0" layoutY="589.0" mnemonicParsing="false" onAction="#extractToExcel" prefHeight="40.0" prefWidth="113.0" styleClass="resetBtn" text="Xuất file Excel">
-      <font>
-         <Font size="14.0" />
-      </font>
-   </Button>
-   <Button layoutX="754.0" layoutY="589.0" mnemonicParsing="false" onAction="#detail" prefHeight="40.0" prefWidth="113.0" styleClass="resetBtn" text="Xem chi tiết">
+   <Button layoutX="832.0" layoutY="589.0" mnemonicParsing="false" onAction="#detail" prefHeight="40.0" prefWidth="113.0" styleClass="resetBtn" text="Xem chi tiết">
       <font>
          <Font size="14.0" />
       </font>

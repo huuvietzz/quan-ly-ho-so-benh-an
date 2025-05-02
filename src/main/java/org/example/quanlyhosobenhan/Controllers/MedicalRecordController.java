@@ -2,27 +2,39 @@ package org.example.quanlyhosobenhan.Controllers;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.print.PrinterJob;
+import javafx.print.*;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.quanlyhosobenhan.Dao.MedicalRecordDAO;
 import org.example.quanlyhosobenhan.Dao.PrescriptionDAO;
 import org.example.quanlyhosobenhan.Model.MedicalRecord;
 import org.example.quanlyhosobenhan.Model.Patient;
 import org.example.quanlyhosobenhan.Model.Prescription;
 
+import java.awt.print.Printable;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -61,9 +73,6 @@ public class MedicalRecordController {
 
     @FXML
     private TextField searchTextField;
-
-    @FXML
-    private AnchorPane medicalRecordPane;
 
     @FXML
     private TableColumn<MedicalRecord, String> symptomColumn;
@@ -436,9 +445,217 @@ public class MedicalRecordController {
         recordTable.getItems().addAll(medicalRecordDAO.getMedicalRecordsByDoctor(doctorId));
     }
 
+
     @FXML
     void printMedicalRecord(ActionEvent event) {
+        ObservableList<MedicalRecord> selectedRecords = recordTable.getSelectionModel().getSelectedItems();
 
+        if (selectedRecords == null || selectedRecords.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng chọn hồ sơ để in.");
+            return;
+        }
+
+        VBox printContent = new VBox(20); // chứa tất cả hồ sơ
+        printContent.setPadding(new Insets(20));
+        printContent.setPrefWidth(600);
+
+        // Thêm hồ sơ vào VBox
+        for (MedicalRecord record : selectedRecords) {
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(8);
+            grid.setPadding(new Insets(10));
+            grid.setStyle("-fx-background-color: #f9f9f9;");
+
+            int row = 0;
+            grid.addRow(row++, new Label("Mã hồ sơ:"), new Label(String.valueOf(record.getId())));
+            grid.addRow(row++, new Label("Bệnh nhân:"), new Label(record.getPatient().getName()));
+            grid.addRow(row++, new Label("Bác sĩ:"), new Label(record.getDoctor().getName()));
+            grid.addRow(row++, new Label("Ngày khám:"), new Label(record.getConsultationDate().format(VIETNAMESE_DATE_TIME_FORMATTER)));
+
+            // Kiểm tra ngày nhập viện và ngày xuất viện có thể null
+            String admissionDate = (record.getAdmissionDate() != null)
+                    ? record.getAdmissionDate().format(VIETNAMESE_DATE_TIME_FORMATTER) : "Không có";
+            String dischargeDate = (record.getDischargeDate() != null)
+                    ? record.getDischargeDate().format(VIETNAMESE_DATE_TIME_FORMATTER) : "Không có";
+
+            grid.addRow(row++, new Label("Ngày nhập viện:"), new Label(admissionDate));
+            grid.addRow(row++, new Label("Ngày xuất viện:"), new Label(dischargeDate));
+            grid.addRow(row++, new Label("Triệu chứng:"), new Label(record.getSymptoms()));
+            grid.addRow(row++, new Label("Chẩn đoán:"), new Label(record.getDiagnosis()));
+            grid.addRow(row++, new Label("Kết quả khám bệnh:"), new Label(record.getExaminationResult()));
+            grid.addRow(row++, new Label("Kết quả điều trị cuối:"), new Label(record.getFinalTreatmentResult()));
+            grid.addRow(row++, new Label("Phương pháp điều trị:"), new Label(record.getTreatmentMethod()));
+
+            // Kiểm tra trạng thái đơn thuốc
+            String prescriptionStatus = record.getPrescription() != null ? "Đã kê" : "Chưa kê";
+            grid.addRow(row++, new Label("Đơn thuốc:"), new Label(prescriptionStatus));
+
+            grid.addRow(row++, new Label("Ghi chú:"), new Label(record.getNotes()));
+
+            VBox container = new VBox(5, grid, new Separator());
+            printContent.getChildren().add(container);
+        }
+
+        // In nội dung
+        PrinterJob job = PrinterJob.createPrinterJob();
+        if (job != null && job.showPrintDialog(recordTable.getScene().getWindow())) {
+            boolean success = job.printPage(printContent);
+            if (success) {
+                job.endJob();
+                showAlert(Alert.AlertType.INFORMATION, "Thông báo", "In hồ sơ thành công!");
+            } else {
+                System.out.println("In thất bại.");
+            }
+        }
+    }
+
+    @FXML
+    void exportToExcel(ActionEvent event) {
+        try {
+            // Chọn vị trí lưu file
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Lưu file Excel");
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Excel Files", "*.xlsx")
+            );
+            File file = fileChooser.showSaveDialog(new Stage());
+
+            if (file != null) {
+                // Tạo workbook và sheet
+                XSSFWorkbook workbook = new XSSFWorkbook();
+                XSSFSheet sheet = workbook.createSheet("MedicalRecords");
+
+                // Style căn giữa và in đậm cho tiêu đề chính
+                CellStyle titleStyle = workbook.createCellStyle();
+                XSSFFont titleFont = workbook.createFont();
+                titleFont.setFontHeightInPoints((short) 16);
+                titleFont.setBold(true);
+                titleStyle.setFont(titleFont);
+                titleStyle.setAlignment(HorizontalAlignment.CENTER);
+                titleStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+                // Style in đậm cho tiêu đề cột
+                CellStyle headerStyle = workbook.createCellStyle();
+                XSSFFont headerFont = workbook.createFont();
+                headerFont.setBold(true);
+                headerStyle.setFont(headerFont);
+                headerStyle.setAlignment(HorizontalAlignment.LEFT);
+                headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+                // Style căn trái cho dữ liệu
+                CellStyle leftAlignStyle = workbook.createCellStyle();
+                leftAlignStyle.setAlignment(HorizontalAlignment.LEFT);
+                leftAlignStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+                // Thêm tiêu đề "Danh sách hồ sơ bệnh án"
+                XSSFRow titleRow = sheet.createRow(0);
+                org.apache.poi.ss.usermodel.Cell titleCell = titleRow.createCell(0);
+                titleCell.setCellValue("Danh sách hồ sơ bệnh án");
+                titleCell.setCellStyle(titleStyle);
+
+                // Merge ô từ cột 0 đến 11 để căn giữa tiêu đề
+                sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 12));
+
+                // Tạo tiêu đề cột
+                XSSFRow headerRow = sheet.createRow(1);
+                String[] headers =
+                        {
+                                "Mã hồ sơ", "Tên bệnh nhân", "Bác sĩ", "Ngày khám", "Ngày nhập viện",
+                                "Ngày xuất viện", "Triệu chứng", "Chẩn đoán", "Kết quả khám bệnh",
+                                "Kết quả điều trị cuối", "Phương pháp điều trị", "Đơn thuốc", "Ghi chú"
+                        };
+
+                for (int i = 0; i < headers.length; i++) {
+                    org.apache.poi.ss.usermodel.Cell cell = headerRow.createCell(i);
+                    cell.setCellValue(headers[i]);
+                    cell.setCellStyle(headerStyle);
+                }
+
+                // Thêm dữ liệu
+                int rowNum = 2; // Dòng bắt đầu sau tiêu đề và header
+                for (MedicalRecord record : recordTable.getItems()) {
+                    XSSFRow row = sheet.createRow(rowNum++);
+
+                    org.apache.poi.ss.usermodel.Cell cell0 = row.createCell(0);
+                    cell0.setCellValue(record.getId());
+                    cell0.setCellStyle(leftAlignStyle);
+
+                    org.apache.poi.ss.usermodel.Cell cell1 = row.createCell(1);
+                    cell1.setCellValue(record.getPatient().getName());
+                    cell1.setCellStyle(leftAlignStyle);
+
+                    org.apache.poi.ss.usermodel.Cell cell2 = row.createCell(2);
+                    cell2.setCellValue(record.getDoctor().getName());
+                    cell2.setCellStyle(leftAlignStyle);
+
+                    org.apache.poi.ss.usermodel.Cell cell3 = row.createCell(3);
+                    cell3.setCellValue(record.getConsultationDate().format(VIETNAMESE_DATE_TIME_FORMATTER));
+                    cell3.setCellStyle(leftAlignStyle);
+
+                    org.apache.poi.ss.usermodel.Cell cell4 = row.createCell(4);
+                    cell4.setCellValue(record.getAdmissionDate() != null
+                            ? record.getAdmissionDate().format(VIETNAMESE_DATE_TIME_FORMATTER)
+                            : "Không có");
+                    cell4.setCellStyle(leftAlignStyle);
+
+                    org.apache.poi.ss.usermodel.Cell cell5 = row.createCell(5);
+                    cell5.setCellValue(record.getDischargeDate() != null
+                            ? record.getDischargeDate().format(VIETNAMESE_DATE_TIME_FORMATTER)
+                            : "Không có");
+                    cell5.setCellStyle(leftAlignStyle);
+
+
+                    org.apache.poi.ss.usermodel.Cell cell6 = row.createCell(6);
+                    cell6.setCellValue(record.getSymptoms());
+                    cell6.setCellStyle(leftAlignStyle);
+
+                    org.apache.poi.ss.usermodel.Cell cell7 = row.createCell(7);
+                    cell7.setCellValue(record.getDiagnosis());
+                    cell7.setCellStyle(leftAlignStyle);
+
+                    org.apache.poi.ss.usermodel.Cell cell8 = row.createCell(8);
+                    cell8.setCellValue(record.getExaminationResult());
+                    cell8.setCellStyle(leftAlignStyle);
+
+                    org.apache.poi.ss.usermodel.Cell cell9 = row.createCell(9);
+                    cell9.setCellValue(record.getFinalTreatmentResult());
+                    cell9.setCellStyle(leftAlignStyle);
+
+                    org.apache.poi.ss.usermodel.Cell cell10 = row.createCell(10);
+                    cell10.setCellValue(record.getTreatmentMethod());
+                    cell10.setCellStyle(leftAlignStyle);
+
+                    org.apache.poi.ss.usermodel.Cell cell11 = row.createCell(11);
+                    cell11.setCellValue(record.getPrescription() != null ? "Đã kê" : "Chưa kê");
+                    cell11.setCellStyle(leftAlignStyle);
+
+                    org.apache.poi.ss.usermodel.Cell cell12 = row.createCell(12);
+                    cell12.setCellValue(record.getNotes());
+                    cell12.setCellStyle(leftAlignStyle);
+                }
+
+                // Auto-size cho đẹp
+                for (int i = 0; i < headers.length; i++) {
+                    sheet.autoSizeColumn(i);
+                    int currentWidth = sheet.getColumnWidth(i);
+                    sheet.setColumnWidth(i, (int) (currentWidth * 1.5));
+                }
+
+                // Ghi file
+                FileOutputStream fileOut = new FileOutputStream(file);
+                workbook.write(fileOut);
+                fileOut.close();
+                workbook.close();
+
+                showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Xuất file Excel thành công!");
+            } else {
+                showAlert(Alert.AlertType.WARNING, "Thông báo", "Không có file nào được chọn để lưu!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "Lỗi khi xuất file Excel!");
+        }
     }
 
     @FXML

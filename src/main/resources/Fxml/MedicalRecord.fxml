@@ -18,7 +18,7 @@
    </Label>
    <TextField fx:id="searchTextField" layoutX="73.0" layoutY="27.0" prefHeight="25.0" prefWidth="303.0" promptText="Tìm kiếm hồ sơ bệnh án" styleClass="search-field" stylesheets="@../Styles/MedicalRecord.css" />
    <DatePicker fx:id="startDatePicker" layoutX="391.0" layoutY="29.0" promptText="Ngày khám bắt đầu" />
-   <Button layoutX="219.0" layoutY="593.0" mnemonicParsing="false" onAction="#printMedicalRecord" prefHeight="40.0" prefWidth="120.0" styleClass="printBtn" text="In hồ sơ">
+   <Button layoutX="145.0" layoutY="593.0" mnemonicParsing="false" onAction="#printMedicalRecord" prefHeight="40.0" prefWidth="120.0" styleClass="printBtn" text="In hồ sơ">
       <font>
          <Font size="17.0" />
       </font>
@@ -41,7 +41,12 @@
       </columns>
    </TableView>
    <DatePicker fx:id="endDatePicker" layoutX="580.0" layoutY="29.0" promptText="Ngày khám kết thúc" />
-   <Button layoutX="696.0" layoutY="593.0" mnemonicParsing="false" onAction="#detail" prefHeight="40.0" prefWidth="120.0" styleClass="printBtn" text="Xem chi tiết">
+   <Button layoutX="478.0" layoutY="593.0" mnemonicParsing="false" onAction="#detail" prefHeight="40.0" prefWidth="120.0" styleClass="printBtn" text="Xem chi tiết">
+      <font>
+         <Font size="17.0" />
+      </font>
+   </Button>
+   <Button layoutX="816.0" layoutY="593.0" mnemonicParsing="false" onAction="#exportToExcel" prefHeight="40.0" prefWidth="130.0" styleClass="printBtn" text="Xuất file Excel">
       <font>
          <Font size="17.0" />
       </font>

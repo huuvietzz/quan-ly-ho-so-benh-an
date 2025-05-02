@@ -31,7 +31,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MedicalRecordManagementController  {
+public class MedicalRecordManagementController {
 
     @FXML
     private TableColumn<MedicalRecord, LocalDateTime> consultationDateColumn;
@@ -76,7 +76,7 @@ public class MedicalRecordManagementController  {
     public static final DateTimeFormatter VIETNAMESE_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         recordTable.setPlaceholder(new Label("❌ Không có hồ sơ bệnh án."));
 
         idRecordColumn.setCellValueFactory(cellData
@@ -88,7 +88,7 @@ public class MedicalRecordManagementController  {
         });
 
 
-        patientColumn.setCellFactory(cellData   -> new TableCell<>() {
+        patientColumn.setCellFactory(cellData -> new TableCell<>() {
             private final Hyperlink link = new Hyperlink();
 
             {
@@ -110,9 +110,9 @@ public class MedicalRecordManagementController  {
                     link.setText(item);
                     setGraphic(link);
 
-                   // Check nếu dòng được chọn thì đổi màu chữ
+                    // Check nếu dòng được chọn thì đổi màu chữ
                     TableRow<?> currentRow = getTableRow();
-                    if(currentRow != null && currentRow.isSelected()) {
+                    if (currentRow != null && currentRow.isSelected()) {
                         link.setStyle("-fx-text-fill: #fff");
                     } else {
                         link.setStyle("-fx-text-fill: #2a73ff;");
@@ -120,7 +120,7 @@ public class MedicalRecordManagementController  {
 
                     // Bắt sự kiện thay đổi chọn dòng
                     currentRow.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
-                        if(isNowSelected) {
+                        if (isNowSelected) {
                             link.setStyle("-fx-text-fill: #fff");
                         } else {
                             link.setStyle("-fx-text-fill: #2a73ff;");
@@ -159,7 +159,7 @@ public class MedicalRecordManagementController  {
         setupEllipsisColumn(treatmentColumn, "Chi tiết pp điều trị");
 
         prescriptionColumn.setCellFactory(col -> new TableCell<>() {
-                private final Hyperlink link = new Hyperlink();
+            private final Hyperlink link = new Hyperlink();
 
             {
                 link.setUnderline(true);
@@ -173,7 +173,7 @@ public class MedicalRecordManagementController  {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if(empty || getIndex() >= getTableView().getItems().size()) {
+                if (empty || getIndex() >= getTableView().getItems().size()) {
                     setGraphic(null);
                 } else {
                     MedicalRecord record = getTableView().getItems().get(getIndex());
@@ -189,7 +189,7 @@ public class MedicalRecordManagementController  {
 
                     // Check nếu dòng được chọn thì đổi màu chữ
                     TableRow<?> currentRow = getTableRow();
-                    if(currentRow != null && currentRow.isSelected()) {
+                    if (currentRow != null && currentRow.isSelected()) {
                         link.setStyle("-fx-text-fill: #fff");
                     } else {
                         link.setStyle("-fx-text-fill: #2a73ff;");
@@ -197,7 +197,7 @@ public class MedicalRecordManagementController  {
 
                     // Bắt sự kiện thay đổi chọn dòng
                     currentRow.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
-                        if(isNowSelected) {
+                        if (isNowSelected) {
                             link.setStyle("-fx-text-fill: #fff");
                         } else {
                             link.setStyle("-fx-text-fill: #2a73ff;");
@@ -243,7 +243,7 @@ public class MedicalRecordManagementController  {
         startDatePicker.valueProperty().addListener((obs, oldDate, newDate) -> {
             filterRecordsCombined(searchTextField.getText());
         });
-        endDatePicker.valueProperty().addListener((obs, oldDate, newDate) ->{
+        endDatePicker.valueProperty().addListener((obs, oldDate, newDate) -> {
             filterRecordsCombined(searchTextField.getText());
         });
 
@@ -274,7 +274,7 @@ public class MedicalRecordManagementController  {
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -284,7 +284,7 @@ public class MedicalRecordManagementController  {
         try {
             MedicalRecord selectedMedicalRecord = recordTable.getSelectionModel().getSelectedItem();
             if (selectedMedicalRecord == null) {
-                showAlert(Alert.AlertType.ERROR, "Lỗi","Vui lòng chọn hồ sơ cần sửa.");
+                showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng chọn hồ sơ cần sửa.");
                 return;
             }
 
@@ -300,7 +300,7 @@ public class MedicalRecordManagementController  {
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -309,7 +309,7 @@ public class MedicalRecordManagementController  {
     @FXML
     void delete(ActionEvent event) {
         MedicalRecord selectedRecord = recordTable.getSelectionModel().getSelectedItem();
-        if(selectedRecord == null) {
+        if (selectedRecord == null) {
             showAlert(Alert.AlertType.ERROR, "Lỗi!", "Vui lòng chọn hồ sơ bệnh án để xóa!");
             return;
         }
@@ -320,11 +320,11 @@ public class MedicalRecordManagementController  {
         confirmAlert.setContentText(null);
 
         confirmAlert.showAndWait().ifPresent(response -> {
-           if(response == ButtonType.OK) {
-               medicalRecordDAO.deleteMedicalRecord(selectedRecord.getId());
-               showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Xóa hồ sơ bệnh án thành công!");
-               refreshTable();
-           }
+            if (response == ButtonType.OK) {
+                medicalRecordDAO.deleteMedicalRecord(selectedRecord.getId());
+                showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Xóa hồ sơ bệnh án thành công!");
+                refreshTable();
+            }
         });
     }
 
@@ -396,7 +396,7 @@ public class MedicalRecordManagementController  {
 
         vbox.getChildren().addAll(
                 idLabel, patientLabel, doctorLabel, consultationDateLabel,
-                admissionLabel, dischargeLabel,symptomsLabel, diagnosisLabel,
+                admissionLabel, dischargeLabel, symptomsLabel, diagnosisLabel,
                 resultLabel, treatmentLabel, finalResultLabel, notesLabel,
                 closeBtn
         );
@@ -404,12 +404,6 @@ public class MedicalRecordManagementController  {
         Scene scene = new Scene(vbox, 500, 450);
         detailStage.setScene(scene);
         detailStage.show();
-    }
-
-
-    @FXML
-    void extractToExcel(ActionEvent event) {
-
     }
 
     // Hàm tìm kiếm kết hợp giữa tìm kiếm và chọn khoảng ngày sinh
@@ -421,23 +415,23 @@ public class MedicalRecordManagementController  {
 
         List<MedicalRecord> filtered = allRecords.stream()
                 .filter(record -> {
-                    LocalDateTime consultationDate  = record.getConsultationDate();
-                    if(consultationDate  == null) return false;
+                    LocalDateTime consultationDate = record.getConsultationDate();
+                    if (consultationDate == null) return false;
 
                     // Chuyển LocalDateTime thành LocalDate để so sánh chỉ theo ngày
                     LocalDate consultationLocalDate = consultationDate.toLocalDate();
 
                     // Lọc theo khoảng ngày được chọn
-                    boolean afterOrEqualStart = (startDate == null || !consultationLocalDate .isBefore(startDate)); // consultationDate >= startDate
-                    boolean beforeOrEqualEnd = (endDate == null || !consultationLocalDate .isAfter(endDate)); // consultationDate <= endDate
-                    if(!(afterOrEqualStart && beforeOrEqualEnd))  return false;
+                    boolean afterOrEqualStart = (startDate == null || !consultationLocalDate.isBefore(startDate)); // consultationDate >= startDate
+                    boolean beforeOrEqualEnd = (endDate == null || !consultationLocalDate.isAfter(endDate)); // consultationDate <= endDate
+                    if (!(afterOrEqualStart && beforeOrEqualEnd)) return false;
 
                     // Lọc theo từ khóa nếu có
-                    if(keyword != null && !keyword.trim().isEmpty()) {
+                    if (keyword != null && !keyword.trim().isEmpty()) {
                         try {
                             int keywordId = Integer.parseInt(keyword);
                             return record.getId() == keywordId;
-                        } catch(NumberFormatException e) {
+                        } catch (NumberFormatException e) {
                             Patient patient = record.getPatient();
                             String combined = (
                                     (patient != null ? patient.getName() : "") + " " +
@@ -451,8 +445,8 @@ public class MedicalRecordManagementController  {
                             ).toLowerCase();
 
                             return combined.contains(keyword.trim().toLowerCase());
-                           }
                         }
+                    }
                     return true; // Neu ko có từ khoá, chỉ lọc theo ngày
                 }).collect(Collectors.toList());
 
@@ -482,7 +476,7 @@ public class MedicalRecordManagementController  {
             stage.setScene(new Scene(root));
             stage.showAndWait();
             refreshTable();
-        } catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -531,10 +525,10 @@ public class MedicalRecordManagementController  {
                     double cellWidth = column.getWidth() - 10;
 
                     // Nếu quá rộng, cắt dần và thêm "..."
-                    if(textWidth > cellWidth) {
+                    if (textWidth > cellWidth) {
                         String shortened = item;
                         text.setText(shortened);
-                        while(text.getLayoutBounds().getWidth() > cellWidth - 10 && shortened.length() > 0) {
+                        while (text.getLayoutBounds().getWidth() > cellWidth - 10 && shortened.length() > 0) {
                             shortened = shortened.substring(0, shortened.length() - 1);
                             text.setText(shortened + "...");
                         }
