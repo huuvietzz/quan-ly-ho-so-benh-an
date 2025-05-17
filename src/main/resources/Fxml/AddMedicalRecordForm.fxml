@@ -12,8 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="579.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.quanlyhosobenhan.Controllers.AddMedicalRecordFormController">
+<AnchorPane prefHeight="579.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.AddMedicalRecordFormController">
     <Label layoutX="268.0" layoutY="24.0" text="Thêm hồ sơ bệnh án">
         <font>
           <Font name="System Bold" size="30.0" />

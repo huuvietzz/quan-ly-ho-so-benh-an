@@ -14,7 +14,7 @@ public class HibernateUtil {
             try {
                 // Cấu hình Hibernate
                 Configuration configuration = new Configuration()
-                        .setProperty(Environment.URL, "jdbc:mysql://localhost/HospitalManagement")
+                        .setProperty(Environment.URL, "jdbc:mysql://localhost/hospital_management")
                         .setProperty(Environment.DRIVER, "com.mysql.cj.jdbc.Driver")
                         .setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect")
                         .setProperty("hibernate.show_sql", "true")

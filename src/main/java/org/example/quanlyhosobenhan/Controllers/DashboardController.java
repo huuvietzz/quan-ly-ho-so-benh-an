@@ -80,7 +80,7 @@ public class DashboardController {
         );
         pieChart.setData(pieChartData);
         pieChart.setTitle("Tỷ lệ giới tính bệnh nhân");
-         
+
         // Cap nhat ten  de hien thi %
         for(PieChart.Data data : pieChartData){
             double percent = (data.getPieValue() / tong) * 100;

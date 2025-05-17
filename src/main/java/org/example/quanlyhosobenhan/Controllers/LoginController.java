@@ -1,5 +1,7 @@
 package org.example.quanlyhosobenhan.Controllers;
 
+import com.sun.net.httpserver.HttpServer;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -13,6 +15,7 @@ import org.example.quanlyhosobenhan.Model.Doctor;
 
 import java.awt.*;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.prefs.Preferences;
 
@@ -93,29 +96,12 @@ public class LoginController {
                 clearLoginInfo();
             }
 
-            showAlert(Alert.AlertType.INFORMATION, "Đăng Nhập Thành Công", "Chào mừng " + doctor.getName() + "!");
+            showAlert(Alert.AlertType.INFORMATION, "Đăng Nhập Thành Công", "Chào mừng " + doctor.getUserName() + "!");
             SwitchScreenController.switchScreen(event, "/Fxml/Main.fxml", "Quản lý hồ sơ bệnh án");
         } else{
             showAlert(Alert.AlertType.ERROR, "Đăng Nhập Thất Bại", "Sai tên đăng nhập hoặc mật khẩu. Vui lòng thử lại!");
         }
     }
-
-    public void loginWithFacebook() {
-        openBrowser("http://localhost:8080/oauth2/authorization/facebook");
-    }
-
-    public void loginWithGoogle() {
-        openBrowser("http://localhost:8080/oauth2/authorization/google");
-    }
-
-    public void openBrowser(String url) {
-        try {
-            Desktop.getDesktop().browse(new URI(url));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 
     @FXML
     public void onSignupLinkClick(ActionEvent event) throws IOException {

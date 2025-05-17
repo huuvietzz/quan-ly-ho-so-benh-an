@@ -8,7 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -21,8 +21,8 @@ public class Doctor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(name = "full_name", nullable = false, unique = true)
+    private String fullName;
 
     @Column(name = "user_name", nullable = false, unique = true)
     private String userName;
@@ -76,4 +76,7 @@ public class Doctor {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    @ManyToMany(mappedBy = "doctors")
+    private Set<Patient> patients;
 }

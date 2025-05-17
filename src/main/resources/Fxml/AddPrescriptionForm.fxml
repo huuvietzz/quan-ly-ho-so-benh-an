@@ -27,7 +27,7 @@
                 <Font name="System Bold" size="15.0" />
             </font>
         </Label>
-        <TextField fx:id="medicineNameField" prefHeight="35.0" prefWidth="230.0" />
+        <TextField fx:id="medicineNameField" prefHeight="35.0" prefWidth="230.0" styleClass="textfield" stylesheets="@../Styles/AddPrescriptionForm.css" />
     </HBox>
    <HBox layoutX="20.0" layoutY="131.0" prefHeight="35.0" prefWidth="600.0" spacing="24.0">
       <children>
@@ -36,7 +36,7 @@
                <Font name="System Bold" size="15.0" />
             </font>
          </Label>
-         <TextField fx:id="quantityField" prefHeight="35.0" prefWidth="230.0" />
+         <TextField fx:id="quantityField" prefHeight="35.0" prefWidth="230.0" styleClass="textfield" stylesheets="@../Styles/AddPrescriptionForm.css" />
       </children>
    </HBox>
    <HBox layoutX="24.0" layoutY="131.0" prefHeight="35.0" prefWidth="600.0" spacing="42.0">
@@ -49,7 +49,7 @@
                <Insets left="1.0" />
             </HBox.margin>
          </Label>
-         <TextField fx:id="unitField" prefHeight="35.0" prefWidth="230.0" />
+         <TextField fx:id="unitField" prefHeight="35.0" prefWidth="230.0" styleClass="textfield" stylesheets="@../Styles/AddPrescriptionForm.css" />
       </children>
    </HBox>
     <HBox layoutX="10.0" layoutY="46.0" prefHeight="35.0" prefWidth="600.0" spacing="14.0">
@@ -58,7 +58,7 @@
                 <Font name="System Bold" size="15.0" />
             </font>
         </Label>
-        <TextField fx:id="dosageField" prefHeight="35.0" prefWidth="230.0" />
+        <TextField fx:id="dosageField" prefHeight="35.0" prefWidth="230.0" styleClass="textfield" stylesheets="@../Styles/AddPrescriptionForm.css" />
     </HBox>
     <HBox layoutX="10.0" layoutY="117.0" prefHeight="57.0" prefWidth="600.0" spacing="14.0">
         <Label text="Cách dùng:">
@@ -66,7 +66,7 @@
                 <Font name="System Bold" size="15.0" />
             </font>
         </Label>
-        <TextArea fx:id="usageInstructionsField" prefHeight="57.0" prefWidth="230.0" />
+        <TextArea fx:id="usageInstructionsField" prefHeight="57.0" prefWidth="230.0" styleClass="textfield" stylesheets="@../Styles/AddPrescriptionForm.css" />
     </HBox>
     <HBox layoutX="10.0" layoutY="117.0" prefHeight="57.0" prefWidth="600.0" spacing="33.0">
         <Label text="Ghi chú:">
@@ -74,17 +74,17 @@
                 <Font name="System Bold" size="15.0" />
             </font>
         </Label>
-        <TextArea fx:id="noteField" prefHeight="57.0" prefWidth="230.0" />
+        <TextArea fx:id="noteField" prefHeight="57.0" prefWidth="230.0" styleClass="textfield" stylesheets="@../Styles/AddPrescriptionForm.css" />
     </HBox>
     <HBox prefHeight="28.0" prefWidth="359.0" spacing="126.0">
         <VBox.margin>
             <Insets bottom="5.0" top="3.0" />
         </VBox.margin>
-        <Button mnemonicParsing="false" onAction="#addBtn" prefHeight="28.0" prefWidth="57.0" styleClass="add_btn" stylesheets="@../Styles/AddPrescriptionForm.css" text="Thêm">
+        <Button mnemonicParsing="false" onAction="#addBtn" prefHeight="28.0" prefWidth="57.0" styleClass="add-btn" stylesheets="@../Styles/AddPrescriptionForm.css" text="Thêm">
             <HBox.margin>
                 <Insets left="62.0" />
             </HBox.margin>
         </Button>
-        <Button mnemonicParsing="false" onAction="#cancelBtn" prefHeight="28.0" prefWidth="57.0" styleClass="cancel_btn" stylesheets="@../Styles/AddPrescriptionForm.css" text="Hủy" />
+        <Button mnemonicParsing="false" onAction="#cancelBtn" prefHeight="28.0" prefWidth="57.0" styleClass="cancel-btn" stylesheets="@../Styles/AddPrescriptionForm.css" text="Hủy" />
     </HBox>
 </VBox>

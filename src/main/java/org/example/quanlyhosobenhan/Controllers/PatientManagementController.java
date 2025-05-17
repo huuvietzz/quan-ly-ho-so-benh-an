@@ -91,7 +91,7 @@ public class PatientManagementController {
                 -> new SimpleObjectProperty<>(cellData.getValue().getId()));
 
         nameColumn.setCellValueFactory(cellData
-                -> new SimpleStringProperty(cellData.getValue().getName()));
+                -> new SimpleStringProperty(cellData.getValue().getFullName()));
         setupEllipsisColumn(nameColumn, "Chi tiết tên");
 
         genderColumn.setCellValueFactory(cellData
@@ -162,41 +162,41 @@ public class PatientManagementController {
         });
     }
 
-    @FXML
-    void details(ActionEvent event) {
-        Patient selectedPatient = patientTable.getSelectionModel().getSelectedItem();
-        if (selectedPatient == null) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi!", "Vui lòng chọn bệnh nhân!");
-            return;
-        }
-
-        Stage detailsStage = new Stage();
-        detailsStage.setTitle("Thông tin chi tiết bệnh nhân");
-
-        VBox vbox = new VBox(10);
-        vbox.setPadding(new Insets(20));
-
-        Label idLabel = new Label("ID: " + selectedPatient.getId());
-        Label nameLabel = new Label("Tên: " + selectedPatient.getName());
-        Label genderLabel = new Label("Giới tính: " + selectedPatient.getGender());
-        Label dobLabel = new Label("Ngày sinh: " + selectedPatient.getBirthdate().format(PatientManagementController.VIETNAMESE_DATE_FORMATTER));
-        Label addressLabel = new Label("Địa chỉ: " + selectedPatient.getAddress());
-        Label emailLabel = new Label("Email: " + selectedPatient.getEmail());
-        Label phoneLabel = new Label("Số điện thoại: " + selectedPatient.getPhone());
-        Label nationalIdLabel = new Label("Số căn cước công dân: " + selectedPatient.getNationalId());
-        Label healthInsuranceIdLabel = new Label("Số thẻ BHYT: " + selectedPatient.getHealthInsuranceId());
-
-        vbox.getChildren().addAll(idLabel, nameLabel, genderLabel, dobLabel, addressLabel, emailLabel, phoneLabel, nationalIdLabel, healthInsuranceIdLabel);
-
-        Button closeBtn = new Button("Đóng");
-        closeBtn.setOnAction(e -> detailsStage.close());
-
-        vbox.getChildren().addAll(closeBtn);
-
-        Scene scene = new Scene(vbox, 400, 300);
-        detailsStage.setScene(scene);
-        detailsStage.show();
-    }
+//    @FXML
+//    void details(ActionEvent event) {
+//        Patient selectedPatient = patientTable.getSelectionModel().getSelectedItem();
+//        if (selectedPatient == null) {
+//            showAlert(Alert.AlertType.ERROR, "Lỗi!", "Vui lòng chọn bệnh nhân!");
+//            return;
+//        }
+//
+//        Stage detailsStage = new Stage();
+//        detailsStage.setTitle("Thông tin chi tiết bệnh nhân");
+//
+//        VBox vbox = new VBox(10);
+//        vbox.setPadding(new Insets(20));
+//
+//        Label idLabel = new Label("ID: " + selectedPatient.getId());
+//        Label nameLabel = new Label("Họ tên: " + selectedPatient.getFullName());
+//        Label genderLabel = new Label("Giới tính: " + selectedPatient.getGender());
+//        Label dobLabel = new Label("Ngày sinh: " + selectedPatient.getBirthdate().format(PatientManagementController.VIETNAMESE_DATE_FORMATTER));
+//        Label addressLabel = new Label("Địa chỉ: " + selectedPatient.getAddress());
+//        Label emailLabel = new Label("Email: " + selectedPatient.getEmail());
+//        Label phoneLabel = new Label("Số điện thoại: " + selectedPatient.getPhone());
+//        Label nationalIdLabel = new Label("Số căn cước công dân: " + selectedPatient.getNationalId());
+//        Label healthInsuranceIdLabel = new Label("Số thẻ BHYT: " + selectedPatient.getHealthInsuranceId());
+//
+//        vbox.getChildren().addAll(idLabel, nameLabel, genderLabel, dobLabel, addressLabel, emailLabel, phoneLabel, nationalIdLabel, healthInsuranceIdLabel);
+//
+//        Button closeBtn = new Button("Đóng");
+//        closeBtn.setOnAction(e -> detailsStage.close());
+//
+//        vbox.getChildren().addAll(closeBtn);
+//
+//        Scene scene = new Scene(vbox, 400, 300);
+//        detailsStage.setScene(scene);
+//        detailsStage.show();
+//    }
 
     @FXML
     void refresh(ActionEvent event) {
@@ -292,7 +292,7 @@ public class PatientManagementController {
                     cell0.setCellStyle(leftAlignStyle);
 
                     Cell cell1 = row.createCell(1);
-                    cell1.setCellValue(patient.getName());
+                    cell1.setCellValue(patient.getFullName());
                     cell1.setCellStyle(leftAlignStyle);
 
                     Cell cell2 = row.createCell(2);
@@ -460,7 +460,7 @@ public class PatientManagementController {
                             return patient.getId() == patientId;
                         } catch(NumberFormatException e) {
                             String combined = (
-                                    (patient != null ? patient.getName() : "") + " " +
+                                    (patient != null ? patient.getFullName() : "") + " " +
                                             patient.getGender() + " " +
                                             patient.getAddress() + " " +
                                             patient.getEmail() + " " +

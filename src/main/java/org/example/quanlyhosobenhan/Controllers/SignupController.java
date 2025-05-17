@@ -190,7 +190,7 @@ public class SignupController {
 
         if(isValid) {
             Doctor doctor = new Doctor();
-            doctor.setName(fullNameField.getText().trim());
+            doctor.setFullName(fullNameField.getText().trim());
             doctor.setUserName(userNameField.getText().trim());
             doctor.setEmail(emailField.getText().trim());
             doctor.setPhone(numberPhoneField.getText().trim());

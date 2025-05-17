@@ -16,6 +16,7 @@ module org.example.quanlyhosobenhan {
     requires io;
     requires bcrypt;
     requires mysql.connector.j;
+    requires jdk.httpserver;
 
     opens org.example.quanlyhosobenhan to javafx.fxml, org.hibernate.orm.core;
     exports org.example.quanlyhosobenhan;

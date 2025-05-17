@@ -228,7 +228,7 @@ public class AddMedicalRecordFormController {
             idColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getId()));
 
             TableColumn<Patient, String> nameColumn = new TableColumn<>("Tên bệnh nhân");
-            nameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
+            nameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFullName()));
 
             table.getColumns().addAll(idColumn, nameColumn);
 
@@ -245,7 +245,7 @@ public class AddMedicalRecordFormController {
                     if (e.getClickCount() == 2 && !row.isEmpty()) {
                         Patient selected = row.getItem();
                         selectedPatient = selected;
-                        patientSearchField.setText(selected.getName()); // set tên bệnh nhân vào text field
+                        patientSearchField.setText(selected.getFullName()); // set tên bệnh nhân vào text field
                         stage.close();
                     }
                 });
@@ -259,7 +259,7 @@ public class AddMedicalRecordFormController {
                         new PatientDAO().getPatientsByDoctorId(doctorId).stream()
                                 .filter(p ->
                                         String.valueOf(p.getId()).contains(newText) ||
-                                                p.getName().toLowerCase().contains(newText.toLowerCase()))
+                                                p.getFullName().toLowerCase().contains(newText.toLowerCase()))
                                 .toList()
                 ));
             });

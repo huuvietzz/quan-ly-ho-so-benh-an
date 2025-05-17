@@ -1,5 +1,4 @@
 package org.example.quanlyhosobenhan.Controllers;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -72,7 +72,7 @@ public class MainController implements Initializable {
     }
 
     public void setting(ActionEvent event) throws IOException {
-        loadPage("/Fxml/Setting.fxml");
+        loadPage("/Fxml/Account.fxml");
     }
 
     public void logOut(ActionEvent event) throws IOException {
@@ -85,7 +85,6 @@ public class MainController implements Initializable {
         // Hiển thị hộp thoại và đợi người dùng tra lời
         Optional<ButtonType> result = alert.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.OK) {
-
             // Neu nguoi dung chon OK, load tro lai man hinh dang nhap
             SwitchScreenController.switchScreen(event, "/Fxml/Login.fxml", "Đăng nhập");
         }
@@ -93,11 +92,27 @@ public class MainController implements Initializable {
 
     private void loadPage(String fxmlFile) {
         try {
-            Parent fxml = FXMLLoader.load(getClass().getResource(fxmlFile));
-            contentArea.getChildren().setAll(fxml);
+            Parent root = FXMLLoader.load(getClass().getResource(fxmlFile));
+
+            // Xóa và thêm node mới
+            contentArea.getChildren().setAll(root);
+
+            // Nếu root là Region (ví dụ ScrollPane, AnchorPane, VBox, …) thì mới bind kích thước
+            if (root instanceof Region) {
+                Region region = (Region) root;
+                region.prefWidthProperty().bind(contentArea.widthProperty());
+                region.prefHeightProperty().bind(contentArea.heightProperty());
+            }
+
+            // Nếu đúng là ScrollPane thì cho nó fit nội dung
+//            if (root instanceof ScrollPane) {
+//                ScrollPane sp = (ScrollPane) root;
+//                sp.setFitToWidth(false);
+//                sp.setFitToHeight(false);
+//            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 }

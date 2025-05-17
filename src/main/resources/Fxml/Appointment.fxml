@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -9,19 +11,43 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="650.0" prefWidth="1065.0" styleClass="primary-color" stylesheets="@../Styles/Appointment.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.AppointmentController">
-   <TextField layoutX="63.0" layoutY="33.0" prefHeight="25.0" prefWidth="303.0" promptText="Tìm kiếm lịch hẹn" />
-   <TableView layoutX="221.0" layoutY="129.0" prefHeight="263.0" prefWidth="570.0">
-      <columns>
-         <TableColumn prefWidth="57.333343505859375" text="ID" />
-         <TableColumn prefWidth="164.66665649414062" text="Bệnh nhân" />
-         <TableColumn prefWidth="170.0" text="Thời gian" />
-         <TableColumn minWidth="0.0" prefWidth="176.666748046875" text="Trạng thái" />
-      </columns>
-   </TableView>
-   <Label layoutX="383.0" layoutY="93.0" text="Danh sách lịch hẹn">
-      <font>
-         <Font size="25.0" />
-      </font>
-   </Label>
-   <DatePicker layoutX="388.0" layoutY="34.0" />
+   <TextField layoutX="63.0" layoutY="33.0" prefHeight="29.0" prefWidth="279.0" promptText="Tìm kiếm lịch hẹn" styleClass="search-field" stylesheets="@../Styles/Appointment.css" AnchorPane.topAnchor="17.0" />
+   <DatePicker layoutX="397.0" layoutY="19.0" prefHeight="29.0" styleClass="date-field" stylesheets="@../Styles/Appointment.css" AnchorPane.topAnchor="17.0">
+      <opaqueInsets>
+         <Insets />
+      </opaqueInsets></DatePicker>
+   <AnchorPane layoutX="16.0" layoutY="81.0" prefHeight="540.0" prefWidth="1034.0" stylesheets="@../Styles/Appointment.css" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="69.0">
+      <children>
+         <AnchorPane layoutX="20.0" layoutY="26.0" prefHeight="359.0" prefWidth="1034.0" stylesheets="@../Styles/Appointment.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+               <Label layoutX="26.0" layoutY="16.0" text="Danh sách lịch hẹn">
+                  <font>
+                     <Font size="25.0" />
+                  </font>
+               </Label>
+               <TableView layoutX="49.0" layoutY="61.0" prefHeight="277.0" prefWidth="819.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
+                  <columns>
+                     <TableColumn fx:id="idAppointmentColumn" prefWidth="92.0" text="ID lịch hẹn" />
+                     <TableColumn fx:id="patientColumn" prefWidth="130.66665649414062" text="Bệnh nhân" />
+                     <TableColumn fx:id="timeColumn" prefWidth="170.0" text="Thời gian" />
+                     <TableColumn fx:id="roomNumberColumn" minWidth="0.0" prefWidth="108.6666259765625" text="Số phòng" />
+                     <TableColumn fx:id="reasonColumn" minWidth="0.0" prefWidth="142.6666259765625" text="Lý do khám" />
+                     <TableColumn fx:id="statusColumn" minWidth="0.0" prefWidth="142.6666259765625" text="Trạng thái" />
+                  </columns>
+                  <columnResizePolicy>
+                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                  </columnResizePolicy>
+               </TableView>
+            </children>
+            <styleClass>
+               <String fx:value="white-bg" />
+               <String fx:value="shadow" />
+            </styleClass>
+         </AnchorPane>
+      </children>
+      <styleClass>
+         <String fx:value="white-bg" />
+         <String fx:value="shadow" />
+      </styleClass>
+   </AnchorPane>
 </AnchorPane>

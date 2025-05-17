@@ -12,7 +12,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.MainController">
    <left>
-      <AnchorPane prefHeight="538.0" prefWidth="195.0" styleClass="menu" stylesheets="@../Styles/Main.css" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="538.0" prefWidth="195.0" styleClass="nav-form" stylesheets="@../Styles/Main.css" BorderPane.alignment="CENTER">
          <Line endX="100.0" layoutX="116.0" layoutY="174.0" startX="-100.0" stroke="WHITE" />
          <Button graphicTextGap="10.0" layoutX="2.0" layoutY="190.0" mnemonicParsing="false" onAction="#dashboard" prefHeight="29.0" prefWidth="141.0" styleClass="nav-btn" stylesheets="@../Styles/Main.css" text="Dashboard">
             <graphic>
@@ -39,9 +39,9 @@
                <FontAwesomeIconView fill="WHITE" glyphName="CALENDAR" size="1.5em" />
             </graphic>
          </Button>
-         <Button graphicTextGap="10.0" layoutX="4.0" layoutY="429.0" minWidth="89.0" mnemonicParsing="false" onAction="#setting" prefHeight="29.0" prefWidth="103.0" styleClass="nav-btn" stylesheets="@../Styles/Main.css" text="Cài đặt">
+         <Button graphicTextGap="13.0" layoutX="10.0" layoutY="429.0" minWidth="89.0" mnemonicParsing="false" onAction="#setting" prefHeight="29.0" prefWidth="113.0" styleClass="nav-btn" stylesheets="@../Styles/Main.css" text="Tài khoản">
             <graphic>
-               <FontAwesomeIconView fill="WHITE" glyphName="GEAR" size="1.5em" />
+               <FontAwesomeIconView fill="WHITE" glyphName="USER" size="1.5em" />
             </graphic>
             <font>
                <Font />
@@ -66,7 +66,7 @@
    </left>
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <StackPane fx:id="contentArea" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="650.0" prefWidth="1065.0" />
+         <StackPane fx:id="contentArea" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="650.0" prefWidth="1081.0" styleClass="primary-color" stylesheets="@../Styles/Main.css" />
       </AnchorPane>
    </center>
 </BorderPane>

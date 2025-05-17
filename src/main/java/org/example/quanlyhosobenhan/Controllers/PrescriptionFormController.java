@@ -88,7 +88,7 @@ public class PrescriptionFormController {
     public void setPatient(Patient patient) {
         this.patient = patient;
         if (patientField != null) {
-            patientField.setText(patient.getName());
+            patientField.setText(patient.getFullName());
         }
     }
 
@@ -134,7 +134,7 @@ public class PrescriptionFormController {
         
         Platform.runLater(() -> {
             if (patient != null) {
-                patientField.setText(patient.getName());
+                patientField.setText(patient.getFullName());
                 patientField.setEditable(false);
             }
         });
@@ -439,8 +439,8 @@ public class PrescriptionFormController {
 
     private void hideNode(Node node) {
         if (node != null) {
-            node.setVisible(false);    // không hiển thị
-            node.setManaged(false);    // không chiếm diện tích
+            node.setVisible(false);
+            node.setManaged(false);
         }
     }
 }

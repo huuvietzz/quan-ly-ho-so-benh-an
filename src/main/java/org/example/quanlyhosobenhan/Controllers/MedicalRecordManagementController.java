@@ -84,7 +84,7 @@ public class MedicalRecordManagementController {
 
         patientColumn.setCellValueFactory(cellData -> {
             Patient patient = cellData.getValue().getPatient();
-            return new SimpleStringProperty(patient != null ? patient.getName() : "");
+            return new SimpleStringProperty(patient != null ? patient.getFullName() : "");
         });
 
 
@@ -356,55 +356,49 @@ public class MedicalRecordManagementController {
         parallel.play();
     }
 
-
-    @FXML
-    void searchRecord(ActionEvent event) {
-
-    }
-
-    @FXML
-    void detail(ActionEvent event) {
-        MedicalRecord selectedRecord = recordTable.getSelectionModel().getSelectedItem();
-        if (selectedRecord == null) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi!", "Vui lòng chọn hồ sơ bệnh án!");
-            return;
-        }
-
-        Stage detailStage = new Stage();
-        detailStage.setTitle("Chi tiết hồ sơ bệnh án");
-
-        VBox vbox = new VBox(10);
-        vbox.setPadding(new Insets(20));
-
-        Label idLabel = new Label("ID: " + selectedRecord.getId());
-        Label patientLabel = new Label("Bệnh nhân: " + selectedRecord.getPatient().getName());
-        Label doctorLabel = new Label("Bác sĩ: " + selectedRecord.getDoctor().getName());
-        Label consultationDateLabel = new Label("Ngày khám: " + selectedRecord.getConsultationDate().format(VIETNAMESE_DATE_TIME_FORMATTER));
-        Label symptomsLabel = new Label("Triệu chứng: " + selectedRecord.getSymptoms());
-        Label diagnosisLabel = new Label("Chẩn đoán: " + selectedRecord.getDiagnosis());
-        Label resultLabel = new Label("Kết quả khám bệnh: " + selectedRecord.getExaminationResult());
-        Label treatmentLabel = new Label("Phương pháp điều trị: " + selectedRecord.getTreatmentMethod());
-        Label finalResultLabel = new Label("Kết quả điều trị cuối: " + selectedRecord.getFinalTreatmentResult());
-        Label notesLabel = new Label("Ghi chú: " + selectedRecord.getNotes());
-        Label admissionLabel = new Label("Ngày nhập viện: " +
-                (selectedRecord.getAdmissionDate() != null ? selectedRecord.getAdmissionDate().format(VIETNAMESE_DATE_TIME_FORMATTER) : "Chưa có"));
-        Label dischargeLabel = new Label("Ngày xuất viện: " +
-                (selectedRecord.getDischargeDate() != null ? selectedRecord.getDischargeDate().format(VIETNAMESE_DATE_TIME_FORMATTER) : "Chưa có"));
-
-        Button closeBtn = new Button("Đóng");
-        closeBtn.setOnAction(e -> detailStage.close());
-
-        vbox.getChildren().addAll(
-                idLabel, patientLabel, doctorLabel, consultationDateLabel,
-                admissionLabel, dischargeLabel, symptomsLabel, diagnosisLabel,
-                resultLabel, treatmentLabel, finalResultLabel, notesLabel,
-                closeBtn
-        );
-
-        Scene scene = new Scene(vbox, 500, 450);
-        detailStage.setScene(scene);
-        detailStage.show();
-    }
+//    @FXML
+//    void detail(ActionEvent event) {
+//        MedicalRecord selectedRecord = recordTable.getSelectionModel().getSelectedItem();
+//        if (selectedRecord == null) {
+//            showAlert(Alert.AlertType.ERROR, "Lỗi!", "Vui lòng chọn hồ sơ bệnh án!");
+//            return;
+//        }
+//
+//        Stage detailStage = new Stage();
+//        detailStage.setTitle("Chi tiết hồ sơ bệnh án");
+//
+//        VBox vbox = new VBox(10);
+//        vbox.setPadding(new Insets(20));
+//
+//        Label idLabel = new Label("ID: " + selectedRecord.getId());
+//        Label patientLabel = new Label("Bệnh nhân: " + selectedRecord.getPatient().getFullName());
+//        Label doctorLabel = new Label("Bác sĩ: " + selectedRecord.getDoctor().getFullName());
+//        Label consultationDateLabel = new Label("Ngày khám: " + selectedRecord.getConsultationDate().format(VIETNAMESE_DATE_TIME_FORMATTER));
+//        Label symptomsLabel = new Label("Triệu chứng: " + selectedRecord.getSymptoms());
+//        Label diagnosisLabel = new Label("Chẩn đoán: " + selectedRecord.getDiagnosis());
+//        Label resultLabel = new Label("Kết quả khám bệnh: " + selectedRecord.getExaminationResult());
+//        Label treatmentLabel = new Label("Phương pháp điều trị: " + selectedRecord.getTreatmentMethod());
+//        Label finalResultLabel = new Label("Kết quả điều trị cuối: " + selectedRecord.getFinalTreatmentResult());
+//        Label notesLabel = new Label("Ghi chú: " + selectedRecord.getNotes());
+//        Label admissionLabel = new Label("Ngày nhập viện: " +
+//                (selectedRecord.getAdmissionDate() != null ? selectedRecord.getAdmissionDate().format(VIETNAMESE_DATE_TIME_FORMATTER) : "Chưa có"));
+//        Label dischargeLabel = new Label("Ngày xuất viện: " +
+//                (selectedRecord.getDischargeDate() != null ? selectedRecord.getDischargeDate().format(VIETNAMESE_DATE_TIME_FORMATTER) : "Chưa có"));
+//
+//        Button closeBtn = new Button("Đóng");
+//        closeBtn.setOnAction(e -> detailStage.close());
+//
+//        vbox.getChildren().addAll(
+//                idLabel, patientLabel, doctorLabel, consultationDateLabel,
+//                admissionLabel, dischargeLabel, symptomsLabel, diagnosisLabel,
+//                resultLabel, treatmentLabel, finalResultLabel, notesLabel,
+//                closeBtn
+//        );
+//
+//        Scene scene = new Scene(vbox, 500, 450);
+//        detailStage.setScene(scene);
+//        detailStage.show();
+//    }
 
     // Hàm tìm kiếm kết hợp giữa tìm kiếm và chọn khoảng ngày sinh
     private void filterRecordsCombined(String keyword) {
@@ -434,7 +428,7 @@ public class MedicalRecordManagementController {
                         } catch (NumberFormatException e) {
                             Patient patient = record.getPatient();
                             String combined = (
-                                    (patient != null ? patient.getName() : "") + " " +
+                                    (patient != null ? patient.getFullName() : "") + " " +
                                             record.getId() + " " +
                                             record.getSymptoms() + " " +
                                             record.getDiagnosis() + " " +
@@ -489,10 +483,10 @@ public class MedicalRecordManagementController {
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Thông tin bệnh nhân");
-        alert.setHeaderText(patient.getName());
+        alert.setHeaderText(patient.getFullName());
         alert.setContentText(
                 "ID: " + patient.getId() + "\n" +
-                        "Tên: " + patient.getName() + "\n" +
+                        "Tên: " + patient.getFullName() + "\n" +
                         "Giới tính: " + patient.getGender() + "\n" +
                         "Ngày sinh: " + formattedBirthDate + "\n" +
                         "Địa chỉ: " + patient.getAddress() + "\n" +

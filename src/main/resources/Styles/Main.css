@@ -1,5 +1,9 @@
-.menu {
-    -fx-background-color: #3147d9;
+.primary-color {
+    -fx-background-color: #efefef;
+}
+
+.nav-form{
+    -fx-background-color: linear-gradient(to bottom right, #272b3f, #256b51);
 }
 
 .nav-btn, .logout-btn {
@@ -10,6 +14,11 @@
     -fx-cursor: hand;
 }
 
+.nav-btn:hover, .logout-btn:hover {
+    -fx-font-weight: bold;
+}
+
 .avatar {
 
 }
+

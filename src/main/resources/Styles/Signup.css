@@ -1,5 +1,19 @@
-.root {
-    -fx-background-color: #e7f3ff;
+.bg-white {
+    -fx-background-color: #fff;
+}
+
+.container {
+    -fx-border-color: #000;
+    -fx-border-width: 0.4 0 0 0;
+    -fx-border-style: solid;
+}
+
+.border{
+    -fx-border-color: #000;
+    -fx-border-width: 0.4;
+    -fx-border-style: solid;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
 }
 
 .signup_btn {
@@ -11,9 +25,9 @@
     -fx-background-color: #3c48ce;
 }
 
-/*.back_to_login {*/
-/*    -fx-background-color: transparent;*/
-/*}*/
+.back_to_login {
+    -fx-background-color: transparent;
+}
 
 .hyperlink:focused {
     -fx-border-color: transparent;
@@ -21,3 +35,22 @@
     -fx-faint-focus-color: transparent;
 }
 
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical {
+    -fx-background-color: #f0f0f0;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #c0c0c0;
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #a0a0a0;
+}

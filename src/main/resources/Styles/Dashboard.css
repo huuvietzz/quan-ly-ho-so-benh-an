@@ -1,15 +1,47 @@
 .primary-color {
-    -fx-background-color: #f4dff6;
+    -fx-background-color: #efefef;
+}
+
+.top-form {
+    -fx-background-color: #fff;
+    -fx-border-width: 0.4 0 0 0;
+    -fx-border-color: #000;
 }
 
 .card {
-    -fx-background-color: #5769e2;
+    -fx-background-color: linear-gradient(to right, #2b303c, #525968);
     -fx-pref-width: 250px;
     -fx-pref-height: 150px;
     -fx-background-radius: 10px;
 }
 
-.search {
-    -fx-background-color: transparent;
-    -fx-cursor: hand;
+.white-bg{
+    -fx-background-color: #fff;
 }
+
+.shadow{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5),6,0,0,0);
+}
+
+.card-wrap {
+    -fx-border-color: transparent transparent #000 transparent;
+    -fx-border-width: 0 0 0.4 0;
+    -fx-border-style: solid;
+}
+
+.card-wrap-wrap {
+    -fx-border-color: #000;
+    -fx-border-width: 0.4;
+    -fx-border-style: solid;
+    -fx-background-radius: 0 0 8px 8px;
+    -fx-border-radius: 0 0 8px 8px;
+}
+
+.line-chart{
+    -fx-border-color: #000;
+    -fx-border-width: 0.4;
+    -fx-border-style: solid;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+}
+

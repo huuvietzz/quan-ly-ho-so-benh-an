@@ -93,7 +93,7 @@ public class MedicalRecordController {
 
         patientColumn.setCellValueFactory(cellData -> {
             Patient patient = cellData.getValue().getPatient();
-            return new SimpleStringProperty(patient != null ? patient.getName() : "");
+            return new SimpleStringProperty(patient != null ? patient.getFullName() : "");
         });
 
 
@@ -289,7 +289,7 @@ public class MedicalRecordController {
                         } catch(NumberFormatException e) {
                             Patient patient = record.getPatient();
                             String combined = (
-                                    (patient != null ? patient.getName() : "") + " " +
+                                    (patient != null ? patient.getFullName() : "") + " " +
                                             record.getId() + " " +
                                             record.getSymptoms() + " " +
                                             record.getDiagnosis() + " " +
@@ -384,10 +384,10 @@ public class MedicalRecordController {
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Thông tin bệnh nhân");
-        alert.setHeaderText(patient.getName());
+        alert.setHeaderText(patient.getFullName());
         alert.setContentText(
                 "ID: " + patient.getId() + "\n" +
-                        "Tên: " + patient.getName() + "\n" +
+                        "Tên: " + patient.getFullName() + "\n" +
                         "Giới tính: " + patient.getGender() + "\n" +
                         "Ngày sinh: " + formattedBirthDate + "\n" +
                         "Địa chỉ: " + patient.getAddress() + "\n" +
@@ -469,8 +469,8 @@ public class MedicalRecordController {
 
             int row = 0;
             grid.addRow(row++, new Label("Mã hồ sơ:"), new Label(String.valueOf(record.getId())));
-            grid.addRow(row++, new Label("Bệnh nhân:"), new Label(record.getPatient().getName()));
-            grid.addRow(row++, new Label("Bác sĩ:"), new Label(record.getDoctor().getName()));
+            grid.addRow(row++, new Label("Bệnh nhân:"), new Label(record.getPatient().getFullName()));
+            grid.addRow(row++, new Label("Bác sĩ:"), new Label(record.getDoctor().getFullName()));
             grid.addRow(row++, new Label("Ngày khám:"), new Label(record.getConsultationDate().format(VIETNAMESE_DATE_TIME_FORMATTER)));
 
             // Kiểm tra ngày nhập viện và ngày xuất viện có thể null
@@ -582,11 +582,11 @@ public class MedicalRecordController {
                     cell0.setCellStyle(leftAlignStyle);
 
                     org.apache.poi.ss.usermodel.Cell cell1 = row.createCell(1);
-                    cell1.setCellValue(record.getPatient().getName());
+                    cell1.setCellValue(record.getPatient().getFullName());
                     cell1.setCellStyle(leftAlignStyle);
 
                     org.apache.poi.ss.usermodel.Cell cell2 = row.createCell(2);
-                    cell2.setCellValue(record.getDoctor().getName());
+                    cell2.setCellValue(record.getDoctor().getFullName());
                     cell2.setCellStyle(leftAlignStyle);
 
                     org.apache.poi.ss.usermodel.Cell cell3 = row.createCell(3);
@@ -673,8 +673,8 @@ public class MedicalRecordController {
         vbox.setPadding(new Insets(20));
 
         Label idLabel = new Label("ID: " + selectedRecord.getId());
-        Label patientLabel = new Label("Bệnh nhân: " + selectedRecord.getPatient().getName());
-        Label doctorLabel = new Label("Bác sĩ: " + selectedRecord.getDoctor().getName());
+        Label patientLabel = new Label("Bệnh nhân: " + selectedRecord.getPatient().getFullName());
+        Label doctorLabel = new Label("Bác sĩ: " + selectedRecord.getDoctor().getFullName());
         Label consultationDateLabel = new Label("Ngày khám: " + selectedRecord.getConsultationDate().format(VIETNAMESE_DATE_TIME_FORMATTER));
         Label symptomsLabel = new Label("Triệu chứng: " + selectedRecord.getSymptoms());
         Label diagnosisLabel = new Label("Chẩn đoán: " + selectedRecord.getDiagnosis());

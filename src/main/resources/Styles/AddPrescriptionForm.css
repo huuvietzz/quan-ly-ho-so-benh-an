@@ -1,17 +1,35 @@
-.add_btn {
-    -fx-background-color: #9f97de;
+.textfield{
+    -fx-background-color: linear-gradient(to bottom, #efefef,#eee);
+    -fx-border-color: linear-gradient(to bottom right, #272b3f, #256b51);
+    -fx-border-width: .8px;
+    -fx-font-family: "Tahoma";
+    -fx-border-radius: 4px;
+}
+.textfield:focused{
+    -fx-border-width: 1.8px;
+    -fx-background-color: #fff;
+}
+
+.add-btn{
+    -fx-background-color: #304575;
+    -fx-background-radius: 8px;
+    -fx-text-fill:#fff;
+    -fx-font-size:12px;
+    -fx-font-family:"Arial";
     -fx-cursor: hand;
 }
-
-.add_btn:hover {
-    -fx-background-color: #8e85d6;
+.add-btn:hover{
+    -fx-background-color: #3357a4;
 }
 
-.cancel_btn {
-    -fx-background-color: #d0833f;
+.cancel-btn{
+    -fx-background-color: #753566;
+    -fx-background-radius: 8px;
+    -fx-text-fill:#fff;
+    -fx-font-size:12px;
+    -fx-font-family:"Arial";
     -fx-cursor: hand;
 }
-
-.cancel_btn:hover {
-    -fx-background-color: #be691e;
+.cancel-btn:hover{
+    -fx-background-color: #9d3485;
 }

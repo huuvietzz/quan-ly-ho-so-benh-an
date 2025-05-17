@@ -33,7 +33,7 @@ public class Prescription {
     private Doctor doctor;
 
     @OneToOne
-    @JoinColumn(name = "medicalRecord_id")
+    @JoinColumn(name = "medical_record_id")
     private MedicalRecord medicalRecord;
 
     @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL, orphanRemoval = true)
