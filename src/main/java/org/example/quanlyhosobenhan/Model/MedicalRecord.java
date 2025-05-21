@@ -78,4 +78,8 @@ public class MedicalRecord {
 
     @OneToOne(mappedBy = "medicalRecord", cascade = CascadeType.ALL, orphanRemoval = true)
     private Prescription prescription;
+
+    @ManyToOne
+    @JoinColumn(name = "entered_by_staff_id")
+    private Staff enteredByStaff;
 }

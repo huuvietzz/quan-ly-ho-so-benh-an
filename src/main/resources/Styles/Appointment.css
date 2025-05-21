@@ -64,3 +64,34 @@
 .date-field:focused{
     -fx-border-width: 2px;
 }
+
+.toggle-button {
+    -fx-background-color: #fff;
+    -fx-font-family: "Arial";
+    -fx-border-width: 1px;
+    -fx-border-color: #000;
+    -fx-border-radius: 5px;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+}
+
+.toggle-button:selected {
+    -fx-background-color: #28a745;
+    -fx-text-fill: #fff;
+}
+
+
+.btn {
+    -fx-background-color: #fff;
+    -fx-font-family: "Arial";
+    -fx-border-width: 1px;
+    -fx-border-color: #000;
+    -fx-border-radius: 5px;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+}
+
+.btn:hover {
+    -fx-background-color: #28a745;
+    -fx-text-fill: #fff;
+}

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1050.0" stylesheets="@../Styles/Signup.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.PatientSignupController">
+<styleClass>
+    <String fx:value="scroll-pane" />
+    <String fx:value="scroll-bar" />
+    <String fx:value="thumb" />
+    <String fx:value="viewport" />
+</styleClass>
+<AnchorPane prefHeight="700.0" prefWidth="1050.0">
+      <AnchorPane layoutY="52.0" prefHeight="669.0" prefWidth="1050.0" styleClass="container" stylesheets="@../Styles/Signup.css">
+         <children>
+            <Text layoutX="24.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Họ và tên">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Text>
+            <VBox layoutX="24.0" layoutY="33.0" prefHeight="63.0" prefWidth="477.0" spacing="5.0">
+               <children>
+                  <TextField fx:id="fullNameField" prefHeight="38.0" prefWidth="443.0" promptText="Họ và tên" />
+                  <Label fx:id="fullNameError" prefHeight="29.0" prefWidth="477.0" textFill="RED" />
+               </children>
+            </VBox>
+            <VBox layoutX="545.0" layoutY="33.0" prefHeight="63.0" prefWidth="486.0" spacing="5.0">
+               <children>
+                  <TextField fx:id="userNameField" prefHeight="38.0" prefWidth="443.0" promptText="Tên đăng nhập" />
+                  <Label fx:id="userNameError" prefHeight="25.0" prefWidth="486.0" textFill="RED" />
+               </children>
+            </VBox>
+            <Text layoutX="546.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên đăng nhập">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Text>
+            <AnchorPane layoutX="22.0" layoutY="192.0" prefHeight="97.0" prefWidth="1006.0" stylesheets="@../Styles/Signup.css">
+               <styleClass>
+                  <String fx:value="bg-white" />
+                  <String fx:value="border" />
+               </styleClass>
+               <children>
+                  <VBox layoutX="20.0" layoutY="30.0" prefHeight="63.0" prefWidth="268.0" spacing="5.0">
+                     <children>
+                        <TextField fx:id="numberPhoneField" prefHeight="38.0" prefWidth="255.0" promptText="SĐT" />
+                        <Label fx:id="numberPhoneError" prefHeight="25.0" prefWidth="268.0" textFill="RED" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="325.0" layoutY="29.0" prefHeight="63.0" prefWidth="308.0" spacing="5.0">
+                     <children>
+                        <DatePicker fx:id="dateField" prefHeight="38.0" prefWidth="309.0" promptText="Ngày sinh" />
+                        <Label fx:id="dateError" prefHeight="29.0" prefWidth="308.0" textFill="RED" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="683.0" layoutY="29.0" prefHeight="63.0" prefWidth="295.0" spacing="5.0">
+                     <children>
+                        <ComboBox fx:id="genderField" prefHeight="38.0" prefWidth="322.0" />
+                        <Label fx:id="genderError" prefHeight="29.0" prefWidth="321.0" textFill="RED" />
+                     </children>
+                  </VBox>
+                  <Text layoutX="21.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Số điện thoại">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="325.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày sinh">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="683.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Giới tính">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+            <VBox layoutX="23.0" layoutY="124.0" prefHeight="63.0" prefWidth="1005.0" spacing="5.0" stylesheets="@../Styles/Signup.css">
+               <children>
+                  <TextField fx:id="emailField" prefHeight="38.0" prefWidth="255.0" promptText="Email" />
+                  <Label fx:id="emailError" prefHeight="27.0" prefWidth="1005.0" textFill="RED" />
+               </children>
+            </VBox>
+            <Text layoutX="24.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Text>
+            <VBox layoutX="25.0" layoutY="423.0" prefHeight="63.0" prefWidth="487.0" spacing="5.0">
+               <children>
+                  <TextField fx:id="nationalIdField" prefHeight="38.0" prefWidth="255.0" promptText="Khoa" text="Căn cước công dân" />
+                  <Label fx:id="nationalIdError" prefHeight="23.0" prefWidth="482.0" textFill="RED" />
+               </children>
+            </VBox>
+            <VBox layoutX="564.0" layoutY="423.0" prefHeight="63.0" prefWidth="465.0" spacing="5.0">
+               <children>
+                  <TextField fx:id="healthInsuranceIdField" prefHeight="38.0" prefWidth="255.0" promptText="Chuyên môn" text="Mã bảo hiểm y tế" />
+                  <Label fx:id="healthInsuranceIdError" prefHeight="22.0" prefWidth="465.0" textFill="RED" />
+               </children>
+            </VBox>
+            <VBox layoutX="22.0" layoutY="320.0" prefHeight="63.0" prefWidth="1005.0" spacing="5.0" stylesheets="@../Styles/Signup.css">
+               <children>
+                  <TextArea fx:id="addressField" prefHeight="83.0" prefWidth="1005.0" promptText="Địa chỉ" />
+                  <Label fx:id="addressError" prefHeight="22.0" prefWidth="1004.0" textFill="RED" />
+               </children>
+            </VBox>
+            <VBox layoutX="24.0" layoutY="517.0" prefHeight="63.0" prefWidth="486.0" spacing="5.0">
+               <children>
+                  <PasswordField fx:id="passwordField" prefHeight="38.0" prefWidth="255.0" promptText="Mật khẩu" />
+                  <Label fx:id="passwordError" prefHeight="23.0" prefWidth="475.0" textFill="RED" />
+               </children>
+            </VBox>
+            <VBox layoutX="565.0" layoutY="516.0" prefHeight="63.0" prefWidth="465.0" spacing="5.0">
+               <children>
+                  <PasswordField fx:id="confirmPasswordField" prefHeight="38.0" prefWidth="255.0" promptText="Xác nhận mật khẩu" />
+                  <Label fx:id="confirmPasswordError" prefHeight="25.0" prefWidth="475.0" textFill="RED" />
+               </children>
+            </VBox>
+            <Text layoutX="25.0" layoutY="508.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mật khẩu">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Text>
+            <Text layoutX="566.0" layoutY="508.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Xác nhận khẩu">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Text>
+            <Hyperlink layoutX="26.0" layoutY="606.0" onAction="#backToLogin" text="Trở lại đăng nhập" />
+            <Button fx:id="signup_btn" layoutX="444.0" layoutY="602.0" mnemonicParsing="false" onAction="#handleSignupBtnClick" prefHeight="25.0" prefWidth="103.0" styleClass="signup_btn" stylesheets="@../Styles/Signup.css" text="Đăng ký" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <Text layoutX="25.0" layoutY="413.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CCCD">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Text>
+            <Text layoutX="567.0" layoutY="413.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã BHYT">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+    <AnchorPane prefHeight="52.0" prefWidth="1050.0" styleClass="bg-white" stylesheets="@../Styles/Signup.css">
+        <Text layoutX="20.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Đăng ký tài khoản">
+            <font>
+                <Font size="25.0" />
+            </font>
+        </Text>
+    </AnchorPane>
+</AnchorPane>
+</ScrollPane>

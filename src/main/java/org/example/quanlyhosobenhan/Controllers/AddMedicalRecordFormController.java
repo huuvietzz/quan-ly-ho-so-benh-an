@@ -74,11 +74,17 @@ public class AddMedicalRecordFormController {
 
     private final MedicalRecordDAO medicalRecordDAO = new MedicalRecordDAO();
 
-    private MedicalRecordManagementController medicalRecordManagementController;
+    private DoctorMedicalRecordManagementController medicalRecordManagementController;
 
-    public void setMedicalRecordManagementController(MedicalRecordManagementController controller) {
+    // private StaffMedicalRecordManagementController staffMedicalRecordManagementController;
+
+    public void setMedicalRecordManagementController(DoctorMedicalRecordManagementController controller) {
         this.medicalRecordManagementController = controller;
     }
+
+//    public void setMedicalRecordManagementController(StaffMedicalRecordManagementController controller) {
+//        this.staffMedicalRecordManagementController = controller;
+//    }
 
     @FXML
     public void initialize() {

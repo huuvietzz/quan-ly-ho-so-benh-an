@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.print.*;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -32,7 +31,6 @@ import org.example.quanlyhosobenhan.Model.MedicalRecord;
 import org.example.quanlyhosobenhan.Model.Patient;
 import org.example.quanlyhosobenhan.Model.Prescription;
 
-import java.awt.print.Printable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -42,7 +40,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MedicalRecordController {
+public class DoctorMedicalRecordController {
 
     @FXML
     private TableColumn<MedicalRecord, LocalDateTime> consultationDateColumn;
@@ -258,6 +256,17 @@ public class MedicalRecordController {
             if (!newFocus) {
                 filterRecordsCombined(searchTextField.getText());
             }
+        });
+
+        recordTable.setRowFactory(tv -> {
+            TableRow<MedicalRecord> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    MedicalRecord selectedRecord = row.getItem();
+                    showMedicalRecordDetail(selectedRecord); // Gọi hàm hiển thị chi tiết
+                }
+            });
+            return row;
         });
     }
 
@@ -658,14 +667,7 @@ public class MedicalRecordController {
         }
     }
 
-    @FXML
-    void detail(ActionEvent event) {
-        MedicalRecord selectedRecord = recordTable.getSelectionModel().getSelectedItem();
-        if (selectedRecord == null) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi!", "Vui lòng chọn hồ sơ bệnh án!");
-            return;
-        }
-
+    private void showMedicalRecordDetail(MedicalRecord selectedRecord) {
         Stage detailStage = new Stage();
         detailStage.setTitle("Chi tiết hồ sơ bệnh án");
 
@@ -692,7 +694,7 @@ public class MedicalRecordController {
 
         vbox.getChildren().addAll(
                 idLabel, patientLabel, doctorLabel, consultationDateLabel,
-                admissionLabel, dischargeLabel,symptomsLabel, diagnosisLabel,
+                admissionLabel, dischargeLabel, symptomsLabel, diagnosisLabel,
                 resultLabel, treatmentLabel, finalResultLabel, notesLabel,
                 closeBtn
         );

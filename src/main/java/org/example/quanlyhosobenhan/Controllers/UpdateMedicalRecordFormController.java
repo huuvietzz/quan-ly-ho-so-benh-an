@@ -75,14 +75,13 @@ public class UpdateMedicalRecordFormController {
 
     private final MedicalRecordDAO medicalRecordDAO = new MedicalRecordDAO();
 
-    private MedicalRecordManagementController medicalRecordManagementController;
+    private DoctorMedicalRecordManagementController medicalRecordManagementController;
 
     private MedicalRecord selectedRecord;
 
-    public void setMedicalRecordManagementController(MedicalRecordManagementController controller) {
+    public void setMedicalRecordManagementController(DoctorMedicalRecordManagementController controller) {
         this.medicalRecordManagementController = controller;
     }
-
 
     public void setMedicalRecord(MedicalRecord record) {
         this.selectedRecord = record;

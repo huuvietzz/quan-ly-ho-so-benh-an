@@ -8,7 +8,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -31,7 +30,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MedicalRecordManagementController {
+public class DoctorMedicalRecordManagementController {
 
     @FXML
     private TableColumn<MedicalRecord, LocalDateTime> consultationDateColumn;

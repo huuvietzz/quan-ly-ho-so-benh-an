@@ -27,6 +27,10 @@ public class Appointment {
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
+    @ManyToOne
+    @JoinColumn(name = "created_by_staff_id")
+    private Staff createdByStaff;
+
     @Column(name = "appointment_time", nullable = false)
     private LocalDateTime appointmentTime;
 

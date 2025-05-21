@@ -10,7 +10,8 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.quanlyhosobenhan.Controllers.DoctorMainController">
    <left>
       <AnchorPane prefHeight="538.0" prefWidth="195.0" styleClass="nav-form" stylesheets="@../Styles/Main.css" BorderPane.alignment="CENTER">
          <Line endX="100.0" layoutX="116.0" layoutY="174.0" startX="-100.0" stroke="WHITE" />

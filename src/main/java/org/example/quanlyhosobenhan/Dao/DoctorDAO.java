@@ -7,7 +7,9 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class DoctorDAO {
     public Doctor login(String userName, String plainPassword){
@@ -83,5 +85,21 @@ public class DoctorDAO {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public List<String> getDoctorsBySpecialization(String specialization) {
+        List<String> doctorNames = new ArrayList<>();
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "SELECT d.fullName FROM Doctor d WHERE d.specialization = :specialization";
+            Query<String> query = session.createQuery(hql, String.class);
+            query.setParameter("specialization", specialization);
+
+            doctorNames = query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return doctorNames;
     }
 }

@@ -1,6 +1,7 @@
 package org.example.quanlyhosobenhan.Dao;
 
 import org.example.quanlyhosobenhan.Controllers.LoginController;
+import org.example.quanlyhosobenhan.Controllers.PasswordEncoder;
 import org.example.quanlyhosobenhan.Model.Doctor;
 import org.example.quanlyhosobenhan.Model.Patient;
 import org.example.quanlyhosobenhan.Util.HibernateUtil;
@@ -11,6 +12,41 @@ import org.hibernate.query.Query;
 import java.util.*;
 
 public class PatientDAO {
+    public Patient login(String userName, String plainPassword) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "FROM Patient WHERE userName = :userName";
+            Query<Patient> query = session.createQuery(hql, Patient.class);
+            query.setParameter("userName", userName);
+
+            Patient patient = query.uniqueResult();
+
+            if (patient != null && PasswordEncoder.checkPassword(plainPassword, patient.getPassword())) {
+                return patient;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null; // Sai username hoặc password
+    }
+
+    public boolean register(Patient patient) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+
+            // Hash password trước khi lưu vào database
+            String hashedPassword = PasswordEncoder.hashPassword(patient.getPassword());
+            patient.setPassword(hashedPassword);
+
+            session.save(patient);
+            session.getTransaction().commit();
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public void savePatient(Patient patient) {
         try(Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();

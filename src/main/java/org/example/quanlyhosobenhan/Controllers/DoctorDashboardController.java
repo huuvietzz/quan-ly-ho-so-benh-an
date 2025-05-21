@@ -3,7 +3,6 @@ package org.example.quanlyhosobenhan.Controllers;
 import javafx.animation.ScaleTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
@@ -22,7 +21,7 @@ import org.example.quanlyhosobenhan.Model.Patient;
 import java.util.Map;
 
 
-public class DashboardController {
+public class DoctorDashboardController {
 
     @FXML
     private Label totalMedicalRecords;

@@ -1,8 +1,8 @@
 package org.example.quanlyhosobenhan.Controllers;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -14,11 +14,9 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Optional;
-import java.util.ResourceBundle;
 
-public class MainController implements Initializable {
+public class DoctorMainController {
     @FXML
     private StackPane contentArea;
 
@@ -39,9 +37,9 @@ public class MainController implements Initializable {
     }
 
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        loadPage("/Fxml/Dashboard.fxml");
+    @FXML
+    public void initialize() {
+        loadPage("/Fxml/DoctorDashboard.fxml");
 
         // Hiển thị tên bác sĩ
         if(LoginController.loggedInDoctor != null) {
@@ -50,31 +48,37 @@ public class MainController implements Initializable {
         }
     }
 
+    @FXML
     public void dashboard(ActionEvent event) throws IOException {
-        loadPage("/Fxml/Dashboard.fxml");
+        loadPage("/Fxml/DoctorDashboard.fxml");
     }
 
+    @FXML
     public void patientManagement(ActionEvent event) throws IOException {
-        loadPage("/Fxml/PatientManagement.fxml");
+        loadPage("/Fxml/DoctorPatientManagement.fxml");
     }
 
-
+    @FXML
     public void medicalRecord(ActionEvent event) throws IOException {
-        loadPage("/Fxml/MedicalRecord.fxml");
+        loadPage("/Fxml/DoctorMedicalRecord.fxml");
     }
 
+    @FXML
     public void medicalRecordManagement(ActionEvent event) throws IOException {
-        loadPage("/Fxml/MedicalRecordManagement.fxml");
+        loadPage("/Fxml/DoctorMedicalRecordManagement.fxml");
     }
 
+    @FXML
     public void appointment(ActionEvent event) throws IOException {
-        loadPage("/Fxml/Appointment.fxml");
+        loadPage("/Fxml/DoctorAppointment.fxml");
     }
 
+    @FXML
     public void setting(ActionEvent event) throws IOException {
-        loadPage("/Fxml/Account.fxml");
+        loadPage("/Fxml/DoctorAccount.fxml");
     }
 
+    @FXML
     public void logOut(ActionEvent event) throws IOException {
         // Tạo hộp thoại xác nhận
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

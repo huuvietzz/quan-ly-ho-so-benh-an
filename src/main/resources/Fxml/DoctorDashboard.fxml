@@ -18,7 +18,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1131.0" prefWidth="1574.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.DashboardController">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1131.0" prefWidth="1574.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.DoctorDashboardController">
    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1131.0" prefWidth="1574.0">
       <AnchorPane prefHeight="1131.0" prefWidth="1574.0" styleClass="primary-color" stylesheets="@../Styles/Dashboard.css">
          <AnchorPane prefHeight="51.0" prefWidth="1050.0" styleClass="top-form" stylesheets="@../Styles/Dashboard.css">

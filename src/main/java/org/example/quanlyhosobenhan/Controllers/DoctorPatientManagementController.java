@@ -8,9 +8,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -36,10 +38,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class PatientManagementController {
+public class DoctorPatientManagementController {
 
     @FXML
     private TableColumn<Patient, String> addressColumn;
@@ -160,43 +163,61 @@ public class PatientManagementController {
                 filterRecordsCombined(searchTextField.getText());
             }
         });
+
+        patientTable.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                Patient selectedPatient = patientTable.getSelectionModel().getSelectedItem();
+                if (selectedPatient != null) {
+                    showPatientDetails(selectedPatient);
+                }
+            }
+        });
     }
 
-//    @FXML
-//    void details(ActionEvent event) {
-//        Patient selectedPatient = patientTable.getSelectionModel().getSelectedItem();
-//        if (selectedPatient == null) {
-//            showAlert(Alert.AlertType.ERROR, "Lỗi!", "Vui lòng chọn bệnh nhân!");
-//            return;
-//        }
-//
-//        Stage detailsStage = new Stage();
-//        detailsStage.setTitle("Thông tin chi tiết bệnh nhân");
-//
-//        VBox vbox = new VBox(10);
-//        vbox.setPadding(new Insets(20));
-//
-//        Label idLabel = new Label("ID: " + selectedPatient.getId());
-//        Label nameLabel = new Label("Họ tên: " + selectedPatient.getFullName());
-//        Label genderLabel = new Label("Giới tính: " + selectedPatient.getGender());
-//        Label dobLabel = new Label("Ngày sinh: " + selectedPatient.getBirthdate().format(PatientManagementController.VIETNAMESE_DATE_FORMATTER));
-//        Label addressLabel = new Label("Địa chỉ: " + selectedPatient.getAddress());
-//        Label emailLabel = new Label("Email: " + selectedPatient.getEmail());
-//        Label phoneLabel = new Label("Số điện thoại: " + selectedPatient.getPhone());
-//        Label nationalIdLabel = new Label("Số căn cước công dân: " + selectedPatient.getNationalId());
-//        Label healthInsuranceIdLabel = new Label("Số thẻ BHYT: " + selectedPatient.getHealthInsuranceId());
-//
-//        vbox.getChildren().addAll(idLabel, nameLabel, genderLabel, dobLabel, addressLabel, emailLabel, phoneLabel, nationalIdLabel, healthInsuranceIdLabel);
-//
-//        Button closeBtn = new Button("Đóng");
-//        closeBtn.setOnAction(e -> detailsStage.close());
-//
-//        vbox.getChildren().addAll(closeBtn);
-//
-//        Scene scene = new Scene(vbox, 400, 300);
-//        detailsStage.setScene(scene);
-//        detailsStage.show();
-//    }
+    private void showPatientDetails(Patient selectedPatient) {
+        Stage detailsStage = new Stage();
+        detailsStage.setTitle("Thông tin chi tiết bệnh nhân");
+
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20));
+        vbox.setPrefWidth(500);
+
+        Function<String, Label> createWrappedLabel = (text) -> {
+            Label label = new Label(text);
+            label.setWrapText(true);
+            if (text.length() > 50) {
+                Tooltip tooltip = new Tooltip(text);
+                tooltip.setWrapText(true);
+                tooltip.setMaxWidth(400);
+                Tooltip.install(label, tooltip);
+            }
+            return label;
+        };
+
+        vbox.getChildren().addAll(
+                createWrappedLabel.apply("🆔 ID: " + selectedPatient.getId()),
+                createWrappedLabel.apply("👤 Họ tên: " + selectedPatient.getFullName()),
+                createWrappedLabel.apply("🚻 Giới tính: " + selectedPatient.getGender()),
+                createWrappedLabel.apply("🎂 Ngày sinh: " + selectedPatient.getBirthdate().format(DoctorPatientManagementController.VIETNAMESE_DATE_FORMATTER)),
+                createWrappedLabel.apply("🏠 Địa chỉ: " + selectedPatient.getAddress()),
+                createWrappedLabel.apply("📧 Email: " + selectedPatient.getEmail()),
+                createWrappedLabel.apply("📞 Số điện thoại: " + selectedPatient.getPhone()),
+                createWrappedLabel.apply("🆔 Số CCCD: " + selectedPatient.getNationalId()),
+                createWrappedLabel.apply("💳 Số thẻ BHYT: " + selectedPatient.getHealthInsuranceId())
+        );
+
+        Button closeBtn = new Button("Đóng");
+        closeBtn.setOnAction(e -> detailsStage.close());
+
+        HBox buttonBox = new HBox(closeBtn);
+        buttonBox.setAlignment(Pos.CENTER_RIGHT);
+        vbox.getChildren().add(buttonBox);
+
+        Scene scene = new Scene(vbox);
+        detailsStage.setScene(scene);
+        detailsStage.show();
+    }
+
 
     @FXML
     void refresh(ActionEvent event) {

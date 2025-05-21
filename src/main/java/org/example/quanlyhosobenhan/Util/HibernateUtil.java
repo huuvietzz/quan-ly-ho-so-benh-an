@@ -25,8 +25,9 @@ public class HibernateUtil {
 
                 configuration.addAnnotatedClass(Appointment.class);
                 configuration.addAnnotatedClass(Doctor.class);
-                configuration.addAnnotatedClass(MedicalRecord.class);
                 configuration.addAnnotatedClass(Patient.class);
+                configuration.addAnnotatedClass(Staff.class);
+                configuration.addAnnotatedClass(MedicalRecord.class);
                 configuration.addAnnotatedClass(Prescription.class);
                 configuration.addAnnotatedClass(PrescriptionDetail.class);
 

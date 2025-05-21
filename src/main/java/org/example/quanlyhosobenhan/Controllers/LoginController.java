@@ -1,32 +1,21 @@
 package org.example.quanlyhosobenhan.Controllers;
 
-import com.sun.net.httpserver.HttpServer;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import org.example.quanlyhosobenhan.Dao.DoctorDAO;
+import org.example.quanlyhosobenhan.Dao.PatientDAO;
+import org.example.quanlyhosobenhan.Dao.StaffDAO;
 import org.example.quanlyhosobenhan.Model.Doctor;
+import org.example.quanlyhosobenhan.Model.Patient;
+import org.example.quanlyhosobenhan.Model.Staff;
 
-import java.awt.*;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.URI;
 import java.util.prefs.Preferences;
 
 
 public class LoginController {
-
-    @FXML
-    private Button fb_btn;
-
-    @FXML
-    private Button gg_btn;
 
     @FXML
     private Button login_btn;
@@ -40,8 +29,17 @@ public class LoginController {
     @FXML
     private CheckBox rememberMeCheckBox;
 
+    @FXML
+    private ComboBox<String> role;
+
     // Biến lưu thông tin bác sĩ đã đăng nhập
     public static Doctor loggedInDoctor;
+
+    // Biến lưu thông tin bệnh nhân đã đăng nhập
+    public static Patient loggedInPatient;
+
+    // Biến lưu thông tin nhan viên đã đăng nhập
+    public static Staff loggedInStaff;
 
     @FXML
     public void initialize() {
@@ -57,6 +55,8 @@ public class LoginController {
                 login_btn.fire();
             }
         });
+
+        role.getItems().addAll("Bác sĩ", "Nhân viên","Bệnh nhân");
     }
 
     @FXML
@@ -83,29 +83,86 @@ public class LoginController {
             return;
         }
 
-        DoctorDAO doctorDAO = new DoctorDAO();
-        Doctor doctor = doctorDAO.login(username, plainPassword);
+        String selectedRole = role.getValue();
+        if (selectedRole == null) {
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng chọn vai trò đăng nhập!");
+            return;
+        }
 
-        if(doctor != null){
-            // Lưu bác sĩ đã đăng nhập vào biến toàn cục
-            loggedInDoctor = doctor;
-
-            if (rememberMeCheckBox.isSelected()) {
-                saveLoginInfo();
-            } else {
-                clearLoginInfo();
+        switch (selectedRole) {
+            case "Bác sĩ" -> {
+                Doctor doctor = new DoctorDAO().login(username, plainPassword);
+                if (doctor != null) {
+                    loggedInDoctor = doctor;
+                    showSuccess(event, doctor.getUserName(), "/Fxml/DoctorMain.fxml");
+                } else {
+                    showFail();
+                }
             }
 
-            showAlert(Alert.AlertType.INFORMATION, "Đăng Nhập Thành Công", "Chào mừng " + doctor.getUserName() + "!");
-            SwitchScreenController.switchScreen(event, "/Fxml/Main.fxml", "Quản lý hồ sơ bệnh án");
-        } else{
-            showAlert(Alert.AlertType.ERROR, "Đăng Nhập Thất Bại", "Sai tên đăng nhập hoặc mật khẩu. Vui lòng thử lại!");
+            case "Nhân viên" -> {
+                Staff staff = new StaffDAO().login(username, plainPassword);
+                if (staff != null) {
+                     loggedInStaff = staff;
+                    showSuccess(event, staff.getUserName(), "/Fxml/StaffMain.fxml");
+                } else {
+                    showFail();
+                }
+            }
+
+            case "Bệnh nhân" -> {
+                Patient patient = new PatientDAO().login(username, plainPassword);
+                if (patient != null) {
+                    loggedInPatient = patient;
+                    showSuccess(event, patient.getUserName(), "/Fxml/PatientMain.fxml");
+                } else {
+                    showFail();
+                }
+            }
+
+            default -> {
+                showAlert(Alert.AlertType.ERROR, "Lỗi", "Vai trò không hợp lệ!");
+            }
         }
+    }
+
+    private void showSuccess(ActionEvent event, String username, String fxmlPath) {
+        if (rememberMeCheckBox.isSelected()) {
+            saveLoginInfo();
+        } else {
+            clearLoginInfo();
+        }
+
+        showAlert(Alert.AlertType.INFORMATION, "Đăng Nhập Thành Công", "Chào mừng " + username + "!");
+        SwitchScreenController.switchScreen(event, fxmlPath, "Hồ sơ bệnh án");
+    }
+
+    private void showFail() {
+        showAlert(Alert.AlertType.ERROR, "Đăng Nhập Thất Bại", "Sai tên đăng nhập hoặc mật khẩu. Vui lòng thử lại!");
     }
 
     @FXML
     public void onSignupLinkClick(ActionEvent event) throws IOException {
-        SwitchScreenController.switchScreen(event, "/Fxml/Signup.fxml", "Đăng ký");
+        String selectedRole = role.getValue();
+        if (selectedRole == null) {
+            showAlert(Alert.AlertType.WARNING, "Chưa chọn vai trò", "Vui lòng chọn vai trò trước khi đăng ký.");
+            return;
+        }
+
+        switch (selectedRole) {
+            case "Bác sĩ" -> {
+                SwitchScreenController.switchScreen(event, "/Fxml/DoctorSignup.fxml", "Đăng ký Bác sĩ");
+            }
+            case "Nhân viên" -> {
+                SwitchScreenController.switchScreen(event, "/Fxml/StaffSignup.fxml", "Đăng ký Nhân viên");
+            }
+            case "Bệnh nhân" -> {
+                SwitchScreenController.switchScreen(event, "/Fxml/PatientSignup.fxml", "Đăng ký Bệnh nhân");
+            }
+            default -> {
+                showAlert(Alert.AlertType.ERROR, "Lỗi", "Vai trò không hợp lệ!");
+            }
+        }
     }
 
     // Lưu userName và password vao trong máy người dùng
