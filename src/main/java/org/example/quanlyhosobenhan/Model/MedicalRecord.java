@@ -80,6 +80,6 @@ public class MedicalRecord {
     private Prescription prescription;
 
     @ManyToOne
-    @JoinColumn(name = "entered_by_staff_id")
+    @JoinColumn(name = "staff_id")
     private Staff enteredByStaff;
 }

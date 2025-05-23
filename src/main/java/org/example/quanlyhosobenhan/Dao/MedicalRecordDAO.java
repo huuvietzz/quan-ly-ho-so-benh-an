@@ -15,13 +15,6 @@ public class MedicalRecordDAO {
         try(Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
 
-//            if (medicalRecord.getCreatedAt() == null) {
-//                medicalRecord.setCreatedAt(LocalDateTime.now());
-//            }
-//            if (medicalRecord.getUpdatedAt() == null) {
-//                medicalRecord.setUpdatedAt(LocalDateTime.now());
-//            }
-
             session.save(medicalRecord);
             transaction.commit();
         } catch (Exception e) {
