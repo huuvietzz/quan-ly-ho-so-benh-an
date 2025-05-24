@@ -44,7 +44,7 @@ public class Patient {
     private Gender gender;
 
     public enum Gender {
-        Nam, Nữ, Khác;
+        Male, Female, Other;
     }
 
     @Column(name = "national_id", unique = true)

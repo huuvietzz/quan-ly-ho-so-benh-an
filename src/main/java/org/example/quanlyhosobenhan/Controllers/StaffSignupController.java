@@ -3,7 +3,9 @@ package org.example.quanlyhosobenhan.Controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.util.StringConverter;
 import org.example.quanlyhosobenhan.Dao.StaffDAO;
+import org.example.quanlyhosobenhan.Model.Doctor;
 import org.example.quanlyhosobenhan.Model.Staff;
 
 import java.io.IOException;
@@ -35,7 +37,40 @@ public class StaffSignupController {
     @FXML
     public void initialize() {
         genderField.getItems().addAll(Staff.Gender.values());
+
+        // Set converter để hiển thị tiếng Việt trên UI
+        genderField.setConverter(new StringConverter<Staff.Gender>() {
+            @Override
+            public String toString(Staff.Gender gender) {
+                if (gender == null) return "";
+                switch (gender) {
+                    case Male:
+                        return "Nam";
+                    case Female:
+                        return "Nữ";
+                    case Other:
+                        return "Khác";
+                    default:
+                        return gender.name();
+                }
+            }
+
+            @Override
+            public Staff.Gender fromString(String string) {
+                switch (string) {
+                    case "Nam":
+                        return Staff.Gender.Male;
+                    case "Nữ":
+                        return Staff.Gender.Female;
+                    case "Khác":
+                        return Staff.Gender.Other;
+                    default:
+                        return null;
+                }
+            }
+        });
     }
+
 
     @FXML
     public void handleSignupBtnClick(ActionEvent event) throws IOException {

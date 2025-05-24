@@ -54,7 +54,7 @@ public class Staff {
     private Gender gender;
 
     public enum Gender {
-        Nam, Nữ, Khác;
+        Male, Female, Other;
     }
 
     @Column(name = "position") // Ví dụ: Tiếp nhận hồ sơ, hành chính, kế toán

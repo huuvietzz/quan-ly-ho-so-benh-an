@@ -3,8 +3,10 @@ package org.example.quanlyhosobenhan.Controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.util.StringConverter;
 import org.example.quanlyhosobenhan.Dao.PatientDAO;
 import org.example.quanlyhosobenhan.Model.Patient;
+import org.example.quanlyhosobenhan.Model.Staff;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
@@ -51,6 +53,38 @@ public class PatientSignupController {
     @FXML
     public void initialize() {
         genderField.getItems().addAll(Patient.Gender.values());
+
+        // Set converter để hiển thị tiếng Việt trên UI
+        genderField.setConverter(new StringConverter<Patient.Gender>() {
+            @Override
+            public String toString(Patient.Gender gender) {
+                if (gender == null) return "";
+                switch (gender) {
+                    case Male:
+                        return "Nam";
+                    case Female:
+                        return "Nữ";
+                    case Other:
+                        return "Khác";
+                    default:
+                        return gender.name();
+                }
+            }
+
+            @Override
+            public Patient.Gender fromString(String string) {
+                switch (string) {
+                    case "Nam":
+                        return Patient.Gender.Male;
+                    case "Nữ":
+                        return Patient.Gender.Female;
+                    case "Khác":
+                        return Patient.Gender.Other;
+                    default:
+                        return null;
+                }
+            }
+        });
     }
 
     @FXML

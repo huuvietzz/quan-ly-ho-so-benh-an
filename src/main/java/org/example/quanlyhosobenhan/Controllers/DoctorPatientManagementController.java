@@ -29,6 +29,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.example.quanlyhosobenhan.Dao.PatientDAO;
+import org.example.quanlyhosobenhan.Model.Appointment;
 import org.example.quanlyhosobenhan.Model.Patient;
 
 
@@ -63,7 +64,7 @@ public class DoctorPatientManagementController {
     private TableColumn<Patient, String> emailColumn;
 
     @FXML
-    private TableColumn<Patient, Patient.Gender> genderColumn;
+    private TableColumn<Patient, String> genderColumn;
 
     @FXML
     private TableColumn<Patient, Integer> idColumn;
@@ -97,8 +98,23 @@ public class DoctorPatientManagementController {
                 -> new SimpleStringProperty(cellData.getValue().getFullName()));
         setupEllipsisColumn(nameColumn, "Chi tiết tên");
 
-        genderColumn.setCellValueFactory(cellData
-                -> new SimpleObjectProperty<>(cellData.getValue().getGender()));
+        genderColumn.setCellValueFactory(cellData -> {
+            Patient.Gender gender = cellData.getValue().getGender();
+            String genderText;
+            switch (gender) {
+                case Male:
+                    genderText = "Nam";
+                    break;
+                case Female:
+                    genderText = "Nữ";
+                    break;
+                case Other:
+                default:
+                    genderText = "Khác";
+                    break;
+            }
+            return new SimpleStringProperty(genderText);
+        });
 
         dobColumn.setCellValueFactory(cellData -> {
             LocalDate birthdate = cellData.getValue().getBirthdate();
@@ -197,7 +213,7 @@ public class DoctorPatientManagementController {
         vbox.getChildren().addAll(
                 createWrappedLabel.apply("🆔 ID: " + selectedPatient.getId()),
                 createWrappedLabel.apply("👤 Họ tên: " + selectedPatient.getFullName()),
-                createWrappedLabel.apply("🚻 Giới tính: " + selectedPatient.getGender()),
+                createWrappedLabel.apply("🚻 Giới tính: " + convertGenderToVietnamese(selectedPatient.getGender())),
                 createWrappedLabel.apply("🎂 Ngày sinh: " + selectedPatient.getBirthdate().format(DoctorPatientManagementController.VIETNAMESE_DATE_FORMATTER)),
                 createWrappedLabel.apply("🏠 Địa chỉ: " + selectedPatient.getAddress()),
                 createWrappedLabel.apply("📧 Email: " + selectedPatient.getEmail()),
@@ -217,6 +233,20 @@ public class DoctorPatientManagementController {
         detailsStage.setScene(scene);
         detailsStage.show();
     }
+
+    private String convertGenderToVietnamese(Patient.Gender gender) {
+        if (gender == null) return "Không rõ";
+        switch (gender) {
+            case Male:
+                return "Nam";
+            case Female:
+                return "Nữ";
+            case Other:
+            default:
+                return "Khác";
+        }
+    }
+
 
 
     @FXML

@@ -3,6 +3,7 @@ package org.example.quanlyhosobenhan.Controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.util.StringConverter;
 import org.example.quanlyhosobenhan.Dao.DoctorDAO;
 import org.example.quanlyhosobenhan.Model.Doctor;
 
@@ -88,9 +89,46 @@ public class DoctorSignupController {
 
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{3,6}$";
 
+//    @FXML
+//    public void initialize() {
+//        genderField.getItems().addAll(Doctor.Gender.values());
+//    }
+
     @FXML
     public void initialize() {
         genderField.getItems().addAll(Doctor.Gender.values());
+
+        // Set converter để hiển thị tiếng Việt trên UI
+        genderField.setConverter(new StringConverter<Doctor.Gender>() {
+            @Override
+            public String toString(Doctor.Gender gender) {
+                if (gender == null) return "";
+                switch (gender) {
+                    case Male:
+                        return "Nam";
+                    case Female:
+                        return "Nữ";
+                    case Other:
+                        return "Khác";
+                    default:
+                        return gender.name();
+                }
+            }
+
+            @Override
+            public Doctor.Gender fromString(String string) {
+                switch (string) {
+                    case "Nam":
+                        return Doctor.Gender.Male;
+                    case "Nữ":
+                        return Doctor.Gender.Female;
+                    case "Khác":
+                        return Doctor.Gender.Other;
+                    default:
+                        return null;
+                }
+            }
+        });
     }
 
     @FXML

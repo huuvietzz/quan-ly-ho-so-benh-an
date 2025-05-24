@@ -20,7 +20,7 @@ public class MedicalRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "consultation_date", nullable = false)
+    @Column(name = "consultation_DateTime", nullable = false)
     private LocalDateTime consultationDate;
 
     @Column(columnDefinition = "TEXT")

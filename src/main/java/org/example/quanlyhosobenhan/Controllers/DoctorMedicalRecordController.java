@@ -397,7 +397,7 @@ public class DoctorMedicalRecordController {
         alert.setContentText(
                 "ID: " + patient.getId() + "\n" +
                         "Tên: " + patient.getFullName() + "\n" +
-                        "Giới tính: " + patient.getGender() + "\n" +
+                        "Giới tính: " + convertGenderToVietnamese(patient.getGender()) + "\n" +
                         "Ngày sinh: " + formattedBirthDate + "\n" +
                         "Địa chỉ: " + patient.getAddress() + "\n" +
                         "Email: " + patient.getEmail() + "\n" +
@@ -406,6 +406,19 @@ public class DoctorMedicalRecordController {
                         "Số thẻ BHYT: " + patient.getHealthInsuranceId()
         );
         alert.showAndWait();
+    }
+
+    private String convertGenderToVietnamese(Patient.Gender gender) {
+        if (gender == null) return "Không rõ";
+        switch (gender) {
+            case Male:
+                return "Nam";
+            case Female:
+                return "Nữ";
+            case Other:
+            default:
+                return "Khác";
+        }
     }
 
     private void openPrescriptionForm(int recordId) {

@@ -67,9 +67,9 @@ public class DoctorDashboardController {
 
     public void loadChart(){
         Map<Patient.Gender, Long> counts = patientDAO.getPatientCountByGender(LoginController.loggedInDoctor.getId());
-        Long soNam = counts.getOrDefault(Patient.Gender.Nam, 0L);
-        Long soNu = counts.getOrDefault(Patient.Gender.Nữ, 0L);
-        Long soKhac = counts.getOrDefault(Patient.Gender.Khác, 0L);
+        Long soNam = counts.getOrDefault(Patient.Gender.Male, 0L);
+        Long soNu = counts.getOrDefault(Patient.Gender.Female, 0L);
+        Long soKhac = counts.getOrDefault(Patient.Gender.Other, 0L);
         Long tong = soNam + soNu + soKhac;
 
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
