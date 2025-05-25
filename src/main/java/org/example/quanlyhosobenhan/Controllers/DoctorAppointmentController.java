@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class StaffAppointmentController {
+public class DoctorAppointmentController {
 
     @FXML
-    private TableColumn<Appointment, String> doctorColumn;
+    private TableView<Appointment> appointmentTable;
 
     @FXML
     private TableColumn<Appointment, Integer> idAppointmentColumn;
@@ -36,10 +36,6 @@ public class StaffAppointmentController {
 
     @FXML
     private TableColumn<Appointment, LocalDateTime> timeColumn;
-
-    @FXML
-    private TableView<Appointment> appointmentTable;
-
 
     private AppointmentDAO appointmentDAO = new AppointmentDAO();
 
@@ -97,10 +93,6 @@ public class StaffAppointmentController {
             }
         });
 
-        doctorColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getDoctor().getFullName()));
-
-
         reasonColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getReason()));
 
@@ -147,12 +139,6 @@ public class StaffAppointmentController {
         refreshTable();
     }
 
-    private void refreshTable() {
-        appointmentTable.getItems().clear();
-        List<Appointment> appointments = appointmentDAO.getAllAppointments();
-        appointmentTable.getItems().addAll(appointments);
-    }
-
     private void openPatientDetail(Patient patient) {
         if (patient == null) return;
 
@@ -176,46 +162,9 @@ public class StaffAppointmentController {
         alert.showAndWait();
     }
 
-    @FXML
-    void confirmBtn(ActionEvent event) {
-        Appointment selected = appointmentTable.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            selected.setStatus(Appointment.Status.Confirmed);
-            appointmentDAO.update(selected);
-            refreshTable();
-        } else {
-            showAlert("Vui lòng chọn một cuộc hẹn để xác nhận.");
-        }
+    private void refreshTable() {
+        appointmentTable.getItems().clear();
+        List<Appointment> appointments = appointmentDAO.getAppointmentsByDoctorId(LoginController.loggedInDoctor.getId());
+        appointmentTable.getItems().addAll(appointments);
     }
-
-    @FXML
-    void cancelBtn(ActionEvent event) {
-        Appointment selected = appointmentTable.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            selected.setStatus(Appointment.Status.Cancelled);
-            appointmentDAO.update(selected);
-            refreshTable();
-        } else {
-            showAlert("Vui lòng chọn một cuộc hẹn để hủy.");
-        }
-    }
-
-    @FXML
-    void deleteBtn(ActionEvent event) {
-        Appointment selected = appointmentTable.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            appointmentDAO.delete(selected.getId());
-            refreshTable();
-        } else {
-            showAlert("Vui lòng chọn một cuộc hẹn để xóa.");
-        }
-    }
-
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
 }

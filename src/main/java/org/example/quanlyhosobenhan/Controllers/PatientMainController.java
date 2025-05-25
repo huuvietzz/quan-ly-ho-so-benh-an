@@ -48,13 +48,8 @@ public class PatientMainController  {
     }
 
     @FXML
-    public void patientManagement(ActionEvent event) {
-         loadPage("/Fxml/PatientPatientManagement.fxml");
-    }
-
-    @FXML
-    public void medicalRecordManagement(ActionEvent event) {
-         loadPage("/Fxml/PatientMedicalRecordManagement.fxml");
+    public void appointmentList(ActionEvent event) {
+        loadPage("/Fxml/PatientListAppointment.fxml");
     }
 
     @FXML

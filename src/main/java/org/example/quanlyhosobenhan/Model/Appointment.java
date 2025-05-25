@@ -39,7 +39,10 @@ public class Appointment {
     private Status status;
 
     public enum Status {
-        PENDING, CONFIRMED, CANCELLED, COMPLETED
+        Pending,
+        Confirmed,
+        Cancelled,
+        Completed
     }
 
     @Column(name = "room_number")

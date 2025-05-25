@@ -149,6 +149,15 @@ public class PatientDAO {
         }
     }
 
+    public Long countAllPatients() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return (Long) session.createQuery("select count(p) from Patient p").uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0L;
+        }
+    }
+
 
     public Map<Patient.Gender, Long> getPatientCountByGender(int doctorId) {
         Map<Patient.Gender, Long> genderCountMap = new HashMap<>();
@@ -167,4 +176,26 @@ public class PatientDAO {
         }
         return genderCountMap;
     }
+
+    public Map<Patient.Gender, Long> countAllPatientsByGender() {
+        Map<Patient.Gender, Long> genderCountMap = new HashMap<>();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = """
+            select p.gender, count(p)
+            from Patient p
+            group by p.gender
+        """;
+            Query<Object[]> query = session.createQuery(hql, Object[].class);
+
+            for (Object[] row : query.getResultList()) {
+                Patient.Gender gender = (Patient.Gender) row[0];
+                Long count = (Long) row[1];
+                genderCountMap.put(gender, count);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return genderCountMap;
+    }
+
 }

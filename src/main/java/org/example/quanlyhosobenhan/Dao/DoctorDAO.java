@@ -102,4 +102,31 @@ public class DoctorDAO {
 
         return doctorNames;
     }
+
+    public List<String> getAllSpecializations() {
+        List<String> specializations = new ArrayList<>();
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "SELECT DISTINCT d.specialization FROM Doctor d WHERE d.specialization IS NOT NULL";
+            Query<String> query = session.createQuery(hql, String.class);
+            specializations = query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return specializations;
+    }
+
+    public Doctor getDoctorByFullName(String fullName) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "FROM Doctor WHERE fullName = :fullName";
+            Query<Doctor> query = session.createQuery(hql, Doctor.class);
+            query.setParameter("fullName", fullName);
+            return query.uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

@@ -8,7 +8,9 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MedicalRecordDAO {
     public void saveMedicalRecord(MedicalRecord medicalRecord) {
@@ -100,4 +102,79 @@ public class MedicalRecordDAO {
             return 0L;
         }
     }
+
+    public Long countAllMedicalRecords() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return (Long) session.createQuery("select count(m) from MedicalRecord m").uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0L;
+        }
+    }
+
+    public Map<Integer, Long> countDistinctPatientsByConsultationMonth(int year) {
+        Map<Integer, Long> result = new HashMap<>();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = """
+            select month(m.consultationDate), count(distinct m.patient.id)
+            from MedicalRecord m
+            where year(m.consultationDate) = :year
+            group by month(m.consultationDate)
+            order by month(m.consultationDate)
+        """;
+            List<Object[]> rows = session.createQuery(hql, Object[].class)
+                    .setParameter("year", year)
+                    .getResultList();
+
+            for (Object[] row : rows) {
+                Integer month = (Integer) row[0];
+                Long    cnt   = (Long)    row[1];
+                result.put(month, cnt);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
+    public Map<Integer, Long> countDistinctPatientsByConsultationMonthByDoctor(int year, int doctorId) {
+        Map<Integer, Long> result = new HashMap<>();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = """
+            select month(m.consultationDate), count(distinct m.patient.id)
+            from MedicalRecord m
+            where year(m.consultationDate) = :year
+              and m.doctor.id = :doctorId
+            group by month(m.consultationDate)
+            order by month(m.consultationDate)
+        """;
+            List<Object[]> rows = session.createQuery(hql, Object[].class)
+                    .setParameter("year", year)
+                    .setParameter("doctorId", doctorId)
+                    .getResultList();
+
+            for (Object[] row : rows) {
+                Integer month = (Integer) row[0];
+                Long cnt      = (Long)    row[1];
+                result.put(month, cnt);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public Long countByPatientId(int patientId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "select count(m) from MedicalRecord m where m.patient.id = :patientId", Long.class)
+                    .setParameter("patientId", patientId)
+                    .uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0L;
+        }
+    }
+
 }

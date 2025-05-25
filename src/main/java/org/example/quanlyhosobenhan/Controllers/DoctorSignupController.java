@@ -89,11 +89,6 @@ public class DoctorSignupController {
 
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{3,6}$";
 
-//    @FXML
-//    public void initialize() {
-//        genderField.getItems().addAll(Doctor.Gender.values());
-//    }
-
     @FXML
     public void initialize() {
         genderField.getItems().addAll(Doctor.Gender.values());
