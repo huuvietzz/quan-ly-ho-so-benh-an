@@ -68,13 +68,13 @@
             </cursor>
         </FontAwesomeIconView>
     </AnchorPane>
-    <StackPane layoutX="897.0" layoutY="17.0" prefHeight="30.0" prefWidth="30.0">
+    <StackPane fx:id="userAvatar" layoutX="897.0" layoutY="17.0" prefHeight="30.0" prefWidth="30.0">
         <cursor>
             <Cursor fx:constant="HAND" />
         </cursor>
         <children>
-            <Circle fill="#2196f3" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
-            <Label text="T" textFill="WHITE">
+            <Circle fill="BLUE" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
+            <Label fx:id="avatarLabel" text="T" textFill="WHITE">
                 <font>
                     <Font size="17.0" />
                 </font>

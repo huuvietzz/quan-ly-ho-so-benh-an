@@ -5,10 +5,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.StackPane;
 import org.example.quanlyhosobenhan.Dao.AppointmentDAO;
 import org.example.quanlyhosobenhan.Dao.MedicalRecordDAO;
 import org.example.quanlyhosobenhan.Dao.PatientDAO;
 import org.example.quanlyhosobenhan.Model.Appointment;
+import org.example.quanlyhosobenhan.Model.Doctor;
+import org.example.quanlyhosobenhan.Model.Patient;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,6 +24,12 @@ public class PatientDashboardController {
 
     @FXML
     private Label totalMedicalRecords;
+
+    @FXML
+    private Label avatarLabel;
+
+    @FXML
+    private StackPane userAvatar;
 
     @FXML
     private TableView<Appointment> appointmentTable;
@@ -43,18 +52,15 @@ public class PatientDashboardController {
     @FXML
     private TableColumn<Appointment, LocalDateTime> timeColumn;
 
-    @FXML
-    private TextField searchTextField;
-
     PatientDAO patientDAO = new PatientDAO();
     MedicalRecordDAO medicalRecordDAO = new MedicalRecordDAO();
     AppointmentDAO appointmentDAO = new AppointmentDAO();
 
-    public static final DateTimeFormatter VIETNAMESE_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
     @FXML
     public void initialize() {
         loadCard();
+
+        getNameAccount();
 
         appointmentTable.setPlaceholder(new Label("❌ Không có cuộc hẹn nào."));
         appointmentTable.setEditable(true);
@@ -120,6 +126,14 @@ public class PatientDashboardController {
 
         totalMedicalRecords.setText(String.valueOf(recordCount));
         totalAppointments.setText(String.valueOf(appointmentCount));
+    }
+
+    private void getNameAccount() {
+        Patient patient = LoginController.loggedInPatient;
+        String userName = patient.getUserName();
+        String initial = userName.trim().substring(0, 1);
+        avatarLabel.setText(initial);
+        Tooltip.install(userAvatar, new Tooltip(patient.getUserName()));
     }
 
     private void refreshTable() {

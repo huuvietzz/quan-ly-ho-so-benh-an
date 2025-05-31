@@ -53,9 +53,6 @@ public class DoctorDashboardController {
     private Label avatarLabel;
 
     @FXML
-    private Circle avatarCircle;
-
-    @FXML
     private StackPane userAvatar;
 
     PatientDAO patientDAO = new PatientDAO();
@@ -68,7 +65,7 @@ public class DoctorDashboardController {
     @FXML
     public void initialize() {
         loadCard();
-        loadChart();
+        loadGenderChart();
         getNameAccount();
 
         int currentYear = LocalDate.now().getYear();
@@ -77,7 +74,7 @@ public class DoctorDashboardController {
     }
 
     private void loadCard(){
-        Long patientCount = patientDAO.countByDoctorId(LoginController.loggedInDoctor.getId());
+        Long patientCount = patientDAO.countConfirmedPatientsByDoctorId(LoginController.loggedInDoctor.getId());
         Long recordCount = medicalRecordDAO.countByDoctorId(LoginController.loggedInDoctor.getId());
         Long appointmentCount = appointmentDAO.countByDoctorId(LoginController.loggedInDoctor.getId());
 
@@ -86,8 +83,8 @@ public class DoctorDashboardController {
         totalAppointments.setText(String.valueOf(appointmentCount));
     }
 
-    private void loadChart(){
-        Map<Patient.Gender, Long> counts = patientDAO.getPatientCountByGender(LoginController.loggedInDoctor.getId());
+    private void loadGenderChart(){
+        Map<Patient.Gender, Long> counts = patientDAO.getConfirmedPatientCountByGender(LoginController.loggedInDoctor.getId());
         Long soNam = counts.getOrDefault(Patient.Gender.Male, 0L);
         Long soNu = counts.getOrDefault(Patient.Gender.Female, 0L);
         Long soKhac = counts.getOrDefault(Patient.Gender.Other, 0L);
@@ -141,6 +138,8 @@ public class DoctorDashboardController {
             });
         }
     }
+
+
 
     private void loadMonthlyPatientChart(int year) {
         int docId = LoginController.loggedInDoctor.getId();
@@ -214,7 +213,7 @@ public class DoctorDashboardController {
         });
     }
 
-    public void getNameAccount() {
+    private void getNameAccount() {
         Doctor doctor = LoginController.loggedInDoctor;
         String userName = doctor.getUserName();
         String initial = userName.trim().substring(0, 1);

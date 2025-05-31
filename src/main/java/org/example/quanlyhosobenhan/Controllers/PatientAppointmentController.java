@@ -2,19 +2,23 @@ package org.example.quanlyhosobenhan.Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.util.StringConverter;
 import org.example.quanlyhosobenhan.Dao.AppointmentDAO;
 import org.example.quanlyhosobenhan.Dao.DoctorDAO;
 import org.example.quanlyhosobenhan.Model.Doctor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class PatientAppointmentController {
+
+    @FXML
+    private AnchorPane rootPane;
 
     @FXML
     private DatePicker dayField;
@@ -27,6 +31,8 @@ public class PatientAppointmentController {
 
     @FXML
     private ComboBox<String> specializationCombobox;
+
+    private ToggleGroup timeGroup;
 
     private DoctorDAO doctorDAO = new DoctorDAO();
 
@@ -42,6 +48,36 @@ public class PatientAppointmentController {
                 loadDoctorsBySpecialization(selectedSpecialization);
             }
         });
+
+        // Định dạng ngày hiển thị theo dd-MM-yyyy
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        StringConverter<LocalDate> converter = new StringConverter<>() {
+            @Override
+            public String toString(LocalDate date) {
+                return date != null ? dateFormatter.format(date) : "";
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                if (string == null || string.trim().isEmpty()) {
+                    return null;
+                }
+                return LocalDate.parse(string, dateFormatter);
+            }
+        };
+
+        dayField.setConverter(converter);
+
+        // 1) Tạo ToggleGroup
+        timeGroup = new ToggleGroup();
+
+        // 2) Gán tất cả ToggleButton có styleClass="time-button" vào cùng nhóm
+        rootPane.lookupAll(".time-button").stream()
+                .filter(node -> node instanceof ToggleButton)
+                .map(node -> (ToggleButton) node)
+                .forEach(tb -> {
+                    tb.setToggleGroup(timeGroup);
+                });
     }
 
     private void loadSpecializations() {
@@ -55,29 +91,54 @@ public class PatientAppointmentController {
     }
 
 
-
     @FXML
     void makeAnAppointment(ActionEvent event) {
         String doctorName = doctorCombobox.getValue();
         LocalDate appointmentDate = dayField.getValue();
         String reason = reasonField.getText();
+        String selectedTime = getSelectedTime();
 
-        if (doctorName == null || appointmentDate == null || reason.isBlank()) {
-            showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng điền đầy đủ thông tin!");
+        if (doctorName == null || appointmentDate == null || reason.isBlank() || selectedTime == null) {
+            showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng điền đầy đủ thông tin và chọn giờ khám!");
             return;
         }
 
         Doctor doctor = doctorDAO.getDoctorByFullName(doctorName);
         if (doctor == null) {
-            System.out.println("Không tìm thấy bác sĩ!");
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "Không tìm thấy bác sĩ!");
             return;
         }
 
-        LocalDateTime appointmentDateTime = appointmentDate.atTime(9, 0);
-        appointmentDAO.createAppointment(LoginController.loggedInPatient, doctor, appointmentDateTime, reason);
+        // Chuyển giờ được chọn thành LocalTime
+        LocalTime time = LocalTime.parse(selectedTime); // ví dụ "09:30"
+        LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, time);
 
+        appointmentDAO.createAppointment(LoginController.loggedInPatient, doctor, appointmentDateTime, reason);
         showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đặt lịch thành công!");
+
+        resetForm();
     }
+
+    private String getSelectedTime() {
+        Toggle selected = timeGroup.getSelectedToggle();
+        return selected != null
+                ? ((ToggleButton) selected).getText()
+                : null;
+    }
+
+    private void resetForm() {
+        specializationCombobox.setValue(null);
+        doctorCombobox.getItems().clear();
+        dayField.setValue(null);
+        reasonField.clear();
+
+        rootPane.lookupAll(".time-button").forEach(node -> {
+            if (node instanceof ToggleButton) {
+                ((ToggleButton) node).setSelected(false);
+            }
+        });
+    }
+
 
     private void showAlert(Alert.AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);

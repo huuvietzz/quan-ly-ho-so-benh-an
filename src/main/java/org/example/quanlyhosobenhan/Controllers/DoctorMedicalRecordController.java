@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -27,6 +28,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.quanlyhosobenhan.Dao.MedicalRecordDAO;
 import org.example.quanlyhosobenhan.Dao.PrescriptionDAO;
+import org.example.quanlyhosobenhan.Model.Doctor;
 import org.example.quanlyhosobenhan.Model.MedicalRecord;
 import org.example.quanlyhosobenhan.Model.Patient;
 import org.example.quanlyhosobenhan.Model.Prescription;
@@ -73,6 +75,12 @@ public class DoctorMedicalRecordController {
     private TextField searchTextField;
 
     @FXML
+    private Label avatarLabel;
+
+    @FXML
+    private StackPane userAvatar;
+
+    @FXML
     private TableColumn<MedicalRecord, String> symptomColumn;
 
     @FXML
@@ -84,6 +92,8 @@ public class DoctorMedicalRecordController {
 
     @FXML
     void initialize() {
+        getNameAccount();
+
         recordTable.setPlaceholder(new Label("❌ Không có hồ sơ bệnh án."));
 
         idRecordColumn.setCellValueFactory(cellData
@@ -715,5 +725,13 @@ public class DoctorMedicalRecordController {
         Scene scene = new Scene(vbox, 500, 450);
         detailStage.setScene(scene);
         detailStage.show();
+    }
+
+    private void getNameAccount() {
+        Doctor doctor = LoginController.loggedInDoctor;
+        String userName = doctor.getUserName();
+        String initial = userName.trim().substring(0, 1);
+        avatarLabel.setText(initial);
+        Tooltip.install(userAvatar, new Tooltip(doctor.getUserName()));
     }
 }

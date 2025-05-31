@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -27,6 +28,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.quanlyhosobenhan.Dao.MedicalRecordDAO;
 import org.example.quanlyhosobenhan.Dao.PrescriptionDAO;
+import org.example.quanlyhosobenhan.Model.Doctor;
 import org.example.quanlyhosobenhan.Model.MedicalRecord;
 import org.example.quanlyhosobenhan.Model.Patient;
 import org.example.quanlyhosobenhan.Model.Prescription;
@@ -53,6 +55,12 @@ public class PatientMedicalRecordController {
 
     @FXML
     private DatePicker endDatePicker;
+
+    @FXML
+    private Label avatarLabel;
+
+    @FXML
+    private StackPane userAvatar;
 
     @FXML
     private TableColumn<MedicalRecord, Integer> idRecordColumn;
@@ -84,6 +92,8 @@ public class PatientMedicalRecordController {
 
     @FXML
     void initialize() {
+        getNameAccount();
+
         recordTable.setPlaceholder(new Label("❌ Không có hồ sơ bệnh án."));
 
         idRecordColumn.setCellValueFactory(cellData
@@ -275,7 +285,7 @@ public class PatientMedicalRecordController {
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
 
-        List<MedicalRecord> allRecords = medicalRecordDAO.getAllMedicalRecords();
+        List<MedicalRecord> allRecords = medicalRecordDAO.getRecordsByPatientId(LoginController.loggedInPatient.getId());
 
         List<MedicalRecord> filtered = allRecords.stream()
                 .filter(record -> {
@@ -397,7 +407,7 @@ public class PatientMedicalRecordController {
         alert.setContentText(
                 "ID: " + patient.getId() + "\n" +
                         "Tên: " + patient.getFullName() + "\n" +
-                        "Giới tính: " + patient.getGender() + "\n" +
+                        "Giới tính: " + convertGenderToVietnamese(patient.getGender()) + "\n" +
                         "Ngày sinh: " + formattedBirthDate + "\n" +
                         "Địa chỉ: " + patient.getAddress() + "\n" +
                         "Email: " + patient.getEmail() + "\n" +
@@ -406,6 +416,19 @@ public class PatientMedicalRecordController {
                         "Số thẻ BHYT: " + patient.getHealthInsuranceId()
         );
         alert.showAndWait();
+    }
+
+    private String convertGenderToVietnamese(Patient.Gender gender) {
+        if (gender == null) return "Không rõ";
+        switch (gender) {
+            case Male:
+                return "Nam";
+            case Female:
+                return "Nữ";
+            case Other:
+            default:
+                return "Khác";
+        }
     }
 
     private void openPrescriptionForm(int recordId) {
@@ -701,6 +724,14 @@ public class PatientMedicalRecordController {
         Scene scene = new Scene(vbox, 500, 450);
         detailStage.setScene(scene);
         detailStage.show();
+    }
+
+    private void getNameAccount() {
+        Patient patient = LoginController.loggedInPatient;
+        String userName = patient.getUserName();
+        String initial = userName.trim().substring(0, 1);
+        avatarLabel.setText(initial);
+        Tooltip.install(userAvatar, new Tooltip(patient.getUserName()));
     }
 
 }

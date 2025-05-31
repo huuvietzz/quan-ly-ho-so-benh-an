@@ -14,8 +14,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1065.0" styleClass="primary-color" stylesheets="@../Styles/MedicalRecordManagement.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.quanlyhosobenhan.Controllers.PatientListAppointmentController">
+<AnchorPane prefHeight="650.0" prefWidth="1065.0" styleClass="primary-color" stylesheets="@../Styles/MedicalRecordManagement.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.PatientListAppointmentController">
     <AnchorPane layoutX="16.0" layoutY="97.0" prefHeight="561.0" prefWidth="1036.0" stylesheets="@../Styles/MedicalRecordManagement.css" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="69.0">
         <styleClass>
             <String fx:value="white-bg" />
@@ -53,15 +52,15 @@
                 <Cursor fx:constant="HAND" />
             </cursor>
         </FontAwesomeIconView>
-        <DatePicker layoutX="587.0" layoutY="22.0" prefHeight="29.0" promptText="Thời gian hẹn" />
+        <DatePicker fx:id="dateAppointment" layoutX="587.0" layoutY="22.0" prefHeight="29.0" promptText="Thời gian hẹn" styleClass="date-field" stylesheets="@../Styles/Appointment.css" />
     </AnchorPane>
-    <StackPane layoutX="891.0" layoutY="17.0" prefHeight="30.0" prefWidth="30.0">
+    <StackPane fx:id="userAvatar" layoutX="891.0" layoutY="17.0" prefHeight="30.0" prefWidth="30.0">
         <cursor>
             <Cursor fx:constant="HAND" />
         </cursor>
         <children>
-            <Circle fill="#2196f3" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
-            <Label text="T" textFill="WHITE">
+            <Circle fill="BLUE" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
+            <Label fx:id="avatarLabel" text="T" textFill="WHITE">
                 <font>
                     <Font size="17.0" />
                 </font>

@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -30,6 +31,7 @@ import org.example.quanlyhosobenhan.Dao.PrescriptionDAO;
 import org.example.quanlyhosobenhan.Model.MedicalRecord;
 import org.example.quanlyhosobenhan.Model.Patient;
 import org.example.quanlyhosobenhan.Model.Prescription;
+import org.example.quanlyhosobenhan.Model.Staff;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -73,6 +75,12 @@ public class StaffMedicalRecordController {
     private TextField searchTextField;
 
     @FXML
+    private Label avatarLabel;
+
+    @FXML
+    private StackPane userAvatar;
+
+    @FXML
     private TableColumn<MedicalRecord, String> symptomColumn;
 
     @FXML
@@ -84,6 +92,8 @@ public class StaffMedicalRecordController {
 
     @FXML
     void initialize() {
+        getNameAccount();
+
         recordTable.setPlaceholder(new Label("❌ Không có hồ sơ bệnh án."));
 
         idRecordColumn.setCellValueFactory(cellData
@@ -397,7 +407,7 @@ public class StaffMedicalRecordController {
         alert.setContentText(
                 "ID: " + patient.getId() + "\n" +
                         "Tên: " + patient.getFullName() + "\n" +
-                        "Giới tính: " + patient.getGender() + "\n" +
+                        "Giới tính: " + convertGenderToVietnamese(patient.getGender()) + "\n" +
                         "Ngày sinh: " + formattedBirthDate + "\n" +
                         "Địa chỉ: " + patient.getAddress() + "\n" +
                         "Email: " + patient.getEmail() + "\n" +
@@ -406,6 +416,19 @@ public class StaffMedicalRecordController {
                         "Số thẻ BHYT: " + patient.getHealthInsuranceId()
         );
         alert.showAndWait();
+    }
+
+    private String convertGenderToVietnamese(Patient.Gender gender) {
+        if (gender == null) return "Không rõ";
+        switch (gender) {
+            case Male:
+                return "Nam";
+            case Female:
+                return "Nữ";
+            case Other:
+            default:
+                return "Khác";
+        }
     }
 
     private void openPrescriptionForm(int recordId) {
@@ -701,6 +724,14 @@ public class StaffMedicalRecordController {
         Scene scene = new Scene(vbox, 500, 450);
         detailStage.setScene(scene);
         detailStage.show();
+    }
+
+    public void getNameAccount() {
+        Staff staff = LoginController.loggedInStaff;
+        String userName = staff.getUserName();
+        String initial = userName.trim().substring(0, 1);
+        avatarLabel.setText(initial);
+        Tooltip.install(userAvatar, new Tooltip(staff.getUserName()));
     }
 
 }

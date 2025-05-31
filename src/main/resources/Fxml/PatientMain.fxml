@@ -29,7 +29,7 @@
                     <FontAwesomeIconView fill="WHITE" glyphName="CALENDAR" size="1.5em" />
                 </graphic>
             </Button>
-            <Button graphicTextGap="13.0" layoutX="10.0" layoutY="380.0" minWidth="89.0" mnemonicParsing="false" onAction="#setting" prefHeight="29.0" prefWidth="113.0" styleClass="nav-btn" stylesheets="@../Styles/Main.css" text="Tài khoản">
+            <Button graphicTextGap="13.0" layoutX="10.0" layoutY="380.0" minWidth="89.0" mnemonicParsing="false" onAction="#profile" prefHeight="29.0" prefWidth="113.0" styleClass="nav-btn" stylesheets="@../Styles/Main.css" text="Tài khoản">
                 <graphic>
                     <FontAwesomeIconView fill="WHITE" glyphName="USER" size="1.5em" />
                 </graphic>

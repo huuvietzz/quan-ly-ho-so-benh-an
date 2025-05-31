@@ -24,21 +24,6 @@ public class AppointmentDAO {
         }
     }
 
-    public Long countConfirmedPatientsByDoctorId(int doctorId) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            String hql = """
-            SELECT COUNT(DISTINCT a.patient.id)
-            FROM Appointment a
-            WHERE a.doctor.id = :doctorId
-              AND a.status = :status
-        """;
-            return session.createQuery(hql, Long.class)
-                    .setParameter("doctorId", doctorId)
-                    .setParameter("status", Appointment.Status.Confirmed)
-                    .uniqueResult();
-        }
-    }
-
     // 1. Tạo lịch hẹn mới (bệnh nhân đặt)
     public void createAppointment(Patient patient, Doctor doctor, LocalDateTime appointmentTime, String reason) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -133,7 +118,6 @@ public class AppointmentDAO {
             return null;
         }
     }
-
 
     public void update(Appointment appointment) {
         Transaction tx = null;
@@ -233,6 +217,21 @@ public class AppointmentDAO {
         }
     }
 
-
+    public void markCompleted(int appointmentId) {
+        Transaction tx = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+            Appointment appt = session.get(Appointment.class, appointmentId);
+            if (appt != null && appt.getStatus() == Appointment.Status.Confirmed) {
+                appt.setStatus(Appointment.Status.Completed);
+                appt.setUpdatedAt(LocalDateTime.now());
+                session.update(appt);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            e.printStackTrace();
+        }
+    }
 }
 

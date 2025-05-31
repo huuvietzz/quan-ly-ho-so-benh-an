@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -19,6 +20,7 @@ import javafx.util.Duration;
 import javafx.util.StringConverter;
 import org.example.quanlyhosobenhan.Dao.MedicalRecordDAO;
 import org.example.quanlyhosobenhan.Dao.PrescriptionDAO;
+import org.example.quanlyhosobenhan.Model.Doctor;
 import org.example.quanlyhosobenhan.Model.MedicalRecord;
 import org.example.quanlyhosobenhan.Model.Patient;
 import org.example.quanlyhosobenhan.Model.Prescription;
@@ -60,6 +62,12 @@ public class DoctorMedicalRecordManagementController {
     private TextField searchTextField;
 
     @FXML
+    private Label avatarLabel;
+
+    @FXML
+    private StackPane userAvatar;
+
+    @FXML
     private TableView<MedicalRecord> recordTable;
 
     @FXML
@@ -76,6 +84,8 @@ public class DoctorMedicalRecordManagementController {
 
     @FXML
     public void initialize() {
+        getNameAccount();
+
         recordTable.setPlaceholder(new Label("❌ Không có hồ sơ bệnh án."));
 
         idRecordColumn.setCellValueFactory(cellData
@@ -355,49 +365,6 @@ public class DoctorMedicalRecordManagementController {
         parallel.play();
     }
 
-//    @FXML
-//    void detail(ActionEvent event) {
-//        MedicalRecord selectedRecord = recordTable.getSelectionModel().getSelectedItem();
-//        if (selectedRecord == null) {
-//            showAlert(Alert.AlertType.ERROR, "Lỗi!", "Vui lòng chọn hồ sơ bệnh án!");
-//            return;
-//        }
-//
-//        Stage detailStage = new Stage();
-//        detailStage.setTitle("Chi tiết hồ sơ bệnh án");
-//
-//        VBox vbox = new VBox(10);
-//        vbox.setPadding(new Insets(20));
-//
-//        Label idLabel = new Label("ID: " + selectedRecord.getId());
-//        Label patientLabel = new Label("Bệnh nhân: " + selectedRecord.getPatient().getFullName());
-//        Label doctorLabel = new Label("Bác sĩ: " + selectedRecord.getDoctor().getFullName());
-//        Label consultationDateLabel = new Label("Ngày khám: " + selectedRecord.getConsultationDate().format(VIETNAMESE_DATE_TIME_FORMATTER));
-//        Label symptomsLabel = new Label("Triệu chứng: " + selectedRecord.getSymptoms());
-//        Label diagnosisLabel = new Label("Chẩn đoán: " + selectedRecord.getDiagnosis());
-//        Label resultLabel = new Label("Kết quả khám bệnh: " + selectedRecord.getExaminationResult());
-//        Label treatmentLabel = new Label("Phương pháp điều trị: " + selectedRecord.getTreatmentMethod());
-//        Label finalResultLabel = new Label("Kết quả điều trị cuối: " + selectedRecord.getFinalTreatmentResult());
-//        Label notesLabel = new Label("Ghi chú: " + selectedRecord.getNotes());
-//        Label admissionLabel = new Label("Ngày nhập viện: " +
-//                (selectedRecord.getAdmissionDate() != null ? selectedRecord.getAdmissionDate().format(VIETNAMESE_DATE_TIME_FORMATTER) : "Chưa có"));
-//        Label dischargeLabel = new Label("Ngày xuất viện: " +
-//                (selectedRecord.getDischargeDate() != null ? selectedRecord.getDischargeDate().format(VIETNAMESE_DATE_TIME_FORMATTER) : "Chưa có"));
-//
-//        Button closeBtn = new Button("Đóng");
-//        closeBtn.setOnAction(e -> detailStage.close());
-//
-//        vbox.getChildren().addAll(
-//                idLabel, patientLabel, doctorLabel, consultationDateLabel,
-//                admissionLabel, dischargeLabel, symptomsLabel, diagnosisLabel,
-//                resultLabel, treatmentLabel, finalResultLabel, notesLabel,
-//                closeBtn
-//        );
-//
-//        Scene scene = new Scene(vbox, 500, 450);
-//        detailStage.setScene(scene);
-//        detailStage.show();
-//    }
 
     // Hàm tìm kiếm kết hợp giữa tìm kiếm và chọn khoảng ngày sinh
     private void filterRecordsCombined(String keyword) {
@@ -584,6 +551,14 @@ public class DoctorMedicalRecordManagementController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    private void getNameAccount() {
+        Doctor doctor = LoginController.loggedInDoctor;
+        String userName = doctor.getUserName();
+        String initial = userName.trim().substring(0, 1);
+        avatarLabel.setText(initial);
+        Tooltip.install(userAvatar, new Tooltip(doctor.getUserName()));
     }
 
     public void refreshTable() {

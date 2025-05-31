@@ -74,8 +74,8 @@ public class DoctorMainController {
     }
 
     @FXML
-    public void setting(ActionEvent event) throws IOException {
-        loadPage("/Fxml/DoctorAccount.fxml");
+    public void profile(ActionEvent event) throws IOException {
+        loadPage("/Fxml/DoctorProfile.fxml");
     }
 
     @FXML

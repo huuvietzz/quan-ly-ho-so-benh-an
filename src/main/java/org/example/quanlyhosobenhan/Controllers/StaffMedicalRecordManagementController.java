@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -19,10 +20,7 @@ import javafx.util.Duration;
 import javafx.util.StringConverter;
 import org.example.quanlyhosobenhan.Dao.MedicalRecordDAO;
 import org.example.quanlyhosobenhan.Dao.PrescriptionDAO;
-import org.example.quanlyhosobenhan.Model.Doctor;
-import org.example.quanlyhosobenhan.Model.MedicalRecord;
-import org.example.quanlyhosobenhan.Model.Patient;
-import org.example.quanlyhosobenhan.Model.Prescription;
+import org.example.quanlyhosobenhan.Model.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -61,6 +59,12 @@ public class StaffMedicalRecordManagementController {
     private TextField searchTextField;
 
     @FXML
+    private Label avatarLabel;
+
+    @FXML
+    private StackPane userAvatar;
+
+    @FXML
     private TableView<MedicalRecord> recordTable;
 
     private MedicalRecordDAO medicalRecordDAO = new MedicalRecordDAO();
@@ -69,6 +73,8 @@ public class StaffMedicalRecordManagementController {
 
     @FXML
     public void initialize() {
+        getNameAccount();
+
         recordTable.setPlaceholder(new Label("❌ Không có hồ sơ bệnh án."));
 
         idRecordColumn.setCellValueFactory(cellData
@@ -383,7 +389,7 @@ public class StaffMedicalRecordManagementController {
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
 
-        List<MedicalRecord> allRecords = medicalRecordDAO.getMedicalRecordsByDoctor(LoginController.loggedInDoctor.getId());
+        List<MedicalRecord> allRecords = medicalRecordDAO.getAllMedicalRecords();
 
         List<MedicalRecord> filtered = allRecords.stream()
                 .filter(record -> {
@@ -469,7 +475,7 @@ public class StaffMedicalRecordManagementController {
         alert.setContentText(
                 "ID: " + patient.getId() + "\n" +
                         "Tên: " + patient.getFullName() + "\n" +
-                        "Giới tính: " + patient.getGender() + "\n" +
+                        "Giới tính: " + convertGenderToVietnamese(patient.getGender()) + "\n" +
                         "Ngày sinh: " + formattedBirthDate + "\n" +
                         "Địa chỉ: " + patient.getAddress() + "\n" +
                         "Email: " + patient.getEmail() + "\n" +
@@ -478,6 +484,19 @@ public class StaffMedicalRecordManagementController {
                         "Số thẻ BHYT: " + patient.getHealthInsuranceId()
         );
         alert.showAndWait();
+    }
+
+    private String convertGenderToVietnamese(Patient.Gender gender) {
+        if (gender == null) return "Không rõ";
+        switch (gender) {
+            case Male:
+                return "Nam";
+            case Female:
+                return "Nữ";
+            case Other:
+            default:
+                return "Khác";
+        }
     }
 
     private void openDoctorDetail(Doctor doctor) {
@@ -492,7 +511,7 @@ public class StaffMedicalRecordManagementController {
         alert.setContentText(
                 "ID: " + doctor.getId() + "\n" +
                         "Tên: " + doctor.getFullName() + "\n" +
-                        "Giới tính: " + doctor.getGender() + "\n" +
+                        "Giới tính: " + convertGenderToVietnamese(doctor.getGender()) + "\n" +
                         "Ngày sinh: " + formattedBirthDate + "\n" +
                         "Địa chỉ: " + (doctor.getAddress() != null ? doctor.getAddress() : "Chưa cập nhật") + "\n" +
                         "Email: " + doctor.getEmail() + "\n" +
@@ -504,6 +523,18 @@ public class StaffMedicalRecordManagementController {
         alert.showAndWait();
     }
 
+    private String convertGenderToVietnamese(Doctor.Gender gender) {
+        if (gender == null) return "Không rõ";
+        switch (gender) {
+            case Male:
+                return "Nam";
+            case Female:
+                return "Nữ";
+            case Other:
+            default:
+                return "Khác";
+        }
+    }
 
     // Hàm giúp hiển thị nội dung khi nội dung vuot quá chieu dài của cột
     private void setupEllipsisColumn(TableColumn<MedicalRecord, String> column, String dialogTitle) {
@@ -579,6 +610,14 @@ public class StaffMedicalRecordManagementController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    public void getNameAccount() {
+        Staff staff = LoginController.loggedInStaff;
+        String userName = staff.getUserName();
+        String initial = userName.trim().substring(0, 1);
+        avatarLabel.setText(initial);
+        Tooltip.install(userAvatar, new Tooltip(staff.getUserName()));
     }
 
     public void refreshTable() {

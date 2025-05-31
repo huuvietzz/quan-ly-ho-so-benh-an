@@ -10,10 +10,12 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1065.0" styleClass="primary-color" stylesheets="@../Styles/MedicalRecord.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.quanlyhosobenhan.Controllers.StaffMedicalRecordController">
+<AnchorPane prefHeight="650.0" prefWidth="1065.0" styleClass="primary-color" stylesheets="@../Styles/MedicalRecord.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.StaffMedicalRecordController">
 <AnchorPane layoutX="13.0" layoutY="74.0" prefHeight="561.0" prefWidth="1036.0" stylesheets="@../Styles/MedicalRecord.css" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="69.0">
     <styleClass>
         <String fx:value="white-bg" />
@@ -58,12 +60,36 @@
 </AnchorPane>
 <AnchorPane layoutX="1.0" prefHeight="69.0" prefWidth="1065.0" styleClass="border" stylesheets="@../Styles/MedicalRecord.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
     <DatePicker fx:id="endDatePicker" layoutX="697.0" layoutY="15.0" prefHeight="29.0" prefWidth="150.0" promptText="Ngày khám kết thúc" styleClass="date-field" stylesheets="@../Styles/MedicalRecord.css" AnchorPane.topAnchor="17.0" />
-    <TextField fx:id="searchTextField" layoutX="201.0" layoutY="17.0" prefHeight="29.0" prefWidth="279.0" promptText="Tìm kiếm hồ sơ bệnh án" styleClass="search-field" stylesheets="@../Styles/MedicalRecord.css" AnchorPane.topAnchor="17.0" />
+    <TextField fx:id="searchTextField" layoutX="89.0" layoutY="18.666666666666668" prefHeight="29.0" prefWidth="391.0" promptText="Tìm kiếm hồ sơ bệnh án" styleClass="search-field" stylesheets="@../Styles/MedicalRecord.css" AnchorPane.topAnchor="18.0" />
     <DatePicker fx:id="startDatePicker" layoutX="516.0" layoutY="16.0" prefHeight="29.0" prefWidth="150.0" promptText="Ngày khám bắt đầu" styleClass="date-field" stylesheets="@../Styles/MedicalRecord.css" AnchorPane.topAnchor="17.0" />
-    <FontAwesomeIconView glyphName="SEARCH" layoutX="454.0" layoutY="37.0" size="1.5em" text="">
+    <FontAwesomeIconView glyphName="SEARCH" layoutX="454.0" layoutY="38.0" size="1.5em" text="">
         <cursor>
             <Cursor fx:constant="HAND" />
         </cursor>
     </FontAwesomeIconView>
 </AnchorPane>
+   <StackPane fx:id="userAvatar" layoutX="888.0" layoutY="16.0" prefHeight="30.0" prefWidth="30.0">
+      <cursor>
+         <Cursor fx:constant="HAND" />
+      </cursor>
+      <children>
+         <Circle fill="BLUE" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
+         <Label fx:id="avatarLabel" text="T" textFill="WHITE">
+            <font>
+               <Font size="17.0" />
+            </font>
+         </Label>
+      </children>
+   </StackPane>
+   <Line endX="-100.00006103515625" endY="25.333335876464844" layoutX="1032.0" layoutY="20.0" startX="-100.0" stroke="#a39b9b" />
+   <FontAwesomeIconView fill="#a39b9b" glyphName="BELL" layoutX="954.0" layoutY="38.0" selectionFill="#f8d1d1" size="1.5em">
+      <cursor>
+         <Cursor fx:constant="HAND" />
+      </cursor>
+   </FontAwesomeIconView>
+   <FontAwesomeIconView fill="#a39b9b" glyphName="ENVELOPE" layoutX="1000.0" layoutY="37.0" size="1.5em" wrappingWidth="18.0">
+      <cursor>
+         <Cursor fx:constant="HAND" />
+      </cursor>
+   </FontAwesomeIconView>
 </AnchorPane>

@@ -1,6 +1,7 @@
 package org.example.quanlyhosobenhan.Dao;
 
 import org.example.quanlyhosobenhan.Controllers.PasswordEncoder;
+import org.example.quanlyhosobenhan.Model.Doctor;
 import org.example.quanlyhosobenhan.Model.Staff;
 import org.example.quanlyhosobenhan.Util.HibernateUtil;
 import org.hibernate.Session;
@@ -39,5 +40,30 @@ public class StaffDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public boolean updatePassword(String userName, String newPassword){
+        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+            session.beginTransaction();
+
+            String hql = "from Staff where userName = :userName";
+            Query<Staff> query = session.createQuery(hql, Staff.class);
+            query.setParameter("userName", userName);
+            Staff staff = query.uniqueResult();
+
+            if(staff != null){
+                // Ma hoa mat khau moi
+                String hashedPassword = PasswordEncoder.hashPassword(newPassword);
+                staff.setPassword(hashedPassword);
+                session.update(staff);
+                session.getTransaction().commit();
+                return true;
+            } else {
+                return false; // Ko tìm thấy user
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 }

@@ -9,12 +9,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import org.example.quanlyhosobenhan.Dao.PatientDAO;
 import org.example.quanlyhosobenhan.Model.Patient;
+import org.example.quanlyhosobenhan.Model.Staff;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -51,7 +53,7 @@ public class StaffPatientManagementController {
     private TextField fullNameField;
 
     @FXML
-    private TableColumn<Patient, Patient.Gender> genderColumn;
+    private TableColumn<Patient, String> genderColumn;
 
     @FXML
     private ComboBox<Patient.Gender> genderField;
@@ -75,6 +77,12 @@ public class StaffPatientManagementController {
     private TextField searchTextField;
 
     @FXML
+    private Label avatarLabel;
+
+    @FXML
+    private StackPane userAvatar;
+
+    @FXML
     private DatePicker startDatePicker;
 
 
@@ -89,6 +97,8 @@ public class StaffPatientManagementController {
 
     @FXML
     public void initialize() {
+        getNameAccount();
+
         patientTable.setPlaceholder(new Label("❌ Không có bệnh nhân."));
 
         idColumn.setCellValueFactory(cellData
@@ -98,8 +108,23 @@ public class StaffPatientManagementController {
                 -> new SimpleStringProperty(cellData.getValue().getFullName()));
         setupEllipsisColumn(nameColumn, "Chi tiết tên");
 
-        genderColumn.setCellValueFactory(cellData
-                -> new SimpleObjectProperty<>(cellData.getValue().getGender()));
+        genderColumn.setCellValueFactory(cellData -> {
+            Patient.Gender gender = cellData.getValue().getGender();
+            String genderText;
+            switch (gender) {
+                case Male:
+                    genderText = "Nam";
+                    break;
+                case Female:
+                    genderText = "Nữ";
+                    break;
+                case Other:
+                default:
+                    genderText = "Khác";
+                    break;
+            }
+            return new SimpleStringProperty(genderText);
+        });
 
         dobColumn.setCellValueFactory(cellData -> {
             LocalDate birthdate = cellData.getValue().getBirthdate();
@@ -119,6 +144,40 @@ public class StaffPatientManagementController {
                 -> new SimpleStringProperty(cellData.getValue().getPhone()));
 
         genderField.getItems().setAll(Patient.Gender.values());
+
+        genderField.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(Patient.Gender item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(switch (item) {
+                        case Male -> "Nam";
+                        case Female -> "Nữ";
+                        case Other -> "Khác";
+                    });
+                }
+            }
+        });
+
+        // Để nút chọn chính cũng hiển thị tiếng Việt
+        genderField.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Patient.Gender item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(switch (item) {
+                        case Male -> "Nam";
+                        case Female -> "Nữ";
+                        case Other -> "Khác";
+                    });
+                }
+            }
+        });
+
 
         refreshTable();
 
@@ -146,6 +205,8 @@ public class StaffPatientManagementController {
 
         startDatePicker.setConverter(converter);
         endDatePicker.setConverter(converter);
+        dobField.setConverter(converter);
+
 
         // Xu ly chon khoang ngay sinh
         startDatePicker.valueProperty().addListener((obs, oldDate, newDate) -> {
@@ -211,7 +272,7 @@ public class StaffPatientManagementController {
         vbox.getChildren().addAll(
                 createWrappedLabel.apply("🆔 ID: " + selectedPatient.getId()),
                 createWrappedLabel.apply("👤 Họ tên: " + selectedPatient.getFullName()),
-                createWrappedLabel.apply("🚻 Giới tính: " + selectedPatient.getGender()),
+                createWrappedLabel.apply("🚻 Giới tính: " + convertGenderToVietnamese(selectedPatient.getGender())),
                 createWrappedLabel.apply("🎂 Ngày sinh: " + selectedPatient.getBirthdate().format(VIETNAMESE_DATE_FORMATTER)),
                 createWrappedLabel.apply("🏠 Địa chỉ: " + selectedPatient.getAddress()),
                 createWrappedLabel.apply("📧 Email: " + selectedPatient.getEmail()),
@@ -230,6 +291,19 @@ public class StaffPatientManagementController {
         Scene scene = new Scene(vbox);
         detailsStage.setScene(scene);
         detailsStage.show();
+    }
+
+    private String convertGenderToVietnamese(Patient.Gender gender) {
+        if (gender == null) return "Không rõ";
+        switch (gender) {
+            case Male:
+                return "Nam";
+            case Female:
+                return "Nữ";
+            case Other:
+            default:
+                return "Khác";
+        }
     }
 
     @FXML
@@ -392,7 +466,7 @@ public class StaffPatientManagementController {
         LocalDate endDate = endDatePicker.getValue();
 
         PatientDAO patientDAO = new PatientDAO();
-        List<Patient> allRecords = patientDAO.getPatientsByDoctorId(LoginController.loggedInDoctor.getId());
+        List<Patient> allRecords = patientDAO.getAllPatient();
 
         List<Patient> filtered = allRecords.stream()
                 .filter(patient -> {
@@ -410,9 +484,15 @@ public class StaffPatientManagementController {
                             int patientId = Integer.parseInt(keyword);
                             return patient.getId() == patientId;
                         } catch(NumberFormatException e) {
+                            String genderText = switch (patient.getGender()) {
+                                case Male -> "Nam";
+                                case Female -> "Nữ";
+                                case Other -> "Khác";
+                            };
+
                             String combined = (
                                     (patient != null ? patient.getFullName() : "") + " " +
-                                            patient.getGender() + " " +
+                                            genderText + " " +
                                             patient.getAddress() + " " +
                                             patient.getEmail() + " " +
                                             patient.getPhone() + " " +
@@ -427,5 +507,13 @@ public class StaffPatientManagementController {
                 }).collect(Collectors.toList());
 
         patientTable.getItems().setAll(filtered);
+    }
+
+    public void getNameAccount() {
+        Staff staff = LoginController.loggedInStaff;
+        String userName = staff.getUserName();
+        String initial = userName.trim().substring(0, 1);
+        avatarLabel.setText(initial);
+        Tooltip.install(userAvatar, new Tooltip(staff.getUserName()));
     }
 }

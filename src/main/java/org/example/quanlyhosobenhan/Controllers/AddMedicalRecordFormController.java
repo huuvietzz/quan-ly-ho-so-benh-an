@@ -82,10 +82,6 @@ public class AddMedicalRecordFormController {
         this.medicalRecordManagementController = controller;
     }
 
-//    public void setMedicalRecordManagementController(StaffMedicalRecordManagementController controller) {
-//        this.staffMedicalRecordManagementController = controller;
-//    }
-
     @FXML
     public void initialize() {
         patientSearchField.setEditable(false);
@@ -222,6 +218,7 @@ public class AddMedicalRecordFormController {
             stage.close();
     }
 
+
     @FXML
     void searchPatient(ActionEvent event) {
         try {
@@ -243,7 +240,8 @@ public class AddMedicalRecordFormController {
 
             // ⚡ Load dữ liệu từ database
             int doctorId = LoginController.loggedInDoctor.getId();
-            table.getItems().addAll(new PatientDAO().getPatientsByDoctorId(doctorId));
+            // Lấy danh sách bệnh nhân đã xác nhận lịch hẹn
+            table.getItems().addAll(new PatientDAO().getPatientsByConfirmedAppointments(doctorId));
 
             table.setRowFactory(tv -> {
                 TableRow<Patient> row = new TableRow<>();
@@ -262,7 +260,7 @@ public class AddMedicalRecordFormController {
             searchField.setPromptText("Tìm bệnh nhân...");
             searchField.textProperty().addListener((obs, oldText, newText) -> {
                 table.setItems(FXCollections.observableArrayList(
-                        new PatientDAO().getPatientsByDoctorId(doctorId).stream()
+                        new PatientDAO().getPatientsByConfirmedAppointments(doctorId).stream()
                                 .filter(p ->
                                         String.valueOf(p.getId()).contains(newText) ||
                                                 p.getFullName().toLowerCase().contains(newText.toLowerCase()))

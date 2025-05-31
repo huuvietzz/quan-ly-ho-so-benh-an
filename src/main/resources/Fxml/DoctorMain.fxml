@@ -10,8 +10,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.quanlyhosobenhan.Controllers.DoctorMainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlyhosobenhan.Controllers.DoctorMainController">
    <left>
       <AnchorPane prefHeight="538.0" prefWidth="195.0" styleClass="nav-form" stylesheets="@../Styles/Main.css" BorderPane.alignment="CENTER">
          <Line endX="100.0" layoutX="116.0" layoutY="174.0" startX="-100.0" stroke="WHITE" />
@@ -40,7 +39,7 @@
                <FontAwesomeIconView fill="WHITE" glyphName="CALENDAR" size="1.5em" />
             </graphic>
          </Button>
-         <Button graphicTextGap="13.0" layoutX="10.0" layoutY="429.0" minWidth="89.0" mnemonicParsing="false" onAction="#setting" prefHeight="29.0" prefWidth="113.0" styleClass="nav-btn" stylesheets="@../Styles/Main.css" text="Tài khoản">
+         <Button graphicTextGap="13.0" layoutX="10.0" layoutY="429.0" minWidth="89.0" mnemonicParsing="false" onAction="#profile" prefHeight="29.0" prefWidth="113.0" styleClass="nav-btn" stylesheets="@../Styles/Main.css" text="Tài khoản">
             <graphic>
                <FontAwesomeIconView fill="WHITE" glyphName="USER" size="1.5em" />
             </graphic>

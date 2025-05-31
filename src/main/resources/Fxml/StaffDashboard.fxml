@@ -24,7 +24,7 @@
                 <cursor>
                     <Cursor fx:constant="HAND" />
                 </cursor>
-                <Circle fx:id="avatarCircle" fill="#2196f3" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
+                <Circle fx:id="avatarCircle" fill="BLUE" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
                 <Label fx:id="avatarLabel" text="T" textFill="WHITE">
                     <font>
                         <Font size="17.0" />

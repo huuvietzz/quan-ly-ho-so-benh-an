@@ -2,6 +2,15 @@
     -fx-background-color: #efefef;
 }
 
+.root-anchorpane {
+    -fx-border-color: #000;
+    -fx-border-width: 0.7 0 0 0;
+}
+
+.header {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4CAF50, #45a049);
+}
+
 .shadow{
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5),6,0,0,0);
 }
@@ -9,6 +18,13 @@
 .white-bg{
     -fx-background-color: #fff;
     -fx-background-radius: 8px;
+}
+
+.white-bg-2 {
+    -fx-background-color: #fff;
+    -fx-background-radius: 0 0 8px 8px;
+    -fx-border-width: 0.7 0 0 0;
+    -fx-border-color: #000;
 }
 
 .table-view{
@@ -71,6 +87,7 @@
     -fx-border-width: 1px;
     -fx-border-color: #000;
     -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
     -fx-font-size: 16px;
     -fx-cursor: hand;
 }
@@ -78,6 +95,12 @@
 .toggle-button:selected {
     -fx-background-color: #28a745;
     -fx-text-fill: #fff;
+}
+
+.time-wrap {
+    -fx-border-width: 1px;
+    -fx-border-color: #000;
+    -fx-border-radius: 5px;
 }
 
 
@@ -94,4 +117,40 @@
 .btn:hover {
     -fx-background-color: #28a745;
     -fx-text-fill: #fff;
+}
+
+.confirm-btn{
+    -fx-background-color: #304575;
+    -fx-background-radius: 8px;
+    -fx-text-fill:#fff;
+    -fx-font-size:14px;
+    -fx-font-family:"Arial";
+    -fx-cursor: hand;
+}
+.confirm-btn:hover{
+    -fx-background-color: #3357a4;
+}
+
+.delete-btn{
+    -fx-background-color: #86253f;
+    -fx-background-radius: 8px;
+    -fx-text-fill:#fff;
+    -fx-font-size:14px;
+    -fx-font-family:"Arial";
+    -fx-cursor: hand;
+}
+.delete-btn:hover{
+    -fx-background-color: #ae1d46;
+}
+
+.cancel-btn{
+    -fx-background-color: #753566;
+    -fx-background-radius: 8px;
+    -fx-text-fill:#fff;
+    -fx-font-size:14px;
+    -fx-font-family:"Arial";
+    -fx-cursor: hand;
+}
+.cancel-btn:hover{
+    -fx-background-color: #9d3485;
 }

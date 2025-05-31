@@ -53,8 +53,8 @@ public class PatientMainController  {
     }
 
     @FXML
-    public void setting(ActionEvent event) {
-        loadPage("/Fxml/PatientAccount.fxml");
+    public void  profile(ActionEvent event) {
+        loadPage("/Fxml/PatientProfile.fxml");
     }
 
     @FXML

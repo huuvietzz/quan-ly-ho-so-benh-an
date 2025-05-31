@@ -58,8 +58,8 @@ public class StaffMainController {
     }
 
     @FXML
-    public void setting(ActionEvent event) {
-        loadPage("/Fxml/StaffAccount.fxml");
+    public void profile(ActionEvent event) {
+        loadPage("/Fxml/StaffProfile.fxml");
     }
 
     @FXML

@@ -2,6 +2,7 @@ package org.example.quanlyhosobenhan.Dao;
 
 import org.example.quanlyhosobenhan.Controllers.LoginController;
 import org.example.quanlyhosobenhan.Controllers.PasswordEncoder;
+import org.example.quanlyhosobenhan.Model.Appointment;
 import org.example.quanlyhosobenhan.Model.Doctor;
 import org.example.quanlyhosobenhan.Model.Patient;
 import org.example.quanlyhosobenhan.Util.HibernateUtil;
@@ -42,6 +43,31 @@ public class PatientDAO {
 
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updatePassword(String userName, String newPassword){
+        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+            session.beginTransaction();
+
+            String hql = "from Patient where userName = :userName";
+            Query<Patient> query = session.createQuery(hql, Patient.class);
+            query.setParameter("userName", userName);
+            Patient patient = query.uniqueResult();
+
+            if(patient != null){
+                // Ma hoa mat khau moi
+                String hashedPassword = PasswordEncoder.hashPassword(newPassword);
+                patient.setPassword(hashedPassword);
+                session.update(patient);
+                session.getTransaction().commit();
+                return true;
+            } else {
+                return false; // Ko tìm thấy user
+            }
+        } catch(Exception e){
             e.printStackTrace();
             return false;
         }
@@ -149,6 +175,21 @@ public class PatientDAO {
         }
     }
 
+    public Long countConfirmedPatientsByDoctorId(int doctorId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = """
+            SELECT COUNT(DISTINCT a.patient.id)
+            FROM Appointment a
+            WHERE a.doctor.id = :doctorId
+              AND a.status = :status
+        """;
+            return session.createQuery(hql, Long.class)
+                    .setParameter("doctorId", doctorId)
+                    .setParameter("status", Appointment.Status.Confirmed)
+                    .uniqueResult();
+        }
+    }
+
     public Long countAllPatients() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return (Long) session.createQuery("select count(p) from Patient p").uniqueResult();
@@ -193,6 +234,50 @@ public class PatientDAO {
                 genderCountMap.put(gender, count);
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return genderCountMap;
+    }
+
+    public List<Patient> getPatientsByConfirmedAppointments(int doctorId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = """
+            SELECT DISTINCT a.patient
+            FROM Appointment a
+            WHERE a.doctor.id = :doctorId
+              AND a.status = :status
+        """;
+            return session.createQuery(hql, Patient.class)
+                    .setParameter("doctorId", doctorId)
+                    .setParameter("status", Appointment.Status.Confirmed)
+                    .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public Map<Patient.Gender, Long> getConfirmedPatientCountByGender(int doctorId) {
+        Map<Patient.Gender, Long> genderCountMap = new HashMap<>();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = """
+            SELECT p.gender, COUNT(DISTINCT p.id)
+            FROM Appointment a
+            JOIN a.patient p
+            WHERE a.doctor.id = :doctorId
+              AND a.status = :status
+            GROUP BY p.gender
+        """;
+            Query<Object[]> query = session.createQuery(hql, Object[].class);
+            query.setParameter("doctorId", doctorId);
+            query.setParameter("status", Appointment.Status.Confirmed);
+
+            for(Object[] row : query.getResultList()) {
+                Patient.Gender gender = (Patient.Gender)row[0];
+                Long count = (Long)row[1];
+                genderCountMap.put(gender, count);
+            }
+        } catch(Exception e) {
             e.printStackTrace();
         }
         return genderCountMap;

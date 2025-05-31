@@ -5,6 +5,7 @@ import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -13,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -28,8 +30,10 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.example.quanlyhosobenhan.Dao.AppointmentDAO;
 import org.example.quanlyhosobenhan.Dao.PatientDAO;
 import org.example.quanlyhosobenhan.Model.Appointment;
+import org.example.quanlyhosobenhan.Model.Doctor;
 import org.example.quanlyhosobenhan.Model.Patient;
 
 
@@ -61,6 +65,12 @@ public class DoctorPatientManagementController {
     private TextField searchTextField;
 
     @FXML
+    private Label avatarLabel;
+
+    @FXML
+    private StackPane userAvatar;
+
+    @FXML
     private TableColumn<Patient, String> emailColumn;
 
     @FXML
@@ -86,9 +96,12 @@ public class DoctorPatientManagementController {
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
 
     private PatientDAO patientDAO = new PatientDAO();
+    private AppointmentDAO appointmentDAO = new AppointmentDAO();
 
     @FXML
     public void initialize() {
+        getNameAccount();
+
         patientTable.setPlaceholder(new Label("❌ Không có bệnh nhân."));
 
         idColumn.setCellValueFactory(cellData
@@ -403,9 +416,12 @@ public class DoctorPatientManagementController {
     }
 
     private void refreshTable() {
-        patientTable.getItems().clear();
-        List<Patient> patients = patientDAO.getPatientsByDoctorId(LoginController.loggedInDoctor.getId());
-        patientTable.getItems().addAll(patients);
+//        patientTable.getItems().clear();
+//        List<Patient> patients = patientDAO.getPatientsByDoctorId(LoginController.loggedInDoctor.getId());
+//        patientTable.getItems().addAll(patients);
+
+        List<Patient> confirmedPatients = appointmentDAO.getConfirmedPatientsByDoctorId(LoginController.loggedInDoctor.getId());
+        patientTable.setItems(FXCollections.observableArrayList(confirmedPatients));
     }
 
     private boolean isValidPhoneNumber(String phoneNumber) {
@@ -510,9 +526,15 @@ public class DoctorPatientManagementController {
                             int patientId = Integer.parseInt(keyword);
                             return patient.getId() == patientId;
                         } catch(NumberFormatException e) {
+                            String genderText = switch (patient.getGender()) {
+                                case Male -> "Nam";
+                                case Female -> "Nữ";
+                                case Other -> "Khác";
+                            };
+
                             String combined = (
                                     (patient != null ? patient.getFullName() : "") + " " +
-                                            patient.getGender() + " " +
+                                            genderText + " " +
                                             patient.getAddress() + " " +
                                             patient.getEmail() + " " +
                                             patient.getPhone() + " " +
@@ -527,5 +549,13 @@ public class DoctorPatientManagementController {
                 }).collect(Collectors.toList());
 
         patientTable.getItems().setAll(filtered);
+    }
+
+    private void getNameAccount() {
+        Doctor doctor = LoginController.loggedInDoctor;
+        String userName = doctor.getUserName();
+        String initial = userName.trim().substring(0, 1);
+        avatarLabel.setText(initial);
+        Tooltip.install(userAvatar, new Tooltip(doctor.getUserName()));
     }
 }
